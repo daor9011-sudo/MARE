@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/MARE_Productividad.html" },
+    { "source": "/(.*)", "destination": "/MARE_Productividad.html" }
+  ]
+}
