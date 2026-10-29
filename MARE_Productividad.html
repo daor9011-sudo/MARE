@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.28-1"/>
+<meta name="app-version" content="2026.10.29-1"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,6 +111,144 @@ main.appmain{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:12px 16px 
 .tbl td{padding:9px 10px;border-bottom:1px solid var(--g1);vertical-align:middle}
 .note{font-size:11.5px;color:var(--g6);margin-top:8px;line-height:1.5}
 
+/* ── Formularios de consulta ── */
+.reg{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.full{grid-column:1/-1}.span2{grid-column:span 2}
+.sec{grid-column:1/-1;font-family:var(--font-d);font-weight:700;font-size:12.5px;color:var(--navy2);display:flex;align-items:center;gap:8px;margin-top:4px}
+.sec::after{content:'';flex:1;height:1px;background:var(--g2)}
+.pay{display:grid;grid-template-columns:170px minmax(0,1fr);gap:10px;align-items:end}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--g2);background:#fff;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--navy2);cursor:pointer}
+.chip.on{background:var(--teal-soft);border-color:var(--teal);color:#0d6b6b}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.hint{font-size:11px;color:#0d6b6b;background:var(--teal-soft);border-radius:7px;padding:5px 9px;margin-top:6px}
+.novino{border:1.5px dashed #e8c3b3;background:#fdf6f2;border-radius:10px;padding:10px 12px}
+.sum{background:var(--g1);border-radius:12px;padding:16px;align-self:start;position:sticky;top:12px}
+.sum h4{font-family:var(--font-d);font-size:13px;margin-bottom:10px}
+.sum .row{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--g2)}
+.sum .row b{text-align:right;overflow-wrap:anywhere}
+.sum .tot{font-family:var(--font-d);font-size:24px;font-weight:800;margin-top:10px}
+.sum .ef{font-size:11.5px;color:var(--pos);margin-top:2px}
+.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.ac-wrap{position:relative}
+.ac-list{position:absolute;z-index:40;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--g2);border-radius:10px;box-shadow:0 16px 32px -12px rgba(11,22,40,.35);max-height:260px;overflow-y:auto}
+.ac-list button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--g1);padding:9px 12px;cursor:pointer;font-size:12.5px;color:var(--navy)}
+.ac-list button:hover,.ac-list button.act{background:var(--teal-soft)}
+.ac-list .tel{color:var(--g6);font-size:11.5px;white-space:nowrap}
+.inp.bad{border-color:#d98a6a;box-shadow:0 0 0 3px rgba(184,72,31,.12)}
+.ferr{color:var(--neg);font-size:11px;margin-top:4px}
+textarea.inp{height:auto;min-height:40px;padding:9px 12px;resize:vertical}
+
+/* ── Hero y KPIs ── */
+.hero{background:linear-gradient(135deg,#0B1628,#1B3A6B);color:#fff;border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;margin-bottom:14px}
+.hero .t{font-family:var(--font-d);font-weight:800;font-size:17px}
+.hero .s{font-size:12px;opacity:.75;margin-top:2px}
+.hkpis{display:flex;gap:10px}
+.hk{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px 14px;min-width:120px}
+.hk .l{font-size:9px;letter-spacing:.8px;text-transform:uppercase;opacity:.7;font-weight:700}
+.hk .v{font-family:var(--font-d);font-size:19px;font-weight:800;white-space:nowrap}
+.hk .v.tl{color:var(--teal)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpis.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi{border-radius:11px;padding:13px 14px;background:#fff;border:1.5px solid var(--g2);min-width:0}
+.kpi .ico{font-size:16px;margin-bottom:4px}
+.kpi .l{font-size:9px;font-weight:700;letter-spacing:.6px;color:var(--g6);text-transform:uppercase}
+.kpi .v{font-family:var(--font-d);font-size:21px;font-weight:800;overflow-wrap:anywhere}
+.kpi .s{font-size:10.5px;color:var(--g6);margin-top:1px}
+
+/* ── Filtros del Historial ── */
+.fbar{display:grid;grid-template-columns:minmax(170px,1.4fr) minmax(190px,1.3fr) repeat(3,minmax(120px,1fr)) auto;gap:8px;align-items:end;margin-bottom:10px}
+.fbar.sin-doc{grid-template-columns:minmax(170px,1.4fr) minmax(190px,1.3fr) repeat(2,minmax(120px,1fr)) auto}
+.fbar .act{display:flex;gap:6px;justify-self:end}
+.toggles{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.perbtn{width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:6px;cursor:pointer}
+.perbtn span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.perwrap{position:relative}
+.pop{position:absolute;z-index:30;top:calc(100% + 6px);left:0;width:340px;max-width:calc(100vw - 32px);background:#fff;border:1px solid var(--g2);border-radius:12px;box-shadow:0 18px 40px -12px rgba(11,22,40,.35);padding:14px}
+.pop .grp{margin-bottom:12px}
+.dayrow{display:flex;gap:6px;align-items:center}
+.dayrow .inp{flex:1}
+.rgrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ic{background:#fff;border:1px solid var(--g2);border-radius:7px;min-width:30px;height:30px;cursor:pointer;color:var(--navy2);font-size:13px;padding:0 6px}
+.ic:hover{border-color:var(--teal)}
+
+/* ── Tabla de consultas ── */
+.tbl .num{text-align:right;font-family:var(--font-d);font-weight:700;white-space:nowrap}
+.tbl tr.nv td{color:var(--g4)}
+.tbl tr:hover td{background:#f8fafd}
+.sub2{font-size:10.5px;color:var(--g6)}
+.empty{text-align:center;padding:28px;color:var(--g6)}
+.st-ef{background:#e7f4ec;color:#245f3d}.st-ta{background:#e8eef9;color:#1B3A6B}.st-tr{background:#e6f6f6;color:#11706f}.st-co{background:#f1edf8;color:#5b4785}
+.st-nv{background:#fbeee8;color:#8c3a1a}.st-fa{background:#eef1f7;color:#475569}
+.more{text-align:center;margin-top:12px}
+
+/* ── Cierre ── */
+.cbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.seg{display:inline-flex;background:var(--g1);border-radius:10px;padding:3px}
+.seg button{border:none;background:none;padding:7px 14px;border-radius:8px;font-weight:700;font-size:12px;color:var(--g6);cursor:pointer}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 2px 6px rgba(11,22,40,.12)}
+.efe{border:1.5px solid #cfe8da;background:#f6fbf8;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.efe h4{font-family:var(--font-d);font-size:13.5px;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.eq{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center}
+.eq .c{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #e1efe7;min-width:0}
+.eq .c .l{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--g6)}
+.eq .c .v{font-family:var(--font-d);font-weight:800;font-size:19px}
+.eq .op{font-family:var(--font-d);font-size:20px;font-weight:800;color:var(--g4)}
+.eq .c.res{background:#e7f4ec;border-color:#bfe0cc}
+.glist{margin-top:10px;font-size:12px}
+.glist .li2{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed #d9eadf}
+.aviso{background:var(--g1);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--g6);margin-bottom:14px}
+.aviso.warn{background:#fff6e5;color:#7a5410}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cc{border:1.5px solid var(--g2);border-radius:12px;padding:13px 14px;min-width:0}
+.cc .h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cc .n{font-weight:700;font-size:13px}
+.cc .a{font-family:var(--font-d);font-weight:800;font-size:18px;white-space:nowrap}
+.bar{height:6px;background:var(--g1);border-radius:99px;margin:8px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--navy2));border-radius:99px}
+.cc details{margin-top:6px;font-size:12px}
+.cc summary{cursor:pointer;color:var(--navy2);font-weight:600;font-size:11.5px}
+.cc .li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed var(--g2)}
+.cuadra{font-size:11.5px;color:var(--pos);margin-top:12px;font-weight:600}
+.cuadra.bad{color:var(--neg)}
+
+/* ── Dashboard ── */
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.chart-box{border:1.5px solid var(--g2);border-radius:12px;padding:14px;min-width:0}
+.chart-box h4{font-family:var(--font-d);font-size:13.5px;margin-bottom:8px}
+.chart-box .cv{position:relative;height:260px}
+.chart-box.wide{grid-column:1/-1}
+
+/* ── Modales de consultas ── */
+.modal.lg{max-width:900px}
+.confirm-txt{font-size:13px;line-height:1.55;margin-bottom:14px}
+.mfoot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.btn-d{background:#B8481F;color:#fff}
+.pap-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
+
+@media (max-width:1100px){.fbar,.fbar.sin-doc{grid-template-columns:repeat(3,minmax(0,1fr))}.fbar .act{grid-column:1/-1}.kpis.k5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:860px){.reg{grid-template-columns:1fr}.sum{position:static}.hero{grid-template-columns:1fr}.hkpis{flex-wrap:wrap}.dgrid{grid-template-columns:1fr}}
+@media (max-width:820px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.eq{grid-template-columns:1fr}.eq .op{text-align:center;line-height:1}}
+@media (max-width:700px){
+  .fbar,.fbar.sin-doc{grid-template-columns:1fr 1fr}
+  .fbar .full2{grid-column:1/-1}
+  .kpis,.kpis.k5{grid-template-columns:1fr 1fr}
+  .kpis .kpi:first-child{grid-column:1/-1}
+  .hk{flex:1;min-width:0}
+}
+@media (max-width:560px){
+  .fgrid,.fbar,.fbar.sin-doc{grid-template-columns:1fr}
+  .span2{grid-column:auto}
+  .pay{grid-template-columns:1fr}
+  .cbar>*{width:100%}
+  .seg{display:flex}.seg button{flex:1}
+  .fbar .act{justify-self:stretch}.fbar .act .btn{flex:1}
+  .chart-box .cv{height:230px}
+  .hk{padding:8px 10px}.hk .v{font-size:15.5px}
+}
+
+#m-confirm{z-index:300}
 /* ── Pie, marca de agua, toast ── */
 .legal{text-align:center;font-size:11px;color:var(--g6);padding:6px 16px 26px}
 .legal a{color:var(--navy2)}
@@ -264,6 +402,47 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
       La información que contiene es confidencial y está protegida por la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.
       Queda prohibida su reproducción, distribución o divulgación sin autorización expresa. Cada acceso y cada cambio quedan registrados.
     </div>
+  </div>
+</div>
+
+<!-- Editar consulta -->
+<div class="modal-overlay2" id="m-editar">
+  <div class="modal lg" role="dialog" aria-labelledby="ed-t">
+    <div class="modal-h"><h3 id="ed-t">✎ Editar consulta</h3><button class="x" data-close>×</button></div>
+    <div id="ed-form"></div>
+  </div>
+</div>
+
+<!-- Confirmación -->
+<div class="modal-overlay2" id="m-confirm">
+  <div class="modal" style="max-width:460px" role="alertdialog" aria-labelledby="cf-t">
+    <div class="modal-h"><h3 id="cf-t">Confirmar</h3><button class="x" data-close>×</button></div>
+    <div class="confirm-txt" id="cf-msg"></div>
+    <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-d" id="cf-ok">Confirmar</button></div>
+  </div>
+</div>
+
+<!-- Papelera -->
+<div class="modal-overlay2" id="m-papelera">
+  <div class="modal lg" role="dialog" aria-labelledby="pp-t">
+    <div class="modal-h"><h3 id="pp-t">🗑 Papelera</h3><button class="x" data-close>×</button></div>
+    <div class="pap-tools"><span class="note" id="pp-sub" style="margin:0"></span><button class="btn btn-d btn-sm hide" id="pp-vaciar">Vaciar papelera</button></div>
+    <div id="pp-list"></div>
+  </div>
+</div>
+
+<!-- Exportar -->
+<div class="modal-overlay2" id="m-exportar">
+  <div class="modal" style="max-width:480px" role="dialog" aria-labelledby="ex-t">
+    <div class="modal-h"><h3 id="ex-t">⭳ Exportar historial</h3><button class="x" data-close>×</button></div>
+    <div class="rgrow" style="margin-bottom:12px">
+      <div><label class="lbl" for="ex-d">Desde</label><input class="inp" type="date" id="ex-d"></div>
+      <div><label class="lbl" for="ex-h">Hasta</label><input class="inp" type="date" id="ex-h"></div>
+    </div>
+    <label class="lbl">Formato</label>
+    <div class="seg" id="ex-fmt" style="margin-bottom:10px"><button data-f="xlsx" class="on">Excel</button><button data-f="pdf">PDF</button></div>
+    <div class="note" id="ex-nota">Se exportan las consultas con los filtros activos del Historial (búsqueda, doctora, motivo, medio y atajos).</div>
+    <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-p" id="ex-go">⭳ Exportar</button></div>
   </div>
 </div>
 
@@ -430,17 +609,18 @@ async function entrar() {
   }
   if (p.rol === 'recepcion' && !p.dentro_horario) return salirFueraDeHorario();
   PERFIL = p;
-  montarApp();
+  await montarApp();
 }
 async function cerrarSesion(silencioso) {
   clearInterval(horarioTimer); horarioTimer = null;
+  apagarRealtime();
   PERFIL = null; TAB = null;
   try { await sb.auth.signOut(); } catch (e) { /* sin red: la sesión local se limpia igual */ }
   if (!silencioso) mostrarAuth('login');
 }
 
 /* ════════ Shell de la app ════════ */
-function montarApp() {
+async function montarApp() {
   $('auth-view').classList.add('hide');
   $('app-view').classList.remove('hide');
   document.body.classList.remove('en-auth');
@@ -453,6 +633,11 @@ function montarApp() {
     '<section class="card hide" id="v-' + t.id + '"><div class="tab-title">' + esc(t.nombre) + ' <small id="sub-' + t.id + '"></small></div><div id="body-' + t.id + '"></div></section>').join('');
   $('nav').innerHTML = vis.map(t => '<button class="pill" data-t="' + t.id + '">' + t.ico + ' ' + esc(t.nombre) + '</button>').join('');
   $('nav').querySelectorAll('[data-t]').forEach(b => b.onclick = () => irA(b.dataset.t));
+  reiniciarEstadoConsultas();
+  $('panels').querySelectorAll('[id^="body-"]').forEach(b => b.innerHTML = '<div class="empty">Cargando…</div>');
+  await bloqueAsync('los catálogos', cargarBase);
+  if (!PERFIL) return;
+  activarRealtime();
   irA(vis.length ? vis[0].id : null);
   if (PERFIL.rol === 'recepcion') {
     clearInterval(horarioTimer);
@@ -473,7 +658,9 @@ function irA(id) {
   TAB = id;
   $('nav').querySelectorAll('[data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === id));
   document.querySelectorAll('#panels > section').forEach(s => s.classList.toggle('hide', s.id !== 'v-' + id));
-  bloque(TABS.find(t => t.id === id).nombre, () => RENDER[id]());
+  const nombre = TABS.find(t => t.id === id).nombre;
+  try { Promise.resolve(RENDER[id]()).catch(e => { console.error('[' + nombre + ']', e); toast('No se pudo cargar ' + nombre + '.'); }); }
+  catch (e) { console.error('[' + nombre + ']', e); toast('No se pudo mostrar ' + nombre + '.'); }
 }
 
 /* Cada pantalla se dibuja en su propio bloque aislado; las fases siguientes reemplazan estos marcadores */
@@ -482,10 +669,10 @@ function marcador(id) {
   $('body-' + id).innerHTML = '<div class="placeholder"><b>' + esc(t.nombre) + '</b>Esta pantalla se construye en la Fase ' + t.fase + '.</div>';
 }
 const RENDER = {
-  registro: () => marcador('registro'),
-  historial: () => marcador('historial'),
-  cierre: () => marcador('cierre'),
-  dashboard: () => marcador('dashboard'),
+  registro: () => renderRegistro(),
+  historial: () => renderHistorial(),
+  cierre: () => renderCierre(),
+  dashboard: () => renderDashboard(),
   prm: () => marcador('prm'),
   gastos: () => marcador('gastos')
 };
@@ -547,6 +734,921 @@ async function pintarPersonal() {
       '<td data-l="Acceso">' + (p.auth_user_id ? 'Ligado' : (p.email ? 'Pendiente de primer acceso' : 'Sin usuario')) + '</td>' +
       '<td data-l="Estado"><span class="st ' + (p.activo ? 'st-ok' : 'st-off') + '">' + (p.activo ? 'Activo' : 'Inactivo') + '</span></td></tr>').join('') +
     '</tbody></table>';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FASES 3 y 4 · Consultas: Registro, Historial, Cierre y Dashboard
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Datos base ── */
+let DOCTORAS = [];      // [{id,nombre,activo}]
+let CATALOGO = [];      // [{id,motivo,tipo_consulta,requiere_descripcion,activo,orden}]
+const SEL_CONS = 'id,fecha,paciente_id,doctor_id,motivo,tipo_consulta,descripcion,monto,medio_pago,monto_2,medio_pago_2,factura,num_factura,numero_recibo,notas,no_vino,deleted,deleted_at,created_at,paciente:pacientes(id,nombre,telefono),doctor:personal(id,nombre)';
+const ES_DOCTORA = () => PERFIL && PERFIL.rol === 'doctor';
+const PUEDE_PAPELERA = () => PERFIL && ['admin', 'doctor'].includes(PERFIL.rol);
+const PUEDE_ELIMINAR_DEF = () => PERFIL && PERFIL.rol === 'admin' && (PERFIL.permisos || {}).puede_eliminar_papelera !== false;
+const PUEDE_EXPORTAR = () => permiso(PERFIL, 'puede_exportar');
+
+async function cargarBase() {
+  const [d, c] = await Promise.all([
+    sb.from('personal').select('id,nombre,activo').eq('rol', 'doctor').order('nombre'),
+    sb.from('catalogo_servicios').select('id,motivo,tipo_consulta,requiere_descripcion,activo,orden').order('orden').order('tipo_consulta')
+  ]);
+  if (d.error) throw d.error;
+  DOCTORAS = d.data || [];
+  CATALOGO = c.error ? [] : (c.data || []);
+  if (c.error) console.error('[catálogo]', c.error);
+}
+const nombreDoctora = id => { const d = DOCTORAS.find(x => x.id === id); return d ? d.nombre : '—'; };
+const corto = n => String(n || '').split(' ').slice(0, 3).join(' ');
+const motivosActivos = () => [...new Set(CATALOGO.filter(c => c.activo).map(c => c.motivo))];
+const tiposDe = m => CATALOGO.filter(c => c.activo && c.motivo === m);
+
+/* Trae TODAS las filas en páginas de 1000 (PostgREST corta en 1000). */
+async function traerTodo(construir) {
+  const PAG = 1000; let desde = 0, todos = [];
+  for (;;) {
+    const { data, error } = await construir().range(desde, desde + PAG - 1);
+    if (error) return { data: null, error };
+    todos = todos.concat(data || []);
+    if (!data || data.length < PAG) break;
+    desde += PAG;
+  }
+  return { data: todos, error: null };
+}
+async function cargarConsultas(desde, hasta, borradas) {
+  const r = await traerTodo(() => sb.from('consultas').select(SEL_CONS).eq('deleted', !!borradas)
+    .gte('fecha', desde).lte('fecha', hasta)
+    .order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id'));
+  if (r.error) throw r.error;
+  return r.data;
+}
+
+/* ── Reglas de dinero (iguales a las de la base) ── */
+const num = v => Math.round((Number(v) || 0) * 100) / 100;
+const ingreso = c => c.no_vino ? 0 : num(num(c.monto) + num(c.monto_2));
+const efectivoDe = c => c.no_vino ? 0 : num((c.medio_pago === 'Efectivo' ? num(c.monto) : 0) + (c.medio_pago_2 === 'Efectivo' ? num(c.monto_2) : 0));
+const pagosDe = c => { const a = []; if (c.no_vino) return a; if (c.medio_pago) a.push([c.medio_pago, num(c.monto)]); if (c.medio_pago_2) a.push([c.medio_pago_2, num(c.monto_2)]); return a; };
+const sumar = (arr, f) => num(arr.reduce((s, x) => s + f(x), 0));
+const stCls = m => ({ Efectivo: 'st-ef', Tarjeta: 'st-ta', Transferencia: 'st-tr', 'Cortesía': 'st-co' }[m] || 'st-fa');
+const servicioTxt = c => [c.motivo, c.tipo_consulta].filter(Boolean).join(' · ') + (c.descripcion ? ': ' + c.descripcion : '');
+
+/* ── Fechas ── */
+const parseISO = s => { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return isoLocal(d); };
+const DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const fmtD = s => { if (!s) return ''; const d = parseISO(s); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear(); };
+const diaNombre = s => DIAS[parseISO(s).getDay()];
+const inicioMes = s => s.slice(0, 7) + '-01';
+const finMes = s => { const d = parseISO(s); return isoLocal(new Date(d.getFullYear(), d.getMonth() + 1, 0)); };
+const normTxt = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const soloDigitos = s => String(s || '').replace(/\D/g, '');
+const opt = (arr, ph, val) => (ph != null ? '<option value="">' + esc(ph) + '</option>' : '') + arr.map(x => {
+  const v = typeof x === 'object' ? x.v : x, t = typeof x === 'object' ? x.t : x;
+  return '<option value="' + esc(v) + '"' + (val === v ? ' selected' : '') + '>' + esc(t) + '</option>';
+}).join('');
+const hayModalAbierto = () => !!document.querySelector('.modal-overlay2.show');
+
+/* ════════ Formulario de consulta (Registro y Editar comparten componente) ════════ */
+const FORMS = {};
+function htmlFormConsulta(p, modo) {
+  const docFija = ES_DOCTORA();
+  return '' +
+  '<div class="reg"><div class="fgrid">' +
+    '<div><label class="lbl" for="' + p + '-fecha">Fecha</label><input class="inp" type="date" id="' + p + '-fecha"></div>' +
+    '<div class="span2"><label class="lbl" for="' + p + '-doc">Doctora</label>' +
+      '<input class="inp" id="' + p + '-doc" list="' + p + '-dl-doc" placeholder="Escribe para buscar…" autocomplete="off"' + (docFija ? ' disabled' : '') + '>' +
+      '<datalist id="' + p + '-dl-doc"></datalist></div>' +
+    '<div class="span2 ac-wrap"><label class="lbl" for="' + p + '-pac">Paciente</label>' +
+      '<input class="inp" id="' + p + '-pac" placeholder="Nombre completo" autocomplete="off">' +
+      '<div class="ac-list hide" id="' + p + '-ac"></div>' +
+      '<div class="hint hide" id="' + p + '-newpac">Paciente nueva: se dará de alta al guardar. Captura su teléfono (se busca por teléfono + nombre para no duplicar).</div></div>' +
+    '<div><label class="lbl" for="' + p + '-tel">Teléfono</label><input class="inp" id="' + p + '-tel" inputmode="tel" placeholder="10 dígitos" maxlength="15"></div>' +
+    '<div><label class="lbl" for="' + p + '-mot">Motivo</label><select class="inp" id="' + p + '-mot"></select></div>' +
+    '<div class="span2"><label class="lbl" for="' + p + '-tipo">Tipo de consulta</label><select class="inp" id="' + p + '-tipo"></select></div>' +
+    '<div class="full hide" id="' + p + '-wdesc"><label class="lbl" for="' + p + '-desc" id="' + p + '-ldesc">Descripción</label><input class="inp" id="' + p + '-desc" maxlength="160"></div>' +
+    '<div class="full novino"><label class="check"><input type="checkbox" id="' + p + '-nv"> No vino · la consulta queda registrada pero no suma ingreso</label></div>' +
+    '<div class="sec">Pago</div>' +
+    '<div class="full" id="' + p + '-pago1"><div class="pay">' +
+      '<div><label class="lbl" for="' + p + '-m1">Monto</label><input class="inp" id="' + p + '-m1" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>' +
+      '<div><span class="lbl">Medio de pago</span><div class="chips" id="' + p + '-p1"></div></div></div></div>' +
+    '<div class="full"><button type="button" class="btn btn-g btn-sm" id="' + p + '-b2">+ Segundo pago</button></div>' +
+    '<div class="full hide" id="' + p + '-pago2"><div class="pay">' +
+      '<div><label class="lbl" for="' + p + '-m2">Monto 2.º pago</label><input class="inp" id="' + p + '-m2" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>' +
+      '<div><span class="lbl">Medio 2.º pago</span><div class="chips" id="' + p + '-p2"></div></div></div></div>' +
+    '<div class="sec">Comprobantes</div>' +
+    '<div style="display:flex;align-items:flex-end"><label class="check" style="height:40px"><input type="checkbox" id="' + p + '-fac"> Requiere factura</label></div>' +
+    '<div><label class="lbl" for="' + p + '-nfac">Núm. de factura</label><input class="inp" id="' + p + '-nfac" placeholder="—" disabled maxlength="40"></div>' +
+    '<div><label class="lbl" for="' + p + '-rec">Núm. de recibo</label><input class="inp" id="' + p + '-rec" placeholder="Opcional" maxlength="40"></div>' +
+    '<div class="full"><label class="lbl" for="' + p + '-notas">Notas</label><input class="inp" id="' + p + '-notas" placeholder="Observaciones (opcional)" maxlength="500"></div>' +
+  '</div>' +
+  '<aside class="sum"><h4>Resumen</h4>' +
+    '<div class="row"><span class="muted">Doctora</span><b id="' + p + '-sdoc">—</b></div>' +
+    '<div class="row"><span class="muted">Paciente</span><b id="' + p + '-spac">—</b></div>' +
+    '<div class="row"><span class="muted">Servicio</span><b id="' + p + '-sserv">—</b></div>' +
+    '<div class="row"><span class="muted">Pagos</span><span id="' + p + '-spag">—</span></div>' +
+    '<div class="tot" id="' + p + '-stot">$0.00</div>' +
+    '<div class="ef" id="' + p + '-sef">Efectivo de esta consulta: $0.00</div>' +
+    '<div class="err hide" id="' + p + '-err" style="margin-top:10px"></div>' +
+    '<div class="actions"><button class="btn btn-p" id="' + p + '-save">' + (modo === 'editar' ? '✓ Guardar cambios' : '✓ Guardar consulta') + '</button>' +
+    '<button class="btn btn-g" id="' + p + '-clear">' + (modo === 'editar' ? 'Cancelar' : 'Limpiar') + '</button></div>' +
+  '</aside></div>';
+}
+
+function initFormConsulta(cont, p, modo, consulta, onSaved) {
+  cont.innerHTML = htmlFormConsulta(p, modo);
+  const F = FORMS[p] = { P1: '', P2: '', pac: null, busy: false, acIdx: -1, acRows: [] };
+  const g = id => $(p + '-' + id);
+  g('dl-doc').innerHTML = DOCTORAS.filter(d => d.activo || (consulta && consulta.doctor_id === d.id)).map(d => '<option value="' + esc(d.nombre) + '">').join('');
+  g('mot').innerHTML = opt(motivosActivos(), 'Seleccionar…');
+
+  function chipsHtml(cur) { return CATALOGOS.mediosPago.map(m => '<button type="button" class="chip' + (m === cur ? ' on' : '') + '" data-m="' + esc(m) + '">' + esc(m) + '</button>').join(''); }
+  function pintarChips() {
+    g('p1').innerHTML = chipsHtml(F.P1); g('p2').innerHTML = chipsHtml(F.P2);
+    g('p1').querySelectorAll('.chip').forEach(b => b.onclick = () => { F.P1 = b.dataset.m; pintarChips(); ajustarCortesia(); resumen(); });
+    g('p2').querySelectorAll('.chip').forEach(b => b.onclick = () => { F.P2 = b.dataset.m; pintarChips(); ajustarCortesia(); resumen(); });
+    const nv = g('nv').checked;
+    g('p1').querySelectorAll('.chip').forEach(b => b.disabled = nv);
+    g('p2').querySelectorAll('.chip').forEach(b => b.disabled = nv);
+  }
+  function ajustarCortesia() {
+    const nv = g('nv').checked;
+    if (F.P1 === 'Cortesía') g('m1').value = '0';
+    if (F.P2 === 'Cortesía') g('m2').value = '0';
+    g('m1').disabled = nv || F.P1 === 'Cortesía';
+    g('m2').disabled = nv || F.P2 === 'Cortesía';
+  }
+  function pintarTipos(sel) {
+    const m = g('mot').value, ts = tiposDe(m);
+    if (consulta && consulta.motivo === m && consulta.tipo_consulta && !ts.some(t => t.tipo_consulta === consulta.tipo_consulta))
+      ts.push({ tipo_consulta: consulta.tipo_consulta, requiere_descripcion: !!consulta.descripcion });
+    g('tipo').innerHTML = m ? opt(ts.map(t => t.tipo_consulta), ts.length > 1 ? 'Seleccionar…' : null, sel) : opt([], 'Elige un motivo');
+    pintarDesc();
+  }
+  function pintarDesc() {
+    const t = tiposDe(g('mot').value).find(x => x.tipo_consulta === g('tipo').value);
+    const need = !!(t && t.requiere_descripcion) || (consulta && consulta.descripcion && g('mot').value === consulta.motivo);
+    g('wdesc').classList.toggle('hide', !need);
+    g('ldesc').textContent = g('mot').value === 'Producto de Farmacia' ? 'Nombre del producto' : g('mot').value === 'Estudios' ? 'Estudio' : 'Descripción';
+  }
+  const docSel = () => { const v = normTxt(g('doc').value); return DOCTORAS.find(d => normTxt(d.nombre) === v) || null; };
+  function segundoVisible() { return !g('pago2').classList.contains('hide'); }
+  function setSegundo(on) {
+    g('pago2').classList.toggle('hide', !on);
+    g('b2').textContent = on ? '✕ Quitar segundo pago' : '+ Segundo pago';
+    if (!on) { g('m2').value = ''; F.P2 = ''; pintarChips(); ajustarCortesia(); }
+  }
+  function resumen() {
+    const nv = g('nv').checked, m1 = num(g('m1').value), m2 = segundoVisible() ? num(g('m2').value) : 0;
+    const d = docSel(); g('sdoc').textContent = d ? corto(d.nombre) : '—';
+    g('spac').textContent = g('pac').value.trim() || '—';
+    g('sserv').textContent = g('mot').value ? (g('mot').value + (g('tipo').value ? ' · ' + g('tipo').value : '')) : '—';
+    const ps = [];
+    if (F.P1) ps.push('<span class="st ' + stCls(F.P1) + '">' + esc(F.P1) + ' ' + money(m1) + '</span>');
+    if (segundoVisible() && (F.P2 || m2)) ps.push('<span class="st ' + stCls(F.P2) + '">' + esc(F.P2 || '¿medio?') + ' ' + money(m2) + '</span>');
+    g('spag').innerHTML = nv ? '<span class="st st-nv">No vino</span>' : (ps.join(' ') || '—');
+    g('stot').textContent = nv ? '$0.00' : money(m1 + m2);
+    g('sef').textContent = 'Efectivo de esta consulta: ' + money(nv ? 0 : (F.P1 === 'Efectivo' ? m1 : 0) + (F.P2 === 'Efectivo' && segundoVisible() ? m2 : 0));
+  }
+
+  /* Autocompletar de pacientes (la base solo devuelve las que cada rol puede ver) */
+  let acTimer = null, acSeq = 0;
+  function cerrarAc() { g('ac').classList.add('hide'); F.acIdx = -1; }
+  function elegirPac(r) {
+    F.pac = r; g('pac').value = r.nombre; g('tel').value = r.telefono || '';
+    g('newpac').classList.add('hide'); cerrarAc(); resumen();
+  }
+  g('pac').addEventListener('input', () => {
+    F.pac = null; resumen();
+    const q = g('pac').value.trim();
+    g('newpac').classList.toggle('hide', q.length < 2);
+    clearTimeout(acTimer);
+    if (q.length < 2) return cerrarAc();
+    acTimer = setTimeout(async () => {
+      const seq = ++acSeq;
+      try {
+        const patron = '%' + q.replace(/[%_]/g, '').replace(/\s+/g, '%') + '%';
+        const { data, error } = await sb.from('pacientes').select('id,nombre,telefono').ilike('nombre', patron).order('nombre').limit(8);
+        if (seq !== acSeq || error) return;
+        F.acRows = data || [];
+        const exacta = F.acRows.find(r => normTxt(r.nombre) === normTxt(q));
+        g('newpac').classList.toggle('hide', !!exacta);
+        if (!F.acRows.length) return cerrarAc();
+        g('ac').innerHTML = F.acRows.map((r, i) => '<button type="button" data-i="' + i + '"><span>' + esc(r.nombre) + '</span><span class="tel">' + esc(r.telefono || 'sin teléfono') + '</span></button>').join('');
+        g('ac').querySelectorAll('button').forEach(b => b.onmousedown = e => { e.preventDefault(); elegirPac(F.acRows[+b.dataset.i]); });
+        g('ac').classList.remove('hide');
+      } catch (e) { console.error(e); }
+    }, 220);
+  });
+  g('pac').addEventListener('keydown', e => {
+    const items = g('ac').querySelectorAll('button'); if (g('ac').classList.contains('hide') || !items.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); F.acIdx = (F.acIdx + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; items.forEach((b, i) => b.classList.toggle('act', i === F.acIdx)); }
+    if (e.key === 'Enter' && F.acIdx >= 0) { e.preventDefault(); elegirPac(F.acRows[F.acIdx]); }
+    if (e.key === 'Escape') cerrarAc();
+  });
+  g('pac').addEventListener('blur', () => setTimeout(cerrarAc, 150));
+
+  g('mot').onchange = () => { pintarTipos(); autoPrecio(); resumen(); };
+  g('tipo').onchange = () => { pintarDesc(); resumen(); };
+  function autoPrecio() { /* sin precios en el catálogo por ahora */ }
+  g('b2').onclick = () => setSegundo(!segundoVisible());
+  g('fac').onchange = () => { g('nfac').disabled = !g('fac').checked; if (!g('fac').checked) g('nfac').value = ''; };
+  g('nv').onchange = () => { ['pago1', 'pago2'].forEach(id => g(id).style.opacity = g('nv').checked ? .45 : 1); g('b2').disabled = g('nv').checked; pintarChips(); ajustarCortesia(); resumen(); };
+  ['doc', 'm1', 'm2', 'desc'].forEach(id => g(id).addEventListener('input', resumen));
+  g('tel').addEventListener('input', () => { const v = soloDigitos(g('tel').value); if (v !== g('tel').value) g('tel').value = v; });
+
+  function limpiar() {
+    ['pac', 'tel', 'desc', 'm1', 'm2', 'nfac', 'rec', 'notas'].forEach(i => g(i).value = '');
+    if (!ES_DOCTORA()) g('doc').value = '';
+    g('mot').value = ''; pintarTipos();
+    F.P1 = F.P2 = ''; F.pac = null; g('fac').checked = false; g('nv').checked = false;
+    g('nv').onchange(); g('fac').onchange(); setSegundo(false); pintarChips();
+    g('newpac').classList.add('hide'); g('err').classList.add('hide');
+    document.querySelectorAll('#' + cont.id + ' .bad').forEach(e => e.classList.remove('bad'));
+    resumen();
+  }
+  function cargar(c) {
+    g('fecha').value = c ? c.fecha : todayLocal();
+    if (ES_DOCTORA()) g('doc').value = PERFIL.nombre;
+    if (!c) return;
+    g('doc').value = nombreDoctora(c.doctor_id);
+    if (c.paciente) { F.pac = { id: c.paciente.id, nombre: c.paciente.nombre, telefono: c.paciente.telefono }; g('pac').value = c.paciente.nombre; g('tel').value = c.paciente.telefono || ''; }
+    if (c.motivo && !motivosActivos().includes(c.motivo)) g('mot').innerHTML += opt([c.motivo]);
+    g('mot').value = c.motivo || ''; pintarTipos(c.tipo_consulta || '');
+    g('desc').value = c.descripcion || '';
+    g('nv').checked = !!c.no_vino;
+    F.P1 = c.medio_pago || ''; g('m1').value = c.no_vino ? '' : num(c.monto).toFixed(2);
+    if (c.medio_pago_2) { setSegundo(true); F.P2 = c.medio_pago_2; g('m2').value = num(c.monto_2).toFixed(2); }
+    g('fac').checked = !!c.factura; g('fac').onchange(); g('nfac').value = c.num_factura || '';
+    g('rec').value = c.numero_recibo || ''; g('notas').value = c.notas || '';
+    g('nv').onchange();
+  }
+
+  function validar() {
+    const falt = []; document.querySelectorAll('#' + cont.id + ' .bad').forEach(e => e.classList.remove('bad'));
+    const marca = (id, t) => { g(id).classList.add('bad'); falt.push(t); };
+    const fecha = g('fecha').value;
+    if (!fecha) marca('fecha', 'fecha');
+    else if (fecha > todayLocal()) marca('fecha', 'fecha (no puede ser futura)');
+    const d = docSel(); if (!d) marca('doc', 'doctora (elígela de la lista)');
+    const nom = g('pac').value.replace(/\s+/g, ' ').trim(); if (nom.length < 2) marca('pac', 'paciente');
+    const tel = soloDigitos(g('tel').value);
+    if (!F.pac && nom.length >= 2 && tel.length !== 10) marca('tel', 'teléfono de 10 dígitos para paciente nueva');
+    if (F.pac && tel && tel.length !== 10) marca('tel', 'teléfono de 10 dígitos');
+    if (!g('mot').value) marca('mot', 'motivo');
+    if (g('mot').value && !g('tipo').value) marca('tipo', 'tipo de consulta');
+    if (!g('wdesc').classList.contains('hide') && !g('desc').value.trim()) marca('desc', g('ldesc').textContent.toLowerCase());
+    const nv = g('nv').checked;
+    let m1 = num(g('m1').value), m2 = num(g('m2').value);
+    if (!nv) {
+      if (!F.P1) falt.push('medio de pago');
+      if (F.P1 && F.P1 !== 'Cortesía' && !(m1 > 0)) marca('m1', 'monto mayor a cero');
+      if (Number(g('m1').value) < 0) marca('m1', 'monto no negativo');
+      if (segundoVisible()) {
+        if (!F.P2) falt.push('medio del segundo pago');
+        if (F.P2 && F.P2 !== 'Cortesía' && !(m2 > 0)) marca('m2', 'monto del segundo pago');
+      }
+    }
+    if (g('fac').checked && !g('nfac').value.trim() && modo === 'editar') { /* el folio puede capturarse después */ }
+    return { falt, d, nom, tel, nv, m1, m2 };
+  }
+
+  g('save').onclick = async () => {
+    if (F.busy) return;
+    const v = validar();
+    if (v.falt.length) { g('err').textContent = 'Falta: ' + v.falt.join(', ') + '.'; g('err').classList.remove('hide'); return; }
+    g('err').classList.add('hide');
+    F.busy = true; const btn = g('save'); btn.disabled = true; const txt = btn.textContent; btn.textContent = 'Guardando…';
+    try {
+      let pacId = F.pac ? F.pac.id : null;
+      if (!pacId) {
+        const r = await sb.rpc('buscar_o_crear_paciente', { p_nombre: v.nom, p_telefono: v.tel || null });
+        if (r.error || !r.data) throw r.error || new Error('No se pudo dar de alta a la paciente');
+        pacId = r.data;
+      } else if (v.tel && v.tel !== (F.pac.telefono || '') && !ES_DOCTORA()) {
+        await sb.from('pacientes').update({ telefono: v.tel }).eq('id', pacId);
+      }
+      const segundo = !v.nv && segundoVisible() && F.P2;
+      const fila = {
+        fecha: g('fecha').value, doctor_id: v.d.id, paciente_id: pacId,
+        motivo: g('mot').value, tipo_consulta: g('tipo').value || null,
+        descripcion: g('wdesc').classList.contains('hide') ? null : (g('desc').value.trim() || null),
+        no_vino: v.nv,
+        monto: v.nv ? 0 : (F.P1 === 'Cortesía' ? 0 : v.m1), medio_pago: v.nv ? null : F.P1,
+        monto_2: segundo ? (F.P2 === 'Cortesía' ? 0 : v.m2) : null, medio_pago_2: segundo ? F.P2 : null,
+        factura: g('fac').checked, num_factura: g('fac').checked ? (g('nfac').value.trim() || null) : null,
+        numero_recibo: g('rec').value.trim() || null, notas: g('notas').value.trim() || null
+      };
+      const q = modo === 'editar' ? sb.from('consultas').update(fila).eq('id', consulta.id).select('id') : sb.from('consultas').insert(fila).select('id');
+      const { data, error } = await q;
+      if (error) throw error;
+      if (!data || !data.length) throw new Error('La base no aceptó el cambio (permisos u horario).');
+      toast(modo === 'editar' ? 'Cambios guardados.' : 'Consulta registrada.');
+      if (modo !== 'editar') { const f = g('fecha').value, dv = g('doc').value; limpiar(); g('fecha').value = f; g('doc').value = dv; resumen(); }
+      if (onSaved) onSaved();
+    } catch (e) {
+      console.error(e);
+      g('err').textContent = 'No se pudo guardar: ' + traducirError(e); g('err').classList.remove('hide');
+    } finally { F.busy = false; btn.disabled = false; btn.textContent = txt; }
+  };
+  g('clear').onclick = () => modo === 'editar' ? cerrarModal('m-editar') : limpiar();
+
+  pintarTipos(); pintarChips(); cargar(consulta); resumen();
+  F.limpiar = limpiar; F.tieneCaptura = () => !!(g('pac').value.trim() || num(g('m1').value) || num(g('m2').value) || g('notas').value.trim() || g('desc').value.trim());
+  return F;
+}
+function traducirError(e) {
+  const m = (e && (e.message || e.details)) || String(e || '');
+  if (/row-level security|permission denied|42501/i.test(m)) return 'no tienes permiso para este cambio (o estás fuera de horario).';
+  if (/doctora/i.test(m)) return 'la consulta debe asignarse a una doctora.';
+  if (/segundo pago/i.test(m)) return 'el segundo pago necesita un monto mayor a cero.';
+  if (/Failed to fetch|NetworkError/i.test(m)) return 'no hay conexión con el servidor.';
+  return m;
+}
+
+/* ════════ REGISTRO ════════ */
+function renderRegistro() {
+  $('sub-registro').textContent = ES_DOCTORA() ? 'Registras consultas a tu nombre' : 'Captura rápida';
+  if (FORMS.r && $('r-save')) return; // conserva lo capturado al cambiar de pestaña
+  initFormConsulta($('body-registro'), 'r', 'nuevo', null, () => { if (TAB === 'historial') cargarHistorial(); });
+}
+
+/* ════════ HISTORIAL ════════ */
+const H = { per: null, rows: [], q: '', doc: '', mot: '', med: '', tg: new Set(), limite: 200, cargando: false, seq: 0 };
+function perDia(d) { return { tipo: 'dia', d, h: d, lbl: d === todayLocal() ? 'Hoy' : d === addDays(todayLocal(), -1) ? 'Ayer' : diaNombre(d) + ' ' + fmtD(d) }; }
+function renderHistorial() {
+  if (!H.per) H.per = perDia(todayLocal());
+  const b = $('body-historial');
+  if (!$('h-body')) {
+    b.innerHTML =
+      '<div class="hero"><div><div class="t" id="h-title">—</div><div class="s" id="h-sub">—</div></div>' +
+      '<div class="hkpis"><div class="hk"><div class="l">Total</div><div class="v tl" id="hk-tot">$0.00</div></div>' +
+      '<div class="hk"><div class="l">Pacientes</div><div class="v" id="hk-pac">0</div></div>' +
+      '<div class="hk"><div class="l">Ticket promedio</div><div class="v" id="hk-tic">$0.00</div></div></div></div>' +
+      '<div class="fbar' + (ES_DOCTORA() ? ' sin-doc' : '') + '">' +
+        '<div class="full2"><label class="lbl" for="h-q">Buscar paciente</label><input class="inp" id="h-q" placeholder="Nombre o teléfono…"></div>' +
+        '<div class="full2 perwrap"><span class="lbl">Periodo</span><button class="inp perbtn" id="h-perbtn" type="button"><span id="h-perlbl">Hoy</span><span>▾</span></button>' +
+          '<div class="pop hide" id="h-pop">' +
+            '<div class="grp"><span class="lbl">Recientes</span><div class="chips"><button class="chip" data-pre="7">7 días</button><button class="chip" data-pre="30">30 días</button><button class="chip" data-pre="90">90 días</button><button class="chip" data-pre="365">Un año</button><button class="chip" data-pre="all">Todo</button></div></div>' +
+            '<div class="grp"><span class="lbl">Un día</span><div class="dayrow"><button class="ic" id="h-dprev" type="button" aria-label="Día anterior">‹</button><input class="inp" type="date" id="h-dia"><button class="ic" id="h-dnext" type="button" aria-label="Día siguiente">›</button></div>' +
+              '<div class="chips" style="margin-top:6px"><button class="chip" data-day="0">Hoy</button><button class="chip" data-day="1">Ayer</button></div></div>' +
+            '<div class="grp" style="margin-bottom:0"><span class="lbl">Rango</span><div class="rgrow"><input class="inp" type="date" id="h-rd" aria-label="Desde"><input class="inp" type="date" id="h-rh" aria-label="Hasta"></div>' +
+              '<div class="chips" style="margin-top:6px"><button class="chip" data-rg="sem">Esta semana</button><button class="chip" data-rg="mes">Este mes</button><button class="chip" data-rg="mpas">Mes pasado</button></div></div>' +
+          '</div></div>' +
+        (ES_DOCTORA() ? '' : '<div><label class="lbl" for="h-doc">Doctora</label><select class="inp" id="h-doc"></select></div>') +
+        '<div><label class="lbl" for="h-mot">Motivo</label><select class="inp" id="h-mot"></select></div>' +
+        '<div><label class="lbl" for="h-med">Medio de pago</label><select class="inp" id="h-med"></select></div>' +
+        '<div class="act">' + (PUEDE_EXPORTAR() ? '<button class="btn btn-s btn-sm" id="h-exp">⭳ Exportar</button>' : '') +
+          (PUEDE_PAPELERA() ? '<button class="btn btn-g btn-sm" id="h-pap">🗑 Papelera</button>' : '') + '</div>' +
+      '</div>' +
+      '<div class="toggles"><button class="chip" data-tg="fac">Solo facturado</button><button class="chip" data-tg="nofac">Solo no facturado</button><button class="chip" data-tg="nv">Solo no vino</button></div>' +
+      '<table class="tbl"><thead><tr><th>Fecha</th><th>Paciente</th>' + (ES_DOCTORA() ? '' : '<th>Doctora</th>') + '<th>Servicio</th><th>Pago</th><th style="text-align:right">Total</th><th>Factura</th><th></th></tr></thead><tbody id="h-body"></tbody></table>' +
+      '<div class="more hide" id="h-more"><button class="btn btn-g btn-sm" id="h-morebtn">Mostrar más</button></div>';
+    if ($('h-doc')) $('h-doc').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todas');
+    $('h-mot').innerHTML = opt(motivosActivos(), 'Todos');
+    $('h-med').innerHTML = opt(CATALOGOS.mediosPago, 'Todos');
+    $('h-q').addEventListener('input', () => { H.q = $('h-q').value; H.limite = 200; pintarHistorial(); });
+    ['h-doc', 'h-mot', 'h-med'].forEach(id => $(id) && $(id).addEventListener('change', () => { H[id.slice(2)] = $(id).value; H.limite = 200; pintarHistorial(); }));
+    document.querySelectorAll('#body-historial [data-tg]').forEach(x => x.onclick = () => {
+      const k = x.dataset.tg; if (H.tg.has(k)) H.tg.delete(k); else { H.tg.add(k); if (k === 'fac') H.tg.delete('nofac'); if (k === 'nofac') H.tg.delete('fac'); }
+      document.querySelectorAll('#body-historial [data-tg]').forEach(y => y.classList.toggle('on', H.tg.has(y.dataset.tg))); pintarHistorial();
+    });
+    $('h-perbtn').onclick = e => { e.stopPropagation(); if ($('h-pop').classList.contains('hide')) $('h-pop').classList.remove('hide'); else cerrarPop(); };
+    if (!renderHistorial._doc) { renderHistorial._doc = true; document.addEventListener('click', e => { const pop = $('h-pop'), pb = $('h-perbtn'); if (pop && pb && !pop.contains(e.target) && !pb.contains(e.target)) cerrarPop(); }); }
+    $('h-pop').querySelectorAll('[data-pre]').forEach(x => x.onclick = () => {
+      const v = x.dataset.pre;
+      setPeriodo(v === 'all' ? { tipo: 'all', d: '2000-01-01', h: '2100-12-31', lbl: 'Todo' }
+        : { tipo: 'pre', d: addDays(todayLocal(), -(+v - 1)), h: todayLocal(), lbl: v === '365' ? 'Último año' : 'Últimos ' + v + ' días' });
+    });
+    $('h-pop').querySelectorAll('[data-day]').forEach(x => x.onclick = () => setPeriodo(perDia(addDays(todayLocal(), -(+x.dataset.day)))));
+    $('h-dprev').onclick = () => setPeriodo(perDia(addDays(H.per.tipo === 'dia' ? H.per.d : todayLocal(), -1)), true);
+    $('h-dnext').onclick = () => setPeriodo(perDia(addDays(H.per.tipo === 'dia' ? H.per.d : todayLocal(), 1)), true);
+    $('h-dia').onchange = () => $('h-dia').value && setPeriodo(perDia($('h-dia').value), true);
+    const rg = () => { if ($('h-rd').value && $('h-rh').value) setRango($('h-rd').value, $('h-rh').value, null, true); };
+    $('h-rd').onchange = rg; $('h-rh').onchange = rg;
+    $('h-pop').querySelectorAll('[data-rg]').forEach(x => x.onclick = () => {
+      const t = todayLocal(), dt = parseISO(t), k = x.dataset.rg;
+      if (k === 'sem') setRango(addDays(t, -((dt.getDay() + 6) % 7)), t, 'Esta semana');
+      else if (k === 'mes') setRango(inicioMes(t), t, 'Este mes');
+      else { const ini = isoLocal(new Date(dt.getFullYear(), dt.getMonth() - 1, 1)); setRango(ini, finMes(ini), 'Mes pasado'); }
+    });
+    if ($('h-exp')) $('h-exp').onclick = abrirExportar;
+    if ($('h-pap')) $('h-pap').onclick = abrirPapelera;
+    $('h-morebtn').onclick = () => { H.limite += 200; pintarHistorial(); };
+  }
+  cargarHistorial();
+}
+function cerrarPop() {
+  const pop = $('h-pop'); if (!pop || pop.classList.contains('hide')) return;
+  pop.classList.add('hide');
+  if (H.per && H.per.tipo === 'rango') { $('h-rd').value = H.per.d; $('h-rh').value = H.per.h; H.per.desdeInputs = false; }
+}
+function setRango(a, b, lbl, abierto) { if (a > b) [a, b] = [b, a]; setPeriodo({ tipo: 'rango', d: a, h: b, lbl: lbl || fmtD(a) + ' – ' + fmtD(b), desdeInputs: !!abierto }, abierto); }
+function setPeriodo(p, abierto) { H.per = p; H.limite = 200; if (!abierto) cerrarPop(); cargarHistorial(); }
+async function cargarHistorial() {
+  if (!$('h-body')) return;
+  const seq = ++H.seq; H.cargando = true;
+  $('h-perlbl').textContent = H.per.lbl;
+  if (H.per.tipo === 'dia') $('h-dia').value = H.per.d;
+  // mientras la persona escribe el rango no se le cambian los campos; al cerrar el panel se acomodan
+  if (H.per.tipo === 'rango' && !H.per.desdeInputs) { $('h-rd').value = H.per.d; $('h-rh').value = H.per.h; }
+  $('h-body').innerHTML = '<tr><td colspan="8" class="empty">Cargando…</td></tr>';
+  try {
+    const rows = await cargarConsultas(H.per.d, H.per.h, false);
+    if (seq !== H.seq) return; // llegó una respuesta vieja: se descarta
+    H.rows = rows;
+  } catch (e) {
+    console.error(e); if (seq !== H.seq) return;
+    H.rows = []; $('h-body').innerHTML = '<tr><td colspan="8" class="empty">No se pudo cargar el historial. ' + esc(traducirError(e)) + '</td></tr>';
+    return;
+  } finally { if (seq === H.seq) H.cargando = false; }
+  pintarHistorial();
+}
+function filtrarHistorial(rows) {
+  const q = normTxt(H.q), qd = soloDigitos(H.q);
+  return rows.filter(c =>
+    (!H.doc || c.doctor_id === H.doc) && (!H.mot || c.motivo === H.mot) &&
+    (!H.med || c.medio_pago === H.med || c.medio_pago_2 === H.med) &&
+    (!q || normTxt(c.paciente && c.paciente.nombre).includes(q) || (qd.length >= 3 && soloDigitos(c.paciente && c.paciente.telefono).includes(qd))) &&
+    (!H.tg.has('fac') || c.factura) && (!H.tg.has('nofac') || !c.factura) && (!H.tg.has('nv') || c.no_vino));
+}
+function pintarHistorial() {
+  if (!$('h-body')) return;
+  bloque('el historial', () => {
+    const rows = filtrarHistorial(H.rows), asist = rows.filter(c => !c.no_vino);
+    const tot = sumar(asist, ingreso), pacs = new Set(asist.map(c => c.paciente_id)).size;
+    $('h-title').textContent = H.per.lbl;
+    const desc = H.per.tipo === 'dia' ? diaNombre(H.per.d) + ' ' + fmtD(H.per.d) : H.per.tipo === 'all' ? 'Todos los registros' : fmtD(H.per.d) + ' – ' + fmtD(H.per.h);
+    $('h-sub').textContent = desc + ' · ' + rows.length + (rows.length === 1 ? ' registro' : ' registros') + (ES_DOCTORA() ? ' · solo tus consultas' : '');
+    $('hk-tot').textContent = money(tot); $('hk-pac').textContent = pacs; $('hk-tic').textContent = money(asist.length ? tot / asist.length : 0);
+    const vis = rows.slice(0, H.limite);
+    $('h-body').innerHTML = vis.length ? vis.map(c => {
+      const pg = pagosDe(c);
+      return '<tr class="' + (c.no_vino ? 'nv' : '') + '">' +
+        '<td data-l="Fecha">' + fmtD(c.fecha) + '</td>' +
+        '<td data-l="Paciente"><div><b>' + esc(c.paciente ? c.paciente.nombre : '—') + '</b>' + (c.paciente && c.paciente.telefono ? '<div class="sub2">' + esc(c.paciente.telefono) + '</div>' : '') + '</div></td>' +
+        (ES_DOCTORA() ? '' : '<td data-l="Doctora">' + esc(corto(c.doctor ? c.doctor.nombre : nombreDoctora(c.doctor_id))) + '</td>') +
+        '<td data-l="Servicio">' + esc(servicioTxt(c)) + '</td>' +
+        '<td data-l="Pago">' + (c.no_vino ? '<span class="st st-nv">No vino</span>' : pg.map(p => '<span class="st ' + stCls(p[0]) + '">' + esc(p[0]) + (pg.length > 1 ? ' ' + money(p[1]) : '') + '</span>').join(' ')) + '</td>' +
+        '<td data-l="Total" class="num">' + (c.no_vino ? '—' : money(ingreso(c))) + '</td>' +
+        '<td data-l="Factura">' + (c.factura ? '<span class="st st-fa">' + esc(c.num_factura || 'Sí, sin folio') + '</span>' : '<span class="muted">No</span>') + '</td>' +
+        '<td data-l="Acciones"><span style="display:inline-flex;gap:5px"><button class="ic" title="Editar" data-ed="' + esc(c.id) + '">✎</button><button class="ic" title="Mandar a papelera" data-del="' + esc(c.id) + '">🗑</button></span></td></tr>';
+    }).join('') : '<tr><td colspan="8" class="empty">Sin registros para estos filtros.</td></tr>';
+    $('h-more').classList.toggle('hide', rows.length <= H.limite);
+    $('h-body').querySelectorAll('[data-ed]').forEach(x => x.onclick = () => abrirEditar(H.rows.find(c => c.id === x.dataset.ed)));
+    $('h-body').querySelectorAll('[data-del]').forEach(x => x.onclick = () => mandarAPapelera(H.rows.find(c => c.id === x.dataset.del)));
+  });
+}
+function abrirEditar(c) {
+  if (!c) return;
+  initFormConsulta($('ed-form'), 'e', 'editar', c, () => { cerrarModal('m-editar'); refrescarActiva(); });
+  abrirModal('m-editar');
+}
+function confirmar(titulo, msg, txtOk) {
+  return new Promise(res => {
+    $('cf-t').textContent = titulo; $('cf-msg').textContent = msg; $('cf-ok').textContent = txtOk || 'Confirmar';
+    const m = $('m-confirm'); let hecho = false;
+    const fin = v => { if (hecho) return; hecho = true; cerrarModal('m-confirm'); obs.disconnect(); res(v); };
+    $('cf-ok').onclick = () => fin(true);
+    const obs = new MutationObserver(() => { if (!m.classList.contains('show')) fin(false); });
+    obs.observe(m, { attributes: true, attributeFilter: ['class'] });
+    abrirModal('m-confirm');
+  });
+}
+async function mandarAPapelera(c) {
+  if (!c) return;
+  const ok = await confirmar('Mandar a papelera', 'La consulta de ' + (c.paciente ? c.paciente.nombre : '—') + ' del ' + fmtD(c.fecha) + ' (' + money(ingreso(c)) + ') dejará de contar en el historial y en el cierre.' + (PUEDE_PAPELERA() ? ' Podrás restaurarla desde la papelera.' : ''), 'Mandar a papelera');
+  if (!ok) return;
+  const { data, error } = await sb.from('consultas').update({ deleted: true }).eq('id', c.id).select('id');
+  if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
+  H.rows = H.rows.filter(x => x.id !== c.id); pintarHistorial();
+  toast('Consulta enviada a la papelera.');
+}
+
+/* Papelera: restaurar (admin y doctora), eliminar definitivo y vaciar (solo admin con permiso) */
+let PAP_ROWS = [];
+async function abrirPapelera() {
+  abrirModal('m-papelera');
+  $('pp-vaciar').classList.toggle('hide', !PUEDE_ELIMINAR_DEF());
+  $('pp-list').innerHTML = '<div class="empty">Cargando…</div>';
+  try {
+    PAP_ROWS = await cargarConsultas('2000-01-01', '2100-12-31', true);
+    PAP_ROWS.sort((a, b) => String(b.deleted_at || '').localeCompare(String(a.deleted_at || '')));
+    pintarPapelera();
+  } catch (e) { console.error(e); $('pp-list').innerHTML = '<div class="empty">No se pudo cargar la papelera.</div>'; }
+}
+function pintarPapelera() {
+  $('pp-sub').textContent = PAP_ROWS.length + (PAP_ROWS.length === 1 ? ' consulta' : ' consultas') + ' en la papelera';
+  $('pp-vaciar').disabled = !PAP_ROWS.length;
+  $('pp-list').innerHTML = PAP_ROWS.length ? '<table class="tbl"><thead><tr><th>Fecha</th><th>Paciente</th><th>Doctora</th><th style="text-align:right">Total</th><th>Eliminada</th><th></th></tr></thead><tbody>' +
+    PAP_ROWS.map(c => '<tr><td data-l="Fecha">' + fmtD(c.fecha) + '</td><td data-l="Paciente"><b>' + esc(c.paciente ? c.paciente.nombre : '—') + '</b><div class="sub2">' + esc(servicioTxt(c)) + '</div></td>' +
+      '<td data-l="Doctora">' + esc(corto(c.doctor ? c.doctor.nombre : '')) + '</td><td data-l="Total" class="num">' + (c.no_vino ? '—' : money(ingreso(c))) + '</td>' +
+      '<td data-l="Eliminada">' + esc(fmtFechaHora(c.deleted_at)) + '</td>' +
+      '<td data-l="Acciones"><span style="display:inline-flex;gap:5px"><button class="btn btn-g btn-sm" data-res="' + esc(c.id) + '">Restaurar</button>' +
+      (PUEDE_ELIMINAR_DEF() ? '<button class="btn btn-d btn-sm" data-def="' + esc(c.id) + '">Eliminar</button>' : '') + '</span></td></tr>').join('') + '</tbody></table>'
+    : '<div class="empty">La papelera está vacía.</div>';
+  $('pp-list').querySelectorAll('[data-res]').forEach(b => b.onclick = async () => {
+    b.disabled = true;
+    const { data, error } = await sb.from('consultas').update({ deleted: false }).eq('id', b.dataset.res).select('id');
+    if (error || !data || !data.length) { b.disabled = false; return toast('No se pudo restaurar: ' + traducirError(error || 'sin permiso')); }
+    PAP_ROWS = PAP_ROWS.filter(c => c.id !== b.dataset.res); pintarPapelera(); toast('Consulta restaurada.'); refrescarActiva();
+  });
+  $('pp-list').querySelectorAll('[data-def]').forEach(b => b.onclick = async () => {
+    const c = PAP_ROWS.find(x => x.id === b.dataset.def);
+    const ok = await confirmar('Eliminar definitivamente', 'Se borrará para siempre la consulta de ' + (c && c.paciente ? c.paciente.nombre : '—') + ' del ' + fmtD(c && c.fecha) + '. Quedará registro en la bitácora. Esta acción no se puede deshacer.', 'Eliminar para siempre');
+    abrirModal('m-papelera');
+    if (!ok) return;
+    const { data, error } = await sb.from('consultas').delete().eq('id', b.dataset.def).eq('deleted', true).select('id');
+    if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
+    PAP_ROWS = PAP_ROWS.filter(x => x.id !== b.dataset.def); pintarPapelera(); toast('Eliminada definitivamente.');
+  });
+}
+$('pp-vaciar').onclick = async () => {
+  if (!PUEDE_ELIMINAR_DEF() || !PAP_ROWS.length) return;
+  const ok = await confirmar('Vaciar papelera', 'Se borrarán para siempre ' + PAP_ROWS.length + ' consultas. Quedará registro en la bitácora. Esta acción no se puede deshacer.', 'Vaciar papelera');
+  abrirModal('m-papelera');
+  if (!ok) return;
+  const ids = PAP_ROWS.map(c => c.id);
+  const { data, error } = await sb.from('consultas').delete().in('id', ids).eq('deleted', true).select('id');
+  if (error) return toast('No se pudo vaciar: ' + traducirError(error));
+  const borr = new Set((data || []).map(r => r.id)); PAP_ROWS = PAP_ROWS.filter(c => !borr.has(c.id)); pintarPapelera();
+  toast(borr.size + ' consultas eliminadas definitivamente.');
+};
+
+/* Exportar (Excel / PDF) con las fechas elegidas en el Historial */
+let EX_FMT = 'xlsx';
+function abrirExportar() {
+  if (!PUEDE_EXPORTAR()) return;
+  const p = H.per;
+  $('ex-d').value = p.tipo === 'all' ? '' : p.d; $('ex-h').value = p.tipo === 'all' ? todayLocal() : p.h;
+  abrirModal('m-exportar');
+}
+$('ex-fmt').querySelectorAll('[data-f]').forEach(b => b.onclick = () => { EX_FMT = b.dataset.f; $('ex-fmt').querySelectorAll('[data-f]').forEach(x => x.classList.toggle('on', x === b)); });
+function cargarScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector('script[src="' + src + '"]')) return res();
+    const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('No se pudo cargar ' + src)); document.head.appendChild(s);
+  });
+}
+const CDN = {
+  xlsx: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+  jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  autotable: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'
+};
+$('ex-go').onclick = async () => {
+  let d = $('ex-d').value || '2000-01-01', h = $('ex-h').value || todayLocal();
+  if (d > h) [d, h] = [h, d];
+  const btn = $('ex-go'); btn.disabled = true; btn.textContent = 'Preparando…';
+  try {
+    const rows = filtrarHistorial(await cargarConsultas(d, h, false)).sort((a, b) => a.fecha.localeCompare(b.fecha));
+    if (!rows.length) { toast('No hay consultas en ese periodo con los filtros activos.'); return; }
+    if (EX_FMT === 'xlsx') await exportarExcel(rows, d, h); else await exportarPDF(rows, d, h);
+    cerrarModal('m-exportar');
+  } catch (e) { console.error(e); toast('No se pudo exportar: ' + traducirError(e)); }
+  finally { btn.disabled = false; btn.textContent = '⭳ Exportar'; }
+};
+const sufijoArchivo = (d, h) => d === h ? d : d + '_a_' + h;
+async function exportarExcel(rows, d, h) {
+  await cargarScript(CDN.xlsx);
+  const asist = rows.filter(c => !c.no_vino), nv = rows.filter(c => c.no_vino);
+  const wb = XLSX.utils.book_new();
+  const head = ['Fecha', 'Paciente', 'Teléfono', 'Doctora', 'Motivo', 'Tipo de consulta', 'Descripción', 'Monto 1', 'Medio de pago 1', 'Monto 2', 'Medio de pago 2', 'Total', 'Efectivo', 'Factura', 'Núm. factura', 'Núm. recibo', 'Notas'];
+  const body = asist.map(c => [fmtD(c.fecha), c.paciente ? c.paciente.nombre : '', c.paciente ? (c.paciente.telefono || '') : '', c.doctor ? c.doctor.nombre : '', c.motivo, c.tipo_consulta || '', c.descripcion || '',
+    num(c.monto), c.medio_pago || '', c.medio_pago_2 ? num(c.monto_2) : '', c.medio_pago_2 || '', ingreso(c), efectivoDe(c), c.factura ? 'Sí' : 'No', c.num_factura || '', c.numero_recibo || '', c.notas || '']);
+  body.push(['', '', '', '', '', '', '', '', '', '', 'TOTAL', sumar(asist, ingreso), sumar(asist, efectivoDe), '', '', '', '']);
+  const ws = XLSX.utils.aoa_to_sheet([head].concat(body));
+  ws['!cols'] = [11, 28, 12, 26, 18, 16, 22, 11, 15, 11, 15, 12, 12, 8, 14, 12, 28].map(w => ({ wch: w }));
+  XLSX.utils.book_append_sheet(wb, ws, 'Consultas');
+  if (nv.length) {
+    const ws2 = XLSX.utils.aoa_to_sheet([['Fecha', 'Paciente', 'Teléfono', 'Doctora', 'Servicio']].concat(nv.map(c => [fmtD(c.fecha), c.paciente ? c.paciente.nombre : '', c.paciente ? (c.paciente.telefono || '') : '', c.doctor ? c.doctor.nombre : '', servicioTxt(c)])));
+    ws2['!cols'] = [11, 28, 12, 26, 26].map(w => ({ wch: w }));
+    XLSX.utils.book_append_sheet(wb, ws2, 'No vinieron');
+  }
+  XLSX.writeFile(wb, 'MARE_Historial_' + sufijoArchivo(d, h) + '.xlsx');
+}
+async function exportarPDF(rows, d, h) {
+  await cargarScript(CDN.jspdf); await cargarScript(CDN.autotable);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  const W = doc.internal.pageSize.getWidth(), M = 36;
+  const asist = rows.filter(c => !c.no_vino), nv = rows.filter(c => c.no_vino);
+  const encabezado = () => {
+    doc.setFillColor(11, 22, 40); doc.rect(0, 0, W, 64, 'F');
+    try { doc.addImage($('logo-src').src, 'PNG', M, 10, 84, 44); } catch (e) { /* sin logo */ }
+    doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+    doc.text('PRODUCTIVIDAD MARE', W - M, 28, { align: 'right' });
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(180, 200, 220);
+    doc.text('Generado: ' + fmtD(todayLocal()) + ' · Por: ' + (PERFIL ? PERFIL.nombre : '—'), W - M, 44, { align: 'right' });
+  };
+  encabezado();
+  let y = 92;
+  doc.setTextColor(11, 22, 40); doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('Historial de consultas', M, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(100, 110, 130);
+  const docNom = H.doc ? nombreDoctora(H.doc) : (ES_DOCTORA() ? PERFIL.nombre : '');
+  doc.text('Periodo: ' + (d === h ? fmtD(d) : fmtD(d) + ' — ' + fmtD(h)) + (docNom ? ' · Doctora: ' + docNom : ''), M, y + 14);
+  y += 32;
+  const tot = sumar(asist, ingreso);
+  const kp = [['Ingreso total', money(tot)], ['Consultas', String(asist.length)], ['Ticket promedio', money(asist.length ? tot / asist.length : 0)], ['No vinieron', String(nv.length)]];
+  const kw = (W - M * 2 - 30) / 4;
+  kp.forEach((k, i) => { const x = M + i * (kw + 10); doc.setFillColor(244, 246, 251); doc.roundedRect(x, y, kw, 40, 4, 4, 'F');
+    doc.setTextColor(11, 22, 40); doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text(k[1], x + 10, y + 19);
+    doc.setTextColor(100, 110, 130); doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.text(k[0].toUpperCase(), x + 10, y + 31); });
+  y += 58;
+  const pie = () => { const n = doc.internal.getNumberOfPages(); for (let i = 1; i <= n; i++) { doc.setPage(i); doc.setDrawColor(27, 58, 107); doc.line(M, 760, W - M, 760); doc.setFontSize(7.5); doc.setTextColor(100, 110, 130);
+    doc.text('Documento generado por el sistema de MARE Ginecología Integral · Confidencial · Uso interno', M, 772); doc.text('Página ' + i + ' de ' + n, W - M, 772, { align: 'right' }); } };
+  doc.autoTable({ startY: y, margin: { left: M, right: M, top: 80, bottom: 50 },
+    head: [['Fecha', 'Paciente', 'Doctora', 'Servicio', 'Pago', 'Total']],
+    body: asist.map(c => [fmtD(c.fecha), c.paciente ? c.paciente.nombre : '—', corto(c.doctor ? c.doctor.nombre : ''), servicioTxt(c), pagosDe(c).map(p => p[0] + (c.medio_pago_2 ? ' ' + money(p[1]) : '')).join(' + '), money(ingreso(c))]),
+    foot: [['', '', '', '', 'TOTAL', money(tot)]],
+    styles: { fontSize: 8, cellPadding: 5 }, headStyles: { fillColor: [27, 58, 107], textColor: 255 }, footStyles: { fillColor: [244, 246, 251], textColor: [11, 22, 40], fontStyle: 'bold' },
+    columnStyles: { 5: { halign: 'right' } }, alternateRowStyles: { fillColor: [250, 251, 253] }, showHead: 'everyPage',
+    didDrawPage: () => encabezado() });
+  if (nv.length) {
+    doc.autoTable({ startY: doc.lastAutoTable.finalY + 24, margin: { left: M, right: M, top: 80, bottom: 50 },
+      head: [['Fecha', 'Paciente', 'Teléfono', 'Doctora', 'Servicio']],
+      body: nv.map(c => [fmtD(c.fecha), c.paciente ? c.paciente.nombre : '—', c.paciente ? (c.paciente.telefono || '') : '', corto(c.doctor ? c.doctor.nombre : ''), servicioTxt(c)]),
+      styles: { fontSize: 8, cellPadding: 5 }, headStyles: { fillColor: [184, 72, 31], textColor: 255 }, showHead: 'everyPage', didDrawPage: () => encabezado() });
+  }
+  pie();
+  doc.save('MARE_Historial_' + sufijoArchivo(d, h) + '.pdf');
+}
+
+/* ════════ CIERRE ════════ */
+const C = { modo: 'dia', dia: null, mes: null, doc: '', vista: 'doc', seq: 0 };
+function renderCierre() {
+  if (!C.dia) { C.dia = todayLocal(); C.mes = todayLocal().slice(0, 7); }
+  if (!$('c-grid')) {
+    $('body-cierre').innerHTML =
+      '<div class="cbar">' +
+        '<div class="seg" id="c-modo"><button data-m="dia" class="on">Día</button><button data-m="mes">Mes</button></div>' +
+        '<div class="dayrow" id="c-diaw"><button class="ic" id="c-prev" aria-label="Día anterior">‹</button><input class="inp" type="date" id="c-dia"><button class="ic" id="c-next" aria-label="Día siguiente">›</button></div>' +
+        '<input class="inp hide" type="month" id="c-mes" style="max-width:190px">' +
+        (ES_DOCTORA() ? '' : '<div style="min-width:220px"><select class="inp" id="c-doc"></select></div>') +
+        '<div class="seg" id="c-vista"><button data-v="doc" class="on">' + (ES_DOCTORA() ? 'Por paciente' : 'Por doctora') + '</button><button data-v="med">Por medio de pago</button></div>' +
+      '</div>' +
+      '<div class="hero" style="grid-template-columns:1fr"><div><div class="t" id="c-title">—</div><div class="s" id="c-range">—</div></div></div>' +
+      '<div class="kpis"><div class="kpi"><div class="ico">💰</div><div class="l">Ingreso total</div><div class="v" id="ck-ing">$0.00</div></div>' +
+      '<div class="kpi"><div class="ico">🩺</div><div class="l">Consultas</div><div class="v" id="ck-con">0</div><div class="s" id="ck-nv"></div></div>' +
+      '<div class="kpi"><div class="ico">🎯</div><div class="l">Ticket promedio</div><div class="v" id="ck-tic">$0.00</div></div></div>' +
+      '<div id="c-efe"></div><div class="cgrid" id="c-grid"></div><div class="cuadra" id="c-cuadra"></div>';
+    if ($('c-doc')) $('c-doc').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todas las doctoras');
+    $('c-modo').querySelectorAll('button').forEach(b => b.onclick = () => { C.modo = b.dataset.m; $('c-modo').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      $('c-diaw').classList.toggle('hide', C.modo !== 'dia'); $('c-mes').classList.toggle('hide', C.modo !== 'mes'); cargarCierre(); });
+    $('c-vista').querySelectorAll('button').forEach(b => b.onclick = () => { C.vista = b.dataset.v; $('c-vista').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); pintarCierre(); });
+    $('c-prev').onclick = () => { C.dia = addDays(C.dia, -1); cargarCierre(); };
+    $('c-next').onclick = () => { C.dia = addDays(C.dia, 1); cargarCierre(); };
+    $('c-dia').onchange = () => { if ($('c-dia').value) { C.dia = $('c-dia').value; cargarCierre(); } };
+    $('c-mes').onchange = () => { if ($('c-mes').value) { C.mes = $('c-mes').value; cargarCierre(); } };
+    if ($('c-doc')) $('c-doc').onchange = () => { C.doc = $('c-doc').value; cargarCierre(); };
+  }
+  cargarCierre();
+}
+const cRango = () => C.modo === 'dia' ? [C.dia, C.dia] : [C.mes + '-01', finMes(C.mes + '-01')];
+let C_ROWS = [], C_GASTOS = null;
+async function cargarCierre() {
+  if (!$('c-grid')) return;
+  const seq = ++C.seq, [d, h] = cRango();
+  $('c-dia').value = C.dia; $('c-mes').value = C.mes;
+  $('c-grid').innerHTML = '<div class="empty">Cargando…</div>';
+  // Bloques independientes: si el efectivo falla, el resto del cierre se muestra igual.
+  const pCons = cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e }));
+  const pGas = (ES_DOCTORA() || C.doc) ? Promise.resolve({ ok: true, r: null })
+    : sb.rpc('cierre_gastos_info', { p_desde: d, p_hasta: h }).then(x => x.error ? { ok: false, e: x.error } : { ok: true, r: x.data }, e => ({ ok: false, e }));
+  const [rc, rg] = await Promise.all([pCons, pGas]);
+  if (seq !== C.seq) return;
+  if (!rc.ok) { console.error(rc.e); C_ROWS = []; $('c-grid').innerHTML = '<div class="empty">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'; }
+  else C_ROWS = (C.doc ? rc.r.filter(c => c.doctor_id === C.doc) : rc.r);
+  C_GASTOS = rg.ok ? rg.r : { error: true };
+  pintarCierre(rc.ok);
+}
+function pintarCierre(consOk) {
+  if (consOk === undefined) consOk = true;
+  const [d, h] = cRango();
+  const rows = C_ROWS, asist = rows.filter(c => !c.no_vino), tot = sumar(asist, ingreso);
+  bloque('el resumen del cierre', () => {
+    $('c-title').textContent = C.modo === 'dia' ? (d === todayLocal() ? 'Cierre de hoy' : 'Cierre del día') : 'Cierre de ' + MESES[parseISO(d).getMonth()] + ' ' + parseISO(d).getFullYear();
+    $('c-range').textContent = (C.modo === 'dia' ? diaNombre(d) + ' ' + fmtD(d) : fmtD(d) + ' – ' + fmtD(h)) + ' · ' + (ES_DOCTORA() ? PERFIL.nombre : (C.doc ? nombreDoctora(C.doc) : 'Todas las doctoras'));
+    $('ck-ing').textContent = money(tot); $('ck-con').textContent = asist.length;
+    $('ck-nv').textContent = rows.length > asist.length ? (rows.length - asist.length) + ' no vino' : '';
+    $('ck-tic').textContent = money(asist.length ? tot / asist.length : 0);
+  });
+  bloque('el efectivo del día', () => pintarEfectivoCierre(rows, d, h));
+  if (!consOk) return;
+  bloque('las tarjetas del cierre', () => {
+    let html = '', sumMed = 0;
+    if (C.vista === 'doc') {
+      if (ES_DOCTORA()) {
+        html = asist.length ? '<div class="cc" style="grid-column:1/-1"><div class="h"><span class="n">' + esc(PERFIL.nombre) + '</span><span class="a">' + money(tot) + '</span></div>' +
+          asist.map(c => '<div class="li"><span>' + esc(c.paciente ? c.paciente.nombre : '—') + ' <span class="muted">· ' + esc(servicioTxt(c)) + '</span></span><b>' + money(ingreso(c)) + '</b></div>').join('') + '</div>' : '';
+      } else {
+        const by = {}; asist.forEach(c => (by[c.doctor_id] = by[c.doctor_id] || []).push(c));
+        html = Object.keys(by).map(k => [k, sumar(by[k], ingreso)]).sort((a, b) => b[1] - a[1]).map(([k, t]) =>
+          '<div class="cc"><div class="h"><span class="n">' + esc(nombreDoctora(k)) + '</span><span class="a">' + money(t) + '</span></div>' +
+          '<div class="bar"><i style="width:' + (tot ? t / tot * 100 : 0).toFixed(1) + '%"></i></div><div class="sub2">' + by[k].length + ' consulta(s) · ' + (tot ? (t / tot * 100).toFixed(1) : '0.0') + '% del ingreso</div>' +
+          '<details><summary>Ver pacientes</summary>' + by[k].map(c => '<div class="li"><span>' + esc(c.paciente ? c.paciente.nombre : '—') + ' <span class="muted">· ' + esc(servicioTxt(c)) + '</span></span><b>' + money(ingreso(c)) + '</b></div>').join('') + '</details></div>').join('');
+      }
+    } else {
+      const by = {};
+      asist.forEach(c => pagosDe(c).forEach(([m, v]) => { const o = by[m] = by[m] || { t: 0, n: 0, doc: {} }; o.t = num(o.t + v); o.n++; o.doc[c.doctor_id] = num((o.doc[c.doctor_id] || 0) + v); }));
+      html = CATALOGOS.mediosPago.filter(m => by[m] && by[m].t > 0.004).map(m => {
+        const o = by[m]; sumMed = num(sumMed + o.t);
+        return '<div class="cc"><div class="h"><span class="n"><span class="st ' + stCls(m) + '">' + esc(m) + '</span></span><span class="a">' + money(o.t) + '</span></div>' +
+          '<div class="bar"><i style="width:' + (tot ? o.t / tot * 100 : 0).toFixed(1) + '%"></i></div><div class="sub2">' + o.n + ' pago(s)</div>' +
+          (ES_DOCTORA() ? '' : '<details><summary>Desglose por doctora</summary>' + Object.keys(o.doc).sort((a, b) => o.doc[b] - o.doc[a]).map(k => '<div class="li"><span>' + esc(nombreDoctora(k)) + '</span><b>' + money(o.doc[k]) + '</b></div>').join('') + '</details>') + '</div>';
+      }).join('');
+      const cort = asist.filter(c => pagosDe(c).some(p => p[0] === 'Cortesía')).length;
+      if (cort) html += '<div class="cc" style="border-style:dashed"><div class="n">Cortesías</div><div class="sub2" style="margin-top:6px">' + cort + ' consulta(s) con cortesía · no suman ingreso</div></div>';
+    }
+    $('c-grid').innerHTML = html || '<div class="empty">Sin consultas en este periodo.</div>';
+    const cu = $('c-cuadra');
+    if (C.vista === 'med' && asist.length) {
+      const okc = mismoMonto(sumMed, tot);
+      cu.className = 'cuadra' + (okc ? '' : ' bad');
+      cu.textContent = okc ? '✓ La suma por medio de pago cuadra con el ingreso total (' + money(tot) + ')' : '⚠ Diferencia de ' + money(tot - sumMed) + ' contra el ingreso total';
+    } else cu.textContent = '';
+  });
+}
+function pintarEfectivoCierre(rows, d, h) {
+  const box = $('c-efe');
+  if (ES_DOCTORA()) { box.innerHTML = ''; return; }
+  const lbl = C.modo === 'dia' ? 'del día' : 'del periodo';
+  if (C.doc) { box.innerHTML = '<div class="aviso">El efectivo ' + lbl + ' se muestra solo sin filtro de doctora, porque los gastos son de la clínica y no de una doctora.</div>'; return; }
+  const g = C_GASTOS;
+  if (!g || g.error) { box.innerHTML = '<div class="aviso warn">No se pudo cargar el efectivo ' + lbl + '. El resto del cierre sigue disponible.</div>'; return; }
+  if (!g.permitido) { box.innerHTML = ''; return; }
+  const cob = sumar(rows, efectivoDe);
+  const sal = Array.isArray(g.salidas) ? g.salidas : [];
+  const tsal = sumar(sal, x => num(x.monto)), neto = num(cob - tsal);
+  const sm = g.sin_medio && g.sin_medio.n > 0 ? '<div class="aviso warn" style="margin:10px 0 0">Hay ' + g.sin_medio.n + ' gasto(s) sin medio de pago (' + money(g.sin_medio.total) + ') en este periodo. Corrígelos en Gastos para que el efectivo cuadre.</div>' : '';
+  box.innerHTML = '<div class="efe"><h4><span>💵 Efectivo ' + lbl + '</span><span class="muted" style="font-weight:500;font-size:11px">Solo efectivo · no incluye tarjeta, transferencia ni cortesía</span></h4>' +
+    '<div class="eq"><div class="c"><div class="l">Efectivo cobrado</div><div class="v">' + money(cob) + '</div></div><div class="op">−</div>' +
+    '<div class="c"><div class="l">Gastos pagados en efectivo</div><div class="v" style="color:var(--neg)">' + money(tsal) + '</div></div><div class="op">=</div>' +
+    '<div class="c res"><div class="l">Efectivo neto ' + lbl + '</div><div class="v" style="color:' + (neto < 0 ? 'var(--neg)' : 'var(--pos)') + '">' + money(neto) + '</div></div></div>' +
+    (sal.length ? '<details class="glist"' + (C.modo === 'dia' ? ' open' : '') + '><summary class="muted" style="cursor:pointer;font-weight:600">' + sal.length + ' gasto(s) en efectivo</summary>' +
+      sal.map(x => '<div class="li2"><span>' + esc(x.descripcion) + ' <span class="muted">· ' + esc(x.categoria) + (C.modo === 'mes' ? ' · ' + fmtD(x.fecha) : '') + '</span></span><b>' + money(x.monto) + '</b></div>').join('') + '</details>'
+      : '<div class="note">Sin gastos en efectivo ' + lbl + '.</div>') +
+    sm + '<div class="note">Los gastos pagados por transferencia o depósito no restan efectivo.</div></div>';
+}
+
+/* ════════ DASHBOARD ════════ */
+const D = { modo: 'rec', dias: 30, mes: null, d: null, h: null, doc: '', seq: 0, charts: {} };
+function renderDashboard() {
+  if (!D.mes) { D.mes = todayLocal().slice(0, 7); D.d = inicioMes(todayLocal()); D.h = todayLocal(); }
+  if (!$('d-kpis')) {
+    $('body-dashboard').innerHTML =
+      '<div class="cbar">' +
+        '<div class="seg" id="d-modo"><button data-m="rec" class="on">Recientes</button><button data-m="mes">Mes</button><button data-m="rango">Rango</button><button data-m="todo">Todo</button></div>' +
+        '<div class="chips" id="d-recw"><button class="chip" data-dias="7">7 días</button><button class="chip on" data-dias="30">30 días</button><button class="chip" data-dias="90">90 días</button></div>' +
+        '<input class="inp hide" type="month" id="d-mes" style="max-width:190px">' +
+        '<div class="rgrow hide" id="d-rgw" style="min-width:280px"><input class="inp" type="date" id="d-rd" aria-label="Desde"><input class="inp" type="date" id="d-rh" aria-label="Hasta"></div>' +
+        (ES_DOCTORA() ? '' : '<div style="min-width:220px"><select class="inp" id="d-doc"></select></div>') +
+      '</div>' +
+      '<div class="hero" style="grid-template-columns:1fr"><div><div class="t" id="d-title">—</div><div class="s" id="d-range">—</div></div></div>' +
+      '<div class="kpis" id="d-kpis"></div><div id="d-aviso"></div>' +
+      '<div class="dgrid">' +
+        '<div class="chart-box wide"><h4 id="d-t-tend">Tendencia del ingreso</h4><div class="cv"><canvas id="d-c-tend"></canvas></div></div>' +
+        '<div class="chart-box' + (ES_DOCTORA() ? ' hide' : '') + '"><h4>Ingreso por doctora</h4><div class="cv"><canvas id="d-c-doc"></canvas></div></div>' +
+        '<div class="chart-box"><h4>Ingreso por medio de pago</h4><div class="cv"><canvas id="d-c-med"></canvas></div></div>' +
+        '<div class="chart-box"><h4>Ingreso por tipo de consulta</h4><div class="cv"><canvas id="d-c-tipo"></canvas></div></div>' +
+        '<div class="chart-box hide" id="d-box-ig"><h4>Ingreso contra gasto</h4><div class="cv"><canvas id="d-c-ig"></canvas></div></div>' +
+      '</div>';
+    if ($('d-doc')) $('d-doc').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todas las doctoras');
+    $('d-modo').querySelectorAll('button').forEach(b => b.onclick = () => { D.modo = b.dataset.m; $('d-modo').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      $('d-recw').classList.toggle('hide', D.modo !== 'rec'); $('d-mes').classList.toggle('hide', D.modo !== 'mes'); $('d-rgw').classList.toggle('hide', D.modo !== 'rango'); cargarDashboard(); });
+    $('d-recw').querySelectorAll('[data-dias]').forEach(b => b.onclick = () => { D.dias = +b.dataset.dias; $('d-recw').querySelectorAll('[data-dias]').forEach(x => x.classList.toggle('on', x === b)); cargarDashboard(); });
+    $('d-mes').onchange = () => { if ($('d-mes').value) { D.mes = $('d-mes').value; cargarDashboard(); } };
+    const rg = () => { if ($('d-rd').value && $('d-rh').value) { D.d = $('d-rd').value; D.h = $('d-rh').value; if (D.d > D.h) [D.d, D.h] = [D.h, D.d]; cargarDashboard(); } };
+    $('d-rd').onchange = rg; $('d-rh').onchange = rg;
+    if ($('d-doc')) $('d-doc').onchange = () => { D.doc = $('d-doc').value; cargarDashboard(); };
+  }
+  cargarDashboard();
+}
+function dRango() {
+  if (D.modo === 'rec') return [addDays(todayLocal(), -(D.dias - 1)), todayLocal(), 'Últimos ' + D.dias + ' días'];
+  if (D.modo === 'mes') { const i = D.mes + '-01'; return [i, finMes(i), MESES[parseISO(i).getMonth()].replace(/^./, c => c.toUpperCase()) + ' ' + parseISO(i).getFullYear()]; }
+  if (D.modo === 'rango') return [D.d, D.h, 'Rango'];
+  return ['2000-01-01', todayLocal(), 'Todo el historial'];
+}
+async function cargarDashboard() {
+  if (!$('d-kpis')) return;
+  const seq = ++D.seq; const [d, h] = dRango();
+  $('d-mes').value = D.mes; $('d-rd').value = D.d; $('d-rh').value = D.h;
+  const verGastos = PERFIL.rol === 'admin' && !D.doc;
+  const [rc, rg] = await Promise.all([
+    cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e })),
+    verGastos ? traerTodo(() => sb.from('gastos').select('id,fecha,monto,medio_pago').gte('fecha', d).lte('fecha', h).order('fecha').order('id')).then(x => x.error ? { ok: false } : { ok: true, r: x.data }, () => ({ ok: false })) : Promise.resolve({ ok: true, r: null })
+  ]);
+  if (seq !== D.seq) return;
+  if (!rc.ok) { console.error(rc.e); $('d-kpis').innerHTML = '<div class="aviso warn" style="grid-column:1/-1">No se pudieron cargar los datos del dashboard.</div>'; return; }
+  const rows = D.doc ? rc.r.filter(c => c.doctor_id === D.doc) : rc.r;
+  bloque('el dashboard', () => pintarDashboard(rows, rg.ok ? rg.r : undefined, d, h));
+}
+async function asegurarCharts() {
+  if (window.Chart) return true;
+  try { await cargarScript(CDN_CHART.chart); await cargarScript(CDN_CHART.labels); return !!window.Chart; } catch (e) { return false; }
+}
+const CDN_CHART = {
+  chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
+  labels: 'https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js'
+};
+const PAL = ['#1B3A6B', '#2ABFBF', '#0B1628', '#6E8FC2', '#7FD6D6', '#94a3b8', '#22488a', '#B5C7E3'];
+const fmtCorto = v => { v = Number(v) || 0; return Math.abs(v) >= 1000 ? '$' + (v / 1000).toLocaleString('es-MX', { maximumFractionDigits: 1 }) + 'k' : '$' + v.toLocaleString('es-MX', { maximumFractionDigits: 0 }); };
+async function pintarDashboard(rows, gastos, d, h) {
+  const asist = rows.filter(c => !c.no_vino), tot = sumar(asist, ingreso);
+  const [, , lbl] = dRango();
+  $('d-title').textContent = lbl;
+  $('d-range').textContent = (D.modo === 'todo' ? 'Hasta ' + fmtD(h) : fmtD(d) + ' – ' + fmtD(h)) + ' · ' + (ES_DOCTORA() ? PERFIL.nombre : (D.doc ? nombreDoctora(D.doc) : 'Todas las doctoras'));
+  const nv = rows.length - asist.length;
+  const k = [['💰', 'Ingreso', money(tot), ''], ['🩺', 'Consultas', String(asist.length), nv ? nv + ' no vino' : ''], ['🎯', 'Ticket promedio', money(asist.length ? tot / asist.length : 0), '']];
+  if (Array.isArray(gastos)) {
+    const tg = sumar(gastos, x => num(x.monto)), mg = num(tot - tg);
+    k.push(['⇣', 'Gasto', money(tg), gastos.length + ' gasto(s)']);
+    k.push(['📈', 'Margen', money(mg), tot > 0 ? (mg / tot * 100).toFixed(1) + '% del ingreso' : '']);
+  }
+  $('d-kpis').className = 'kpis' + (k.length === 5 ? ' k5' : '');
+  $('d-kpis').innerHTML = k.map(x => '<div class="kpi"><div class="ico">' + x[0] + '</div><div class="l">' + x[1] + '</div><div class="v"' + (x[1] === 'Margen' && x[2].includes('-') ? ' style="color:var(--neg)"' : '') + '>' + x[2] + '</div>' + (x[3] ? '<div class="s">' + x[3] + '</div>' : '') + '</div>').join('');
+  $('d-aviso').innerHTML = (PERFIL.rol === 'admin' && D.doc) ? '<div class="aviso">Con filtro de doctora no se muestran gastos ni margen: los gastos son de la clínica.</div>'
+    : (PERFIL.rol === 'admin' && gastos === undefined) ? '<div class="aviso warn">No se pudieron cargar los gastos; el resto del dashboard sí.</div>' : '';
+  $('d-box-ig').classList.toggle('hide', !Array.isArray(gastos));
+  if (!(await asegurarCharts())) { document.querySelectorAll('#body-dashboard .cv').forEach(c => c.innerHTML = '<div class="empty">No se pudieron cargar las gráficas.</div>'); return; }
+  if (window.ChartDataLabels && !asegurarCharts._reg) { Chart.register(ChartDataLabels); asegurarCharts._reg = true; }
+  Chart.defaults.font.family = "'Instrument Sans', sans-serif"; Chart.defaults.color = '#64748b';
+  // agrupación temporal: por día hasta 62 días, si no por mes
+  const dias = Math.round((parseISO(h) - parseISO(d)) / 864e5) + 1;
+  const porMes = D.modo === 'todo' || dias > 62;
+  const llave = f => porMes ? f.slice(0, 7) : f;
+  const serie = {}; asist.forEach(c => { serie[llave(c.fecha)] = num((serie[llave(c.fecha)] || 0) + ingreso(c)); });
+  let etiquetas;
+  if (porMes) {
+    const ks = Object.keys(serie).sort(); etiquetas = [];
+    if (ks.length) { let cur = ks[0] + '-01'; const fin = (D.modo === 'todo' ? ks[ks.length - 1] : h.slice(0, 7)) + '-01'; while (cur <= fin) { etiquetas.push(cur.slice(0, 7)); cur = isoLocal(new Date(parseISO(cur).getFullYear(), parseISO(cur).getMonth() + 1, 1)); } }
+  } else { etiquetas = []; for (let x = d; x <= h; x = addDays(x, 1)) etiquetas.push(x); }
+  const lblT = x => porMes ? MESES[+x.slice(5, 7) - 1].slice(0, 3) + ' ' + x.slice(2, 4) : x.slice(8, 10) + '/' + x.slice(5, 7);
+  $('d-t-tend').textContent = 'Tendencia del ingreso ' + (porMes ? '(por mes)' : '(por día)');
+  graf('tend', 'd-c-tend', { type: 'line', data: { labels: etiquetas.map(lblT), datasets: [{ data: etiquetas.map(x => serie[x] || 0), borderColor: '#2ABFBF', backgroundColor: 'rgba(42,191,191,.15)', fill: true, tension: .3, pointRadius: etiquetas.length > 40 ? 0 : 3 }] },
+    options: baseOpts({ datalabels: { display: false } }) });
+  $('d-c-doc').closest('.chart-box').classList.toggle('hide', ES_DOCTORA() || !!D.doc);
+  if (!ES_DOCTORA() && !D.doc) {
+    const bd = {}; asist.forEach(c => bd[c.doctor_id] = num((bd[c.doctor_id] || 0) + ingreso(c)));
+    const ks = Object.keys(bd).sort((a, b) => bd[b] - bd[a]);
+    graf('doc', 'd-c-doc', { type: 'bar', data: { labels: ks.map(x => corto(nombreDoctora(x))), datasets: [{ data: ks.map(x => bd[x]), backgroundColor: '#1B3A6B', borderRadius: 6, maxBarThickness: 34 }] },
+      options: baseOpts({ datalabels: { anchor: 'end', align: 'end', formatter: fmtCorto, color: '#0B1628', font: { weight: 700 } } }, true) });
+  }
+  const bm = {}; asist.forEach(c => pagosDe(c).forEach(([m, v]) => { if (v > 0) bm[m] = num((bm[m] || 0) + v); }));
+  const mk = CATALOGOS.mediosPago.filter(m => bm[m]);
+  graf('med', 'd-c-med', { type: 'doughnut', data: { labels: mk, datasets: [{ data: mk.map(m => bm[m]), backgroundColor: mk.map((m, i) => PAL[i]), borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '58%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) } },
+      datalabels: { color: '#fff', font: { weight: 700 }, formatter: (v, c) => { const s = c.dataset.data.reduce((a, b) => a + b, 0); return s && v / s > .06 ? Math.round(v / s * 100) + '%' : ''; } } } } });
+  const bt = {}; asist.forEach(c => { const t = [c.motivo, c.tipo_consulta].filter(Boolean).join(' · '); bt[t] = num((bt[t] || 0) + ingreso(c)); });
+  const tk = Object.keys(bt).sort((a, b) => bt[b] - bt[a]);
+  graf('tipo', 'd-c-tipo', { type: 'bar', data: { labels: tk, datasets: [{ data: tk.map(x => bt[x]), backgroundColor: '#2ABFBF', borderRadius: 6, maxBarThickness: 34 }] },
+    options: baseOpts({ datalabels: { anchor: 'end', align: 'end', formatter: fmtCorto, color: '#0B1628', font: { weight: 700 } } }, true) });
+  if (Array.isArray(gastos)) {
+    const mesesIG = [...new Set(asist.map(c => c.fecha.slice(0, 7)).concat(gastos.map(x => x.fecha.slice(0, 7))))].sort();
+    const ing = {}, gas = {}; asist.forEach(c => ing[c.fecha.slice(0, 7)] = num((ing[c.fecha.slice(0, 7)] || 0) + ingreso(c))); gastos.forEach(x => gas[x.fecha.slice(0, 7)] = num((gas[x.fecha.slice(0, 7)] || 0) + num(x.monto)));
+    graf('ig', 'd-c-ig', { type: 'bar', data: { labels: mesesIG.map(x => MESES[+x.slice(5, 7) - 1].slice(0, 3) + ' ' + x.slice(2, 4)),
+      datasets: [{ label: 'Ingreso', data: mesesIG.map(x => ing[x] || 0), backgroundColor: '#2ABFBF', borderRadius: 6 }, { label: 'Gasto', data: mesesIG.map(x => gas[x] || 0), backgroundColor: '#1B3A6B', borderRadius: 6 }] },
+      options: baseOpts({ legend: { display: true, position: 'bottom' }, datalabels: { display: false } }) });
+  }
+}
+function baseOpts(plugins, horizontal) {
+  return { responsive: true, maintainAspectRatio: false, indexAxis: horizontal ? 'y' : 'x', layout: { padding: { right: horizontal ? 48 : 8, top: 8 } },
+    plugins: Object.assign({ legend: { display: false }, tooltip: { callbacks: { label: c => (c.dataset.label ? c.dataset.label + ': ' : '') + money(c.raw) } } }, plugins),
+    scales: { [horizontal ? 'x' : 'y']: { beginAtZero: true, ticks: { callback: v => fmtCorto(v) }, grid: { color: '#eef1f7' } }, [horizontal ? 'y' : 'x']: { grid: { display: false } } } };
+}
+function graf(key, canvasId, cfg) {
+  try { if (D.charts[key]) D.charts[key].destroy(); } catch (e) { /* nada */ }
+  const cv = $(canvasId); if (!cv) return;
+  D.charts[key] = new Chart(cv.getContext('2d'), cfg);
+}
+
+/* ════════ Tiempo real y refresco ════════ */
+let RT = null, rtTimer = null;
+function refrescarActiva() {
+  if (TAB === 'historial') cargarHistorial();
+  else if (TAB === 'cierre') cargarCierre();
+  else if (TAB === 'dashboard') cargarDashboard();
+}
+function activarRealtime() {
+  if (RT || !sb.channel) return;
+  try {
+    RT = sb.channel('mare-consultas')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'consultas' }, () => {
+        clearTimeout(rtTimer);
+        rtTimer = setTimeout(() => { if (!hayModalAbierto()) refrescarActiva(); }, 600);
+      })
+      .subscribe();
+  } catch (e) { console.error('[tiempo real]', e); }
+}
+function apagarRealtime() { try { if (RT) sb.removeChannel(RT); } catch (e) { /* nada */ } RT = null; }
+
+function reiniciarEstadoConsultas() {
+  H.per = null; H.rows = []; H.q = ''; H.doc = ''; H.mot = ''; H.med = ''; H.tg = new Set(); H.limite = 200;
+  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'doc'; C.modo = 'dia'; C_ROWS = []; C_GASTOS = null;
+  D.modo = 'rec'; D.dias = 30; D.mes = null; D.doc = '';
+  Object.keys(D.charts).forEach(k => { try { D.charts[k].destroy(); } catch (e) { /* nada */ } }); D.charts = {};
+  Object.keys(FORMS).forEach(k => delete FORMS[k]);
 }
 
 /* ════════ Arranque ════════ */
