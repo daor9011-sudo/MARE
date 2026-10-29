@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-6"/>
+<meta name="app-version" content="2026.10.29-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -722,6 +722,139 @@ textarea.app-input{height:auto}
 @media (max-width:820px){.b1-grid,.row4{grid-template-columns:repeat(2,minmax(0,1fr))}.b1-tall{grid-column:auto;grid-row:auto}.b1-grid .b1-summary{order:10;grid-column:1/-1}}
 @media (max-width:560px){.b1-grid,.row4{grid-template-columns:1fr}.pago2{grid-template-columns:1fr}.vis-off{display:none}}
 
+.fin-card.m .kpi-val,.fin-card.m .sp{color:#0B1628}.fin-card.m .fin-sub{color:#0B1628}
+.fin-sec{background:#fff;border-radius:11px;padding:14px 16px 16px;border:1px solid var(--g2);margin-bottom:10px;min-width:0}
+.fin-2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fin-doc{border:1.5px solid var(--g2);border-radius:10px;padding:11px 14px;min-width:0}
+.fin-doc .fd-h{display:flex;align-items:center;gap:8px}
+.fin-doc .fd-dot{width:10px;height:10px;border-radius:50%;flex:none}
+.fin-doc .fd-n{font-family:var(--font-d);font-size:12.5px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fin-doc .fd-m{font-family:var(--font-d);font-size:18px;font-weight:800;color:#0B1628;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fin-pill{font-family:var(--font-d);font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#0B1628;color:#fff;white-space:nowrap}
+.fin-pill.neg{background:#fff;color:#0B1628;box-shadow:inset 0 0 0 1.5px #0B1628}
+.fin-bar{display:flex;height:11px;border-radius:6px;overflow:hidden;background:#0B1628;margin-top:9px}
+.fin-bar i{display:block;height:100%;background:#E0703F}
+.fin-bar.neg{background:#E0703F}
+.fin-bar-l{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:var(--g6);margin-top:4px;flex-wrap:wrap}
+.fin-bar-l b{color:#0B1628;font-family:var(--font-d)}
+.fin-bar-l .gx,.fin-bar-l .gx b{color:#B8481F}
+.gx-bars{display:grid;gap:0}
+.gx-row{display:grid;grid-template-columns:118px minmax(0,1fr) auto 48px;gap:8px;align-items:center;padding:4px 0;font-size:11.5px}
+
+/* ── Cierre: componentes de Skin Fabric ── */
+.cierre-mi .cierre-card{margin-bottom:0}
+.cierre-mi .acordeon-pac{display:block!important}
+#v-cierre{max-width:1080px;margin:0 auto}
+.toggle-link{background:none;border:none;color:#0B6E6E;font-size:11px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:0}
+.periodo-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.periodo-bar input,.periodo-bar select{padding:7px 10px;font-size:12px;border:1px solid var(--g2);border-radius:7px;background:#fff;color:var(--navy);font-family:inherit;outline:none}
+.periodo-bar .date-label{font-weight:700;font-size:12.5px;min-width:150px;text-align:center;color:var(--navy);font-family:var(--font-d)}
+.prm-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.prm-tab-btn{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--g2);background:#fff;color:var(--g6);font-family:var(--font-b)}
+.prm-tab-btn.act{background:var(--navy);border-color:var(--navy);color:#fff}
+.subpanel{display:none}
+.subpanel.active{display:block}
+.cierre-card{background:#fff;border:1px solid var(--g2);border-left:4px solid var(--teal);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.cierre-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.cierre-name{font-size:12.5px;font-weight:700;color:var(--navy)}
+.cierre-total{font-family:var(--font-d);font-size:14px;font-weight:800;color:var(--teal)}
+.cierre-meta{font-size:10.5px;color:var(--g4);margin:2px 0 6px}
+.doc-pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;margin:6px 6px 0 0}
+.dsp-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.dsp-split.solo{grid-template-columns:1fr}
+.dsp-col{border:1px solid var(--g2);border-radius:10px;padding:9px 12px 8px;background:#fff;min-width:0}
+.dsp-col.s{border-top:3px solid var(--teal)}
+.dsp-col.f{border-top:3px solid var(--purple);background:linear-gradient(180deg,#FBF8FE,#fff 60px)}
+.dsp-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.dsp-h .t{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.dsp-col.s .t{color:#0B6E6E}
+.dsp-col.f .t{color:var(--purple)}
+.dsp-h .m{font-family:var(--font-d);font-size:15px;font-weight:800}
+.dsp-col.s .m{color:var(--teal)}
+.dsp-col.f .m{color:var(--purple)}
+.dsp-sub{font-size:10.5px;color:var(--g4);margin-top:1px}
+.dsp-pills .doc-pill{margin-top:7px}
+.dsp-lista{display:none;margin-top:8px;border-top:1px dashed var(--g2);padding-top:4px}
+.dsp-card.open .dsp-lista{display:block}
+.dsp-col.f .pac-row-grid .pac-monto{color:var(--purple)}
+.dsp-pie{margin-top:10px;padding-top:8px;border-top:1px solid var(--g2);display:flex;gap:4px 8px;align-items:center;flex-wrap:wrap}
+.dsp-pie .lbl{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--g6);margin-right:4px}
+.dsp-pie .doc-pill{margin:0}
+@media(max-width:700px){.dsp-split{grid-template-columns:1fr}}
+.acordeon-pac{margin-top:8px;border-top:1px dashed var(--g2);padding-top:7px;display:none}
+.acordeon-pac.open{display:block}
+.pac-row-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.4fr) minmax(64px,auto);gap:10px;padding:5px 0;border-bottom:1px solid var(--g1);font-size:11px;align-items:center}
+.pac-row-grid .pac-nombre{color:var(--navy);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pac-row-grid .pac-detalle{color:var(--g4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pac-row-grid .pac-monto{color:var(--teal);font-weight:700;text-align:right}
+.pago-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.pago-card{border-radius:12px;padding:16px;position:relative;overflow:hidden}
+.pago-card .ico{font-size:22px;margin-bottom:8px}
+.pago-card .nombre{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
+.pago-card .total{font-family:var(--font-d);font-size:20px;font-weight:800;color:var(--navy)}
+.pago-card .sub{font-size:10.5px;color:var(--g6);margin-top:4px}
+.pago-card .barra-bg{height:6px;background:rgba(0,0,0,.06);border-radius:4px;margin-top:10px;overflow:hidden}
+.pago-card .barra-fill{height:100%;border-radius:4px}
+.pago-desglose{margin-top:10px;font-size:10.5px;color:var(--g6)}
+.pago-desglose div{display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid rgba(0,0,0,.06)}
+@media (max-width:560px){.periodo-bar select{margin-left:0!important}}
+.kpi-grid.cierre-kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kpi-card.kpi-farm{border-color:#D2B4DE;background:linear-gradient(180deg,#fff,#F5F0FC)}
+.kpi-card.kpi-farm .kpi-val{color:var(--purple)}
+.cs-sec{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--g6);margin:6px 0 8px}
+.farm-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.farm-box{border:1px solid var(--g2);border-radius:12px;padding:14px 16px;background:#fff;margin-bottom:14px}
+.farm-grid2 .farm-box{margin-bottom:0}
+.bar-row{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;font-size:11.5px;padding:5px 0}
+.bar-row .bg{height:8px;background:#eef1f7;border-radius:5px;overflow:hidden}
+.bar-row .bg i{display:block;height:100%;background:var(--purple);border-radius:5px}
+.bar-row b{font-variant-numeric:tabular-nums}
+.bar-row .doc-pill{margin:0}
+.prod-row{display:grid;grid-template-columns:minmax(0,2.4fr) 44px minmax(0,1.3fr) minmax(70px,auto);gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #f0f2f7;font-size:12px}
+.prod-row.h{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--g6);border-bottom:1.5px solid var(--g2)}
+.prod-row .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.prod-row .q{text-align:center;color:var(--g6)}
+.prod-row .m{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.prod-row .bg{height:6px;background:#eef1f7;border-radius:4px;overflow:hidden}
+.prod-row .bg i{display:block;height:100%;background:var(--purple);border-radius:4px}
+.cuadre{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+.cuadre th{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--g6);text-align:right;padding:8px 10px;border-bottom:1.5px solid var(--g2)}
+.cuadre th:first-child,.cuadre td:first-child{text-align:left}
+.cuadre td{padding:9px 10px;border-bottom:1px solid #f0f2f7;text-align:right;font-variant-numeric:tabular-nums}
+.cuadre td.f{color:var(--purple);font-weight:700}
+.cuadre td.t{font-weight:800}
+.cuadre tr.tot td{border-top:2px solid var(--navy);border-bottom:none;font-weight:800;background:#FAFBFD}
+.cuadre .doc-pill{margin:0}
+.cs-split{display:flex;height:8px;border-radius:5px;overflow:hidden;background:rgba(0,0,0,.07);margin:8px 0 6px}
+.cs-split i{display:block;height:100%}
+.cs-split .s{background:var(--teal)}
+.cs-split .f{background:var(--purple)}
+.cs-ley{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--g6)}
+.cs-ley b{color:var(--navy)}
+.cs-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.cs-dot.s{background:var(--teal)}
+.cs-dot.f{background:var(--purple)}
+.farm-det-row{display:grid;grid-template-columns:48px minmax(0,1.4fr) minmax(0,2fr) 34px minmax(70px,auto) auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #f4f6fb;font-size:11.5px}
+.farm-det-row .f{color:var(--g6);font-weight:700}
+.farm-det-row .pz{text-align:center;color:var(--g6)}
+.farm-det-row .m{text-align:right;font-weight:700;color:var(--purple)}
+.farm-det-row .n,.farm-det-row .pr{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.farm-det-row .del{background:none;border:none;cursor:pointer;color:var(--red);font-size:13px;padding:0 4px}
+@media (max-width:720px){.farm-grid2{grid-template-columns:1fr}
+.bar-row{grid-template-columns:100px 1fr auto}
+.cuadre th,.cuadre td{padding:8px 5px;font-size:11px}
+.farm-det-row{grid-template-columns:44px minmax(0,1fr) auto auto}
+.farm-det-row .pr,.farm-det-row .pz{display:none}}
+.com-hero-tabs .prm-tab-btn{border:0;background:rgba(255,255,255,.10);color:rgba(255,255,255,.8);font:700 12.5px var(--font-b);padding:9px 18px;border-radius:10px 10px 0 0}
+.com-hero-tabs .prm-tab-btn.act{background:#fff;color:var(--navy)}
+@media (max-width:640px){.com-hero-tabs .prm-tab-btn{padding:10px 6px;font-size:12px;text-align:center;white-space:nowrap}
+.periodo-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch}
+.periodo-bar>*{min-width:0}
+#cierre-modo-dia,#cierre-modo-mes,#cierre-date-input,#cierre-btn-hoy{grid-column:span 2}
+#cierre-date-label{grid-column:span 2;min-width:0;align-self:center}
+#cierre-doctor{grid-column:1 / -1;max-width:none!important;margin-left:0!important}
+.periodo-bar .sbtn{display:flex;justify-content:center;align-items:center}}
+
 /* ── Ajustes MARE sobre el diseño de Skin Fabric ── */
 @media (max-width:700px){
   #hist-tbody td[data-l]::before,#gasto-tbody td[data-l]::before,.tx-table td[data-l]::before{content:attr(data-l)}
@@ -954,6 +1087,7 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     <div class="modal-h"><h3 id="mg-t">+ Registrar gasto</h3><button class="x" data-close>×</button></div>
     <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
       <div><label class="lbl" for="mg-fecha">Fecha</label><input class="inp" type="date" id="mg-fecha"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="mg-doc">Asociar a</label><select class="inp" id="mg-doc"></select></div>
       <div><label class="lbl" for="mg-cat">Categoría</label><select class="inp" id="mg-cat"></select></div>
       <div><label class="lbl" for="mg-monto">Monto</label><input class="inp" type="number" id="mg-monto" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>
       <div style="display:flex;align-items:flex-end"><label class="check" style="height:40px"><input type="checkbox" id="mg-fac"> Facturado</label></div>
@@ -1980,50 +2114,85 @@ async function exportarPDF(rows, d, h) {
   doc.save('MARE_Historial_' + sufijoArchivo(d, h) + '.pdf');
 }
 
-/* ════════ CIERRE ════════ */
-const C = { modo: 'dia', dia: null, mes: null, doc: '', vista: 'doc', seq: 0 };
+/* ════════ CIERRE (Resultados operativos · diseño de Skin Fabric) ════════ */
+const C = { modo: 'dia', dia: null, mes: null, doc: '', vista: 'cierre-por-doctor-panel', seq: 0 };
+const MEDIO_COLORES = {
+  efectivo: { bg: '#EAF7EE', border: '#A8D8B4', fg: '#2E7D4F', bar: '#2E7D4F', ico: '💵' },
+  tarjeta: { bg: '#EEF5FC', border: '#BDD5F0', fg: '#1B5C9E', bar: '#1B5C9E', ico: '💳' },
+  transferencia: { bg: '#FDF6EC', border: '#EDD49A', fg: '#9A6010', bar: '#9A6010', ico: '🏦' },
+  cortesia: { bg: '#F5F0FC', border: '#D2B4DE', fg: '#7D3C98', bar: '#7D3C98', ico: '🎁' }
+};
+const MEDIO_DEFAULT = { bg: '#F4F6FB', border: '#E2E8F4', fg: '#334155', bar: '#334155', ico: '💰' };
+const getMedioColor = n => MEDIO_COLORES[normTxt(n)] || MEDIO_DEFAULT;
+const esFarmacia = c => /farmacia/i.test(c.motivo || '');
+const labelDia = s => capF(parseISO(s).toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' }));
+const labelMes = s => capF(parseISO(s + '-01').toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }));
+const pillMedio = (m, monto) => { const c = getMedioColor(m); return '<span class="doc-pill" style="background:' + c.bg + ';border:1px solid ' + c.border + ';color:' + c.fg + '">' + c.ico + ' ' + esc(m) + (monto != null ? ' ' + money(monto) : '') + '</span>'; };
 function renderCierre() {
   if (!C.dia) { C.dia = todayLocal(); C.mes = todayLocal().slice(0, 7); }
-  if (!$('c-grid')) {
+  if (!$('cierre-kpis')) {
+    $('v-cierre').querySelector('.tab-title').innerHTML = '<span id="cierre-title">' + (ES_DOCTORA() ? '🧾 Mi cierre' : '🧾 Resultados Operativos') + '</span>';
     $('body-cierre').innerHTML =
-      '<div class="cbar">' +
-        '<div class="seg" id="c-modo"><button data-m="dia" class="on">Día</button><button data-m="mes">Mes</button></div>' +
-        '<div class="dayrow" id="c-diaw"><button class="ic" id="c-prev" aria-label="Día anterior">‹</button><input class="inp" type="date" id="c-dia"><button class="ic" id="c-next" aria-label="Día siguiente">›</button></div>' +
-        '<input class="inp hide" type="month" id="c-mes" style="max-width:190px">' +
-        (ES_DOCTORA() ? '' : '<div style="min-width:220px"><select class="inp" id="c-doc"></select></div>') +
-        '<div class="seg" id="c-vista"><button data-v="doc" class="on">' + (ES_DOCTORA() ? 'Por paciente' : 'Por doctora') + '</button><button data-v="med">Por medio de pago</button></div>' +
+      '<div class="periodo-bar">' +
+        '<button class="sbtn act" id="cierre-modo-dia" type="button">📋 Día</button>' +
+        '<button class="sbtn" id="cierre-modo-mes" type="button">📅 Mes</button>' +
+        '<button class="sbtn btn-outline" id="cierre-btn-prev" type="button" aria-label="Anterior">‹</button>' +
+        '<span class="date-label" id="cierre-date-label">—</span>' +
+        '<button class="sbtn btn-outline" id="cierre-btn-next" type="button" aria-label="Siguiente">›</button>' +
+        '<input type="date" id="cierre-date-input" aria-label="Fecha">' +
+        '<button class="sbtn btn-outline" id="cierre-btn-hoy" type="button">↻ Hoy</button>' +
+        (PUEDE_EXPORTAR() ? '<button class="sbtn btn-outline" id="c-flash" type="button" title="Genera un PDF de una hoja con la productividad del periodo" style="margin-left:auto">📄 Exportar PDF</button>' : '') +
+        (ES_DOCTORA() ? '' : '<select id="cierre-doctor" style="max-width:240px' + (PUEDE_EXPORTAR() ? '' : ';margin-left:auto') + '" aria-label="Doctora"></select>') +
       '</div>' +
-      '<div class="hero" style="grid-template-columns:1fr"><div><div class="t" id="c-title">—</div><div class="s" id="c-range">—</div></div></div>' +
-      '<div class="kpis"><div class="kpi"><div class="ico">💰</div><div class="l">Ingreso total</div><div class="v" id="ck-ing">$0.00</div></div>' +
-      '<div class="kpi"><div class="ico">🩺</div><div class="l">Consultas</div><div class="v" id="ck-con">0</div><div class="s" id="ck-nv"></div></div>' +
-      '<div class="kpi"><div class="ico">🎯</div><div class="l">Ticket promedio</div><div class="v" id="ck-tic">$0.00</div></div></div>' +
-      '<div id="c-efe"></div><div class="cgrid" id="c-grid"></div><div class="cuadra" id="c-cuadra"></div>';
-    if ($('c-doc')) $('c-doc').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todas las doctoras');
-    $('c-modo').querySelectorAll('button').forEach(b => b.onclick = () => { C.modo = b.dataset.m; $('c-modo').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-      $('c-diaw').classList.toggle('hide', C.modo !== 'dia'); $('c-mes').classList.toggle('hide', C.modo !== 'mes'); cargarCierre(); });
-    $('c-vista').querySelectorAll('button').forEach(b => b.onclick = () => { C.vista = b.dataset.v; $('c-vista').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); pintarCierre(); });
-    $('c-prev').onclick = () => { C.dia = addDays(C.dia, -1); cargarCierre(); };
-    $('c-next').onclick = () => { C.dia = addDays(C.dia, 1); cargarCierre(); };
-    $('c-dia').onchange = () => { if ($('c-dia').value) { C.dia = $('c-dia').value; cargarCierre(); } };
-    $('c-mes').onchange = () => { if ($('c-mes').value) { C.mes = $('c-mes').value; cargarCierre(); } };
-    if ($('c-doc')) $('c-doc').onchange = () => { C.doc = $('c-doc').value; cargarCierre(); };
+      '<div class="kpi-grid cierre-kpis" id="cierre-kpis">' +
+        '<div class="kpi-card"><div class="ico">💰</div><div class="kpi-label">Ingreso total</div><div class="kpi-val" id="ck-ing">$0.00</div><div class="kpi-sub" id="ck-ing-s">servicios + farmacia</div></div>' +
+        '<div class="kpi-card"><div class="ico">🩺</div><div class="kpi-label">Servicios</div><div class="kpi-val" id="ck-serv">$0.00</div><div class="kpi-sub" id="ck-serv-s">—</div></div>' +
+        '<div class="kpi-card kpi-farm"><div class="ico">💊</div><div class="kpi-label">Farmacia</div><div class="kpi-val" id="ck-farm">$0.00</div><div class="kpi-sub" id="ck-farm-s">—</div></div>' +
+        '<div class="kpi-card"><div class="ico">🧾</div><div class="kpi-label">Consultas</div><div class="kpi-val" id="ck-con">0</div><div class="kpi-sub" id="ck-nv"></div></div>' +
+        '<div class="kpi-card"><div class="ico">🎟️</div><div class="kpi-label">Ticket servicios</div><div class="kpi-val" id="ck-tic">$0.00</div><div class="kpi-sub" id="ck-tic-s">—</div></div>' +
+        '<div class="kpi-card kpi-farm"><div class="ico">🎟️</div><div class="kpi-label">Ticket farmacia</div><div class="kpi-val" id="ck-ticf">$0.00</div><div class="kpi-sub" id="ck-ticf-s">—</div></div>' +
+      '</div>' +
+      '<div id="c-efe"></div>' +
+      '<div class="prm-tabs" id="cierre-tabs">' +
+        '<button type="button" class="prm-tab-btn act" data-target="cierre-por-doctor-panel">👥 Por Doctora</button>' +
+        '<button type="button" class="prm-tab-btn" data-target="cierre-por-pago-panel">💳 Por Medio de Pago</button>' +
+        '<button type="button" class="prm-tab-btn" data-target="cierre-por-farm-panel">💊 Farmacia</button>' +
+      '</div>' +
+      '<div class="subpanel active" id="cierre-por-doctor-panel"><div id="cierre-por-doctor"></div></div>' +
+      '<div class="subpanel" id="cierre-por-pago-panel"><div id="cierre-por-pago"></div></div>' +
+      '<div class="subpanel" id="cierre-por-farm-panel"><div id="cierre-por-farm"></div></div>';
+    if ($('cierre-doctor')) { $('cierre-doctor').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todo el personal'); $('cierre-doctor').onchange = () => { C.doc = $('cierre-doctor').value; cargarCierre(); }; }
+    $('cierre-modo-dia').onclick = () => { C.modo = 'dia'; cargarCierre(); };
+    $('cierre-modo-mes').onclick = () => { C.modo = 'mes'; C.mes = C.dia.slice(0, 7); cargarCierre(); };
+    const mover = n => { if (C.modo === 'dia') C.dia = addDays(C.dia, n); else { const [y, m] = C.mes.split('-').map(Number); C.mes = isoLocal(new Date(y, m - 1 + n, 1)).slice(0, 7); } cargarCierre(); };
+    $('cierre-btn-prev').onclick = () => mover(-1); $('cierre-btn-next').onclick = () => mover(1);
+    $('cierre-btn-hoy').onclick = () => { C.dia = todayLocal(); C.mes = C.dia.slice(0, 7); cargarCierre(); };
+    $('cierre-date-input').onchange = () => { const v = $('cierre-date-input').value; if (!v) return; C.dia = v; C.mes = v.slice(0, 7); cargarCierre(); };
+    $('cierre-tabs').querySelectorAll('.prm-tab-btn').forEach(b => b.onclick = () => {
+      C.vista = b.dataset.target;
+      $('cierre-tabs').querySelectorAll('.prm-tab-btn').forEach(x => x.classList.toggle('act', x === b));
+      document.querySelectorAll('#body-cierre .subpanel').forEach(p => p.classList.toggle('active', p.id === C.vista));
+    });
+    if ($('c-flash')) $('c-flash').onclick = exportarFlashReport;
   }
-  cargarCierre();
+  return cargarCierre();
 }
 const cRango = () => C.modo === 'dia' ? [C.dia, C.dia] : [C.mes + '-01', finMes(C.mes + '-01')];
 let C_ROWS = [], C_GASTOS = null;
 async function cargarCierre() {
-  if (!$('c-grid')) return;
+  if (!$('cierre-kpis')) return;
   const seq = ++C.seq, [d, h] = cRango();
-  $('c-dia').value = C.dia; $('c-mes').value = C.mes;
-  $('c-grid').innerHTML = '<div class="empty">Cargando…</div>';
+  $('cierre-modo-dia').classList.toggle('act', C.modo === 'dia'); $('cierre-modo-mes').classList.toggle('act', C.modo === 'mes');
+  $('cierre-date-label').textContent = C.modo === 'dia' ? labelDia(C.dia) : labelMes(C.mes);
+  $('cierre-date-input').value = C.dia;
+  $('cierre-por-doctor').innerHTML = '<div class="empty-note">Cargando…</div>';
   // Bloques independientes: si el efectivo falla, el resto del cierre se muestra igual.
   const pCons = cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e }));
   const pGas = (ES_DOCTORA() || C.doc) ? Promise.resolve({ ok: true, r: null })
     : sb.rpc('cierre_gastos_info', { p_desde: d, p_hasta: h }).then(x => x.error ? { ok: false, e: x.error } : { ok: true, r: x.data }, e => ({ ok: false, e }));
   const [rc, rg] = await Promise.all([pCons, pGas]);
   if (seq !== C.seq) return;
-  if (!rc.ok) { console.error(rc.e); C_ROWS = []; $('c-grid').innerHTML = '<div class="empty">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'; }
+  if (!rc.ok) { console.error(rc.e); C_ROWS = []; ['cierre-por-doctor', 'cierre-por-pago', 'cierre-por-farm'].forEach(id => $(id).innerHTML = '<div class="empty-note">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'); }
   else C_ROWS = (C.doc ? rc.r.filter(c => c.doctor_id === C.doc) : rc.r);
   C_GASTOS = rg.ok ? rg.r : { error: true };
   pintarCierre(rc.ok);
@@ -2031,70 +2200,131 @@ async function cargarCierre() {
 function pintarCierre(consOk) {
   if (consOk === undefined) consOk = true;
   const [d, h] = cRango();
-  const rows = C_ROWS, asist = rows.filter(c => !c.no_vino), tot = sumar(asist, ingreso);
+  const rows = C_ROWS, asist = rows.filter(c => !c.no_vino);
+  const serv = asist.filter(c => !esFarmacia(c)), farm = asist.filter(esFarmacia);
+  const totS = sumar(serv, ingreso), totF = sumar(farm, ingreso), tot = num(totS + totF);
+  const pct = v => tot > 0 ? Math.round(v / tot * 100) : 0;
   bloque('el resumen del cierre', () => {
-    $('c-title').textContent = C.modo === 'dia' ? (d === todayLocal() ? 'Cierre de hoy' : 'Cierre del día') : 'Cierre de ' + MESES[parseISO(d).getMonth()] + ' ' + parseISO(d).getFullYear();
-    $('c-range').textContent = (C.modo === 'dia' ? diaNombre(d) + ' ' + fmtD(d) : fmtD(d) + ' – ' + fmtD(h)) + ' · ' + (ES_DOCTORA() ? PERFIL.nombre : (C.doc ? nombreDoctora(C.doc) : 'Todas las doctoras'));
-    $('ck-ing').textContent = money(tot); $('ck-con').textContent = asist.length;
-    $('ck-nv').textContent = rows.length > asist.length ? (rows.length - asist.length) + ' no vino' : '';
-    $('ck-tic').textContent = money(asist.length ? tot / asist.length : 0);
+    $('ck-ing').textContent = money(tot);
+    $('ck-ing-s').textContent = 'servicios + farmacia';
+    $('ck-serv').textContent = money(totS); $('ck-serv-s').textContent = (totF > 0 ? pct(totS) + '% del ingreso · ' : '') + serv.length + ' consulta(s)';
+    $('ck-farm').textContent = money(totF); $('ck-farm-s').textContent = farm.length ? pct(totF) + '% del ingreso · ' + farm.length + ' producto(s)' : 'sin ventas';
+    $('ck-con').textContent = asist.length; $('ck-nv').textContent = rows.length > asist.length ? (rows.length - asist.length) + ' no vino' : '';
+    $('ck-tic').textContent = money(serv.length ? totS / serv.length : 0); $('ck-tic-s').textContent = serv.length + ' consulta(s)';
+    $('ck-ticf').textContent = money(farm.length ? totF / farm.length : 0); $('ck-ticf-s').textContent = farm.length ? farm.length + ' venta(s)' : 'sin ventas';
   });
   bloque('el efectivo del día', () => pintarEfectivoCierre(rows, d, h));
   if (!consOk) return;
-  bloque('las tarjetas del cierre', () => {
-    let html = '', sumMed = 0;
-    if (C.vista === 'doc') {
-      if (ES_DOCTORA()) {
-        html = asist.length ? '<div class="cc" style="grid-column:1/-1"><div class="h"><span class="n">' + esc(PERFIL.nombre) + '</span><span class="a">' + money(tot) + '</span></div>' +
-          asist.map(c => '<div class="li"><span>' + esc(c.paciente ? c.paciente.nombre : '—') + ' <span class="muted">· ' + esc(servicioTxt(c)) + '</span></span><b>' + money(ingreso(c)) + '</b></div>').join('') + '</div>' : '';
-      } else {
-        const by = {}; asist.forEach(c => (by[c.doctor_id] = by[c.doctor_id] || []).push(c));
-        html = Object.keys(by).map(k => [k, sumar(by[k], ingreso)]).sort((a, b) => b[1] - a[1]).map(([k, t]) =>
-          '<div class="cc"><div class="h"><span class="n">' + esc(nombreDoctora(k)) + '</span><span class="a">' + money(t) + '</span></div>' +
-          '<div class="bar"><i style="width:' + (tot ? t / tot * 100 : 0).toFixed(1) + '%"></i></div><div class="sub2">' + by[k].length + ' consulta(s) · ' + (tot ? (t / tot * 100).toFixed(1) : '0.0') + '% del ingreso</div>' +
-          '<details><summary>Ver pacientes</summary>' + by[k].map(c => '<div class="li"><span>' + esc(c.paciente ? c.paciente.nombre : '—') + ' <span class="muted">· ' + esc(servicioTxt(c)) + '</span></span><b>' + money(ingreso(c)) + '</b></div>').join('') + '</details></div>').join('');
-      }
-    } else {
-      const by = {};
-      asist.forEach(c => pagosDe(c).forEach(([m, v]) => { const o = by[m] = by[m] || { t: 0, n: 0, doc: {} }; o.t = num(o.t + v); o.n++; o.doc[c.doctor_id] = num((o.doc[c.doctor_id] || 0) + v); }));
-      html = CATALOGOS.mediosPago.filter(m => by[m] && by[m].t > 0.004).map(m => {
-        const o = by[m]; sumMed = num(sumMed + o.t);
-        return '<div class="cc"><div class="h"><span class="n"><span class="st ' + stCls(m) + '">' + esc(m) + '</span></span><span class="a">' + money(o.t) + '</span></div>' +
-          '<div class="bar"><i style="width:' + (tot ? o.t / tot * 100 : 0).toFixed(1) + '%"></i></div><div class="sub2">' + o.n + ' pago(s)</div>' +
-          (ES_DOCTORA() ? '' : '<details><summary>Desglose por doctora</summary>' + Object.keys(o.doc).sort((a, b) => o.doc[b] - o.doc[a]).map(k => '<div class="li"><span>' + esc(nombreDoctora(k)) + '</span><b>' + money(o.doc[k]) + '</b></div>').join('') + '</details>') + '</div>';
-      }).join('');
-      const cort = asist.filter(c => pagosDe(c).some(p => p[0] === 'Cortesía')).length;
-      if (cort) html += '<div class="cc" style="border-style:dashed"><div class="n">Cortesías</div><div class="sub2" style="margin-top:6px">' + cort + ' consulta(s) con cortesía · no suman ingreso</div></div>';
-    }
-    $('c-grid').innerHTML = html || '<div class="empty">Sin consultas en este periodo.</div>';
-    const cu = $('c-cuadra');
-    if (C.vista === 'med' && asist.length) {
-      const okc = mismoMonto(sumMed, tot);
-      cu.className = 'cuadra' + (okc ? '' : ' bad');
-      cu.textContent = okc ? '✓ La suma por medio de pago cuadra con el ingreso total (' + money(tot) + ')' : '⚠ Diferencia de ' + money(tot - sumMed) + ' contra el ingreso total';
-    } else cu.textContent = '';
+  // agrupar por doctora y por medio de pago
+  const porDoc = {}, porMedio = {};
+  const nuevo = id => porDoc[id] || (porDoc[id] = { id, nombre: nombreDoctora(id), total: 0, serv: 0, farm: 0, count: 0, pagos: {}, pagosS: {}, pagosF: {}, pacientes: [], farmItems: [] });
+  asist.forEach(c => {
+    const dd = nuevo(c.doctor_id), f = esFarmacia(c), v = ingreso(c);
+    dd.total = num(dd.total + v);
+    if (f) { dd.farm = num(dd.farm + v); dd.farmItems.push({ nombre: c.paciente ? c.paciente.nombre : '—', detalle: c.descripcion || 'Producto', monto: v }); }
+    else { dd.serv = num(dd.serv + v); dd.count++; dd.pacientes.push({ nombre: c.paciente ? c.paciente.nombre : '—', detalle: servicioTxt(c), monto: v }); }
+    pagosDe(c).forEach(([m, x], i) => {
+      if (i > 0 && !(x > 0)) return;
+      dd.pagos[m] = num((dd.pagos[m] || 0) + x); const pl = f ? dd.pagosF : dd.pagosS; pl[m] = num((pl[m] || 0) + x);
+      const pm = porMedio[m] || (porMedio[m] = { total: 0, serv: 0, farm: 0, n: 0, porDoc: {} });
+      pm.total = num(pm.total + x); if (f) pm.farm = num(pm.farm + x); else pm.serv = num(pm.serv + x); pm.n++;
+      pm.porDoc[dd.nombre] = num((pm.porDoc[dd.nombre] || 0) + x);
+    });
+  });
+  bloque('el cierre por doctora', () => pintarCierrePorDoctora(porDoc));
+  bloque('el cierre por medio de pago', () => pintarCierrePorMedio(porMedio, tot, totF > 0));
+  bloque('la farmacia del cierre', () => pintarCierreFarmacia(farm, totF));
+}
+function pintarCierrePorDoctora(porDoc) {
+  const cont = $('cierre-por-doctor');
+  const docs = Object.values(porDoc).sort((a, b) => b.total - a.total);
+  if (!docs.length) { cont.innerHTML = '<div class="empty-note">Sin resultados para este periodo.</div>'; return; }
+  const pills = obj => Object.entries(obj).sort((a, b) => b[1] - a[1]).map(([m, v]) => pillMedio(m, v)).join('');
+  const fila = p => '<div class="pac-row-grid"><span class="pac-nombre">' + esc(p.nombre) + '</span><span class="pac-detalle">' + esc(p.detalle) + '</span><span class="pac-monto">' + money(p.monto) + '</span></div>';
+  const abierto = C.modo === 'dia';
+  cont.innerHTML = docs.map((d, i) => {
+    const hayS = d.serv > 0 || d.pacientes.length > 0, hayF = d.farmItems.length > 0, pc = v => d.total > 0 ? Math.round(v / d.total * 100) : 0;
+    const colS = hayS ? '<div class="dsp-col s"><div class="dsp-h"><span class="t">Servicios</span><span class="m">' + money(d.serv) + '</span></div>' +
+      '<div class="dsp-sub">' + d.count + ' consulta(s)' + (hayF ? ' · ' + pc(d.serv) + '% del total' : '') + '</div><div class="dsp-pills">' + pills(d.pagosS) + '</div><div class="dsp-lista">' + d.pacientes.map(fila).join('') + '</div></div>' : '';
+    const colF = hayF ? '<div class="dsp-col f"><div class="dsp-h"><span class="t">💊 Farmacia</span><span class="m">' + money(d.farm) + '</span></div>' +
+      '<div class="dsp-sub">' + d.farmItems.length + ' venta(s)' + (hayS ? ' · ' + pc(d.farm) + '% del total' : '') + '</div><div class="dsp-pills">' + pills(d.pagosF) + '</div><div class="dsp-lista">' + d.farmItems.map(fila).join('') + '</div></div>' : '';
+    const pie = hayS && hayF ? '<div class="dsp-pie"><span class="lbl">Cobrado por medio</span>' + pills(d.pagos) + '</div>' : '';
+    const nItems = d.pacientes.length + d.farmItems.length;
+    return '<div class="cierre-card dsp-card' + (abierto ? ' open' : '') + '" id="cierre-card-' + i + '">' +
+      '<div class="cierre-head"><span class="cierre-name">' + esc(d.nombre) + '</span><span class="cierre-total">' + money(d.total) + '</span></div>' +
+      '<div class="cierre-meta">' + [d.count ? d.count + ' paciente(s)' : '', hayF ? d.farmItems.length + ' producto(s) de farmacia' : ''].filter(Boolean).join(' · ') + '</div>' +
+      '<div class="dsp-split' + (hayS && hayF ? '' : ' solo') + '">' + colS + colF + '</div>' + pie +
+      '<button class="toggle-link" type="button" data-idx="' + i + '">' + (abierto ? 'Ocultar' : 'Ver') + ' detalle (' + nItems + ') ▾</button></div>';
+  }).join('');
+  cont.querySelectorAll('.toggle-link').forEach(b => b.onclick = () => {
+    const on = $('cierre-card-' + b.dataset.idx).classList.toggle('open');
+    b.textContent = (on ? 'Ocultar' : 'Ver') + b.textContent.replace(/^(Ocultar|Ver)/, '');
   });
 }
-function pintarEfectivoCierre(rows, d, h) {
+function pintarCierrePorMedio(porMedio, total, hayFarm) {
+  const cont = $('cierre-por-pago');
+  const medios = Object.entries(porMedio).map(([nombre, v]) => Object.assign({ nombre }, v)).sort((a, b) => b.total - a.total);
+  if (!medios.length) { cont.innerHTML = '<div class="empty-note">Sin resultados para este periodo.</div>'; return; }
+  const sumS = sumar(medios, m => m.serv), sumF = sumar(medios, m => m.farm), cobrado = num(sumS + sumF);
+  const cuadra = mismoMonto(cobrado, total);
+  const cuadre = '<div class="cs-sec">Cuadre de caja por medio de pago <span id="c-cuadra" style="font-weight:700;letter-spacing:0;text-transform:none;color:' + (cuadra ? 'var(--pos)' : 'var(--neg)') + '">' + (cuadra ? '✓ cuadra con el ingreso total' : '⚠ diferencia de ' + money(total - cobrado)) + '</span></div>' +
+    '<table class="cuadre"><thead><tr><th>Medio</th><th>Servicios</th><th>💊 Farmacia</th><th>Total</th><th>%</th></tr></thead><tbody>' +
+    medios.map(m => '<tr><td>' + pillMedio(m.nombre) + '</td><td>' + money(m.serv) + '</td><td class="f">' + money(m.farm) + '</td><td class="t">' + money(m.total) + '</td><td>' + (cobrado > 0 ? Math.round(m.total / cobrado * 100) : 0) + '%</td></tr>').join('') +
+    '<tr class="tot"><td>Total cobrado</td><td>' + money(sumS) + '</td><td class="f">' + money(sumF) + '</td><td>' + money(cobrado) + '</td><td>100%</td></tr></tbody></table>';
+  cont.innerHTML = cuadre + '<div class="pago-cards">' + medios.filter(m => m.total > 0.004 || m.nombre !== 'Cortesía').map(m => {
+    const c = getMedioColor(m.nombre), p = total > 0 ? Math.round(m.total / total * 100) : 0;
+    const split = hayFarm && m.total > 0
+      ? '<div class="cs-split"><i class="s" style="width:' + Math.round(m.serv / m.total * 100) + '%"></i><i class="f" style="width:' + Math.round(m.farm / m.total * 100) + '%"></i></div>' +
+        '<div class="cs-ley"><span><span class="cs-dot s"></span>Servicios <b>' + fmt0(m.serv) + '</b></span><span><span class="cs-dot f"></span>Farmacia <b>' + fmt0(m.farm) + '</b></span></div>'
+      : '<div class="barra-bg"><div class="barra-fill" style="width:' + p + '%;background:' + c.bar + '"></div></div>';
+    return '<div class="pago-card" style="background:' + c.bg + ';border:1.5px solid ' + c.border + '"><div class="ico">' + c.ico + '</div><div class="nombre" style="color:' + c.fg + '">' + esc(m.nombre) + '</div>' +
+      '<div class="total">' + money(m.total) + '</div><div class="sub">' + p + '% del total · ' + m.n + ' pago(s)</div>' + split +
+      (ES_DOCTORA() ? '' : '<div class="pago-desglose">' + Object.entries(m.porDoc).sort((a, b) => b[1] - a[1]).map(([k, v]) => '<div><span>' + esc(k) + '</span><span>' + money(v) + '</span></div>').join('') + '</div>') + '</div>';
+  }).join('') + '</div>';
+}
+function pintarCierreFarmacia(filas, totF) {
+  const cont = $('cierre-por-farm');
+  if (!filas.length) { cont.innerHTML = '<div class="empty-note">Sin ventas de farmacia en este periodo.</div>'; return; }
+  const fMed = {}, fDoc = {}, prod = {};
+  filas.forEach(c => {
+    pagosDe(c).forEach(([m, v]) => { if (v > 0) fMed[m] = num((fMed[m] || 0) + v); });
+    const dn = nombreDoctora(c.doctor_id); fDoc[dn] = num((fDoc[dn] || 0) + ingreso(c));
+    const k = (c.descripcion || 'Producto').trim().toUpperCase(); const o = prod[k] || (prod[k] = { n: c.descripcion || 'Producto', q: 0, t: 0 }); o.q++; o.t = num(o.t + ingreso(c));
+  });
+  const prodL = Object.values(prod).sort((a, b) => b.t - a.t), maxP = prodL[0].t || 1, pc = v => totF > 0 ? Math.round(v / totF * 100) : 0;
+  const barras = (obj, conPill) => Object.entries(obj).sort((a, b) => b[1] - a[1]).map(([k, v]) => '<div class="bar-row">' + (conPill ? pillMedio(k) : '<span style="font-weight:600">' + esc(k) + '</span>') + '<span class="bg"><i style="width:' + pc(v) + '%"></i></span><b>' + fmt0(v) + '</b></div>').join('');
+  const detalle = filas.slice().sort((a, b) => a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0).map(c =>
+    '<div class="farm-det-row"><span class="f">' + fmtD(c.fecha).slice(0, 5) + '</span><span class="n" title="' + esc(c.paciente ? c.paciente.nombre : '') + '">' + esc(c.paciente ? c.paciente.nombre : '—') + '</span><span class="pr" title="' + esc(c.descripcion || '') + '">' + esc(c.descripcion || 'Producto') + '</span><span class="pz">×1</span><span class="m">' + money(ingreso(c)) + '</span><span></span></div>').join('');
+  cont.innerHTML = '<div class="farm-grid2"><div class="farm-box"><div class="cs-sec">Por medio de pago</div>' + barras(fMed, true) + '</div>' +
+    (ES_DOCTORA() ? '' : '<div class="farm-box"><div class="cs-sec">Quién generó la venta</div>' + barras(fDoc, false) + '</div>') + '</div>' +
+    '<div class="farm-box"><div class="cs-sec">Productos vendidos · ' + filas.length + ' venta(s) · ' + money(totF) + '</div>' +
+    '<div class="prod-row h"><span>Producto</span><span style="text-align:center">Ventas</span><span></span><span style="text-align:right">Total</span></div>' +
+    prodL.map(o => '<div class="prod-row"><span class="n" title="' + esc(o.n) + '">' + esc(o.n) + '</span><span class="q">' + o.q + '</span><span class="bg"><i style="width:' + Math.round(o.t / maxP * 100) + '%"></i></span><span class="m">' + fmt0(o.t) + '</span></div>').join('') + '</div>' +
+    '<div class="farm-box"><button class="toggle-link" type="button" id="cierre-farm-det-btn">Ver detalle de ventas (' + filas.length + ') ▾</button><div class="acordeon-pac" id="cierre-farm-det">' + detalle + '</div></div>';
+  $('cierre-farm-det-btn').onclick = () => $('cierre-farm-det').classList.toggle('open');
+}
+/* Efectivo del día: cobrado − gastos pagados en efectivo. Nunca muestra caja acumulada. */
+function pintarEfectivoCierre(rows) {
   const box = $('c-efe');
   if (ES_DOCTORA()) { box.innerHTML = ''; return; }
   const lbl = C.modo === 'dia' ? 'del día' : 'del periodo';
-  if (C.doc) { box.innerHTML = '<div class="aviso">El efectivo ' + lbl + ' se muestra solo sin filtro de doctora, porque los gastos son de la clínica y no de una doctora.</div>'; return; }
+  if (C.doc) { box.innerHTML = '<div class="aviso">El efectivo ' + lbl + ' se muestra solo con "Todo el personal", porque los gastos son de la clínica y no de una doctora.</div>'; return; }
   const g = C_GASTOS;
   if (!g || g.error) { box.innerHTML = '<div class="aviso warn">No se pudo cargar el efectivo ' + lbl + '. El resto del cierre sigue disponible.</div>'; return; }
   if (!g.permitido) { box.innerHTML = ''; return; }
-  const cob = sumar(rows, efectivoDe);
-  const sal = Array.isArray(g.salidas) ? g.salidas : [];
-  const tsal = sumar(sal, x => num(x.monto)), neto = num(cob - tsal);
+  const cob = sumar(rows, efectivoDe), sal = Array.isArray(g.salidas) ? g.salidas : [], tsal = sumar(sal, x => num(x.monto)), neto = num(cob - tsal);
   const sm = g.sin_medio && g.sin_medio.n > 0 ? '<div class="aviso warn" style="margin:10px 0 0">Hay ' + g.sin_medio.n + ' gasto(s) sin medio de pago (' + money(g.sin_medio.total) + ') en este periodo. Corrígelos en Gastos para que el efectivo cuadre.</div>' : '';
-  box.innerHTML = '<div class="efe"><h4><span>💵 Efectivo ' + lbl + '</span><span class="muted" style="font-weight:500;font-size:11px">Solo efectivo · no incluye tarjeta, transferencia ni cortesía</span></h4>' +
-    '<div class="eq"><div class="c"><div class="l">Efectivo cobrado</div><div class="v">' + money(cob) + '</div></div><div class="op">−</div>' +
-    '<div class="c"><div class="l">Gastos pagados en efectivo</div><div class="v" style="color:var(--neg)">' + money(tsal) + '</div></div><div class="op">=</div>' +
-    '<div class="c res"><div class="l">Efectivo neto ' + lbl + '</div><div class="v" style="color:' + (neto < 0 ? 'var(--neg)' : 'var(--pos)') + '">' + money(neto) + '</div></div></div>' +
-    (sal.length ? '<details class="glist"' + (C.modo === 'dia' ? ' open' : '') + '><summary class="muted" style="cursor:pointer;font-weight:600">' + sal.length + ' gasto(s) en efectivo</summary>' +
-      sal.map(x => '<div class="li2"><span>' + esc(x.descripcion) + ' <span class="muted">· ' + esc(x.categoria) + (C.modo === 'mes' ? ' · ' + fmtD(x.fecha) : '') + '</span></span><b>' + money(x.monto) + '</b></div>').join('') + '</details>'
-      : '<div class="note">Sin gastos en efectivo ' + lbl + '.</div>') +
-    sm + '<div class="note">Los gastos pagados por transferencia o depósito no restan efectivo.</div></div>';
+  box.innerHTML = '<div class="fin-sec"><div class="prod-head"><div class="prod-title">💵 Efectivo ' + lbl + '</div><div class="prod-period">Solo efectivo · no incluye tarjeta, transferencia ni cortesía</div></div>' +
+    '<div class="kpi-grid cols3" style="margin:8px 0 0">' +
+      '<div class="kpi-card" style="border-left:4px solid #2E7D4F"><div class="kpi-label">Efectivo cobrado</div><div class="kpi-val">' + money(cob) + '</div></div>' +
+      '<div class="kpi-card" style="border-left:4px solid #B8481F"><div class="kpi-label">− Gastos pagados en efectivo</div><div class="kpi-val" style="color:var(--neg)">' + money(tsal) + '</div></div>' +
+      '<div class="kpi-card" style="border-left:4px solid var(--teal);background:#F2FBFB"><div class="kpi-label">= Efectivo neto ' + lbl + '</div><div class="kpi-val" style="color:' + (neto < 0 ? 'var(--neg)' : 'var(--pos)') + '">' + money(neto) + '</div></div>' +
+    '</div>' +
+    (sal.length ? '<button class="toggle-link" type="button" id="c-efe-tg">' + (C.modo === 'dia' ? 'Ocultar' : 'Ver') + ' gastos en efectivo (' + sal.length + ') ▾</button><div class="acordeon-pac' + (C.modo === 'dia' ? ' open' : '') + '" id="c-efe-det">' +
+      sal.map(x => '<div class="pac-row-grid"><span class="pac-nombre">' + esc(x.descripcion) + '</span><span class="pac-detalle">' + esc(x.categoria) + (C.modo === 'mes' ? ' · ' + fmtD(x.fecha) : '') + '</span><span class="pac-monto">' + money(x.monto) + '</span></div>').join('') + '</div>'
+      : '<div class="kpi-sub" style="margin-top:8px">Sin gastos en efectivo ' + lbl + '.</div>') +
+    sm + '<div class="kpi-sub" style="margin-top:8px">Los gastos pagados por transferencia o depósito no restan efectivo.</div></div>';
+  if ($('c-efe-tg')) $('c-efe-tg').onclick = () => { const on = $('c-efe-det').classList.toggle('open'); $('c-efe-tg').textContent = (on ? 'Ocultar' : 'Ver') + $('c-efe-tg').textContent.replace(/^(Ocultar|Ver)/, ''); };
 }
 
 /* ════════ DASHBOARD (diseño de Skin Fabric) ════════ */
@@ -2116,12 +2346,14 @@ function renderDashboard() {
             '<div class="dash-f"><span class="dash-lbl">Tipo</span><select id="dash-tipo"></select></div></div>' +
         '</div></div>' +
       '<div class="fin-grid" id="dash-fin" style="display:none">' +
-        '<div class="fin-card i"><div class="bd"><div class="kpi-label">Ingreso total</div><div class="kpi-val" id="fin-ing-v">$0</div><div class="fin-sub" id="fin-ing-s"></div></div><div><div class="sp" id="fin-ing-sp"></div><div class="cap">ingreso diario</div></div></div>' +
-        '<div class="fin-card g"><div class="bd"><div class="kpi-label">Gasto total</div><div class="kpi-val" id="fin-gas-v">$0</div><div class="fin-sub" id="fin-gas-s"></div></div><div><div class="sp" id="fin-gas-sp"></div><div class="cap">gasto diario</div></div></div>' +
+        '<div class="fin-card i"><div class="bd"><div class="kpi-label" id="fin-ing-l">Ingreso total</div><div class="kpi-val" id="fin-ing-v">$0</div><div class="fin-sub" id="fin-ing-s"></div></div><div><div class="sp" id="fin-ing-sp"></div><div class="cap">ingreso diario</div></div></div>' +
+        '<div class="fin-card g"><div class="bd"><div class="kpi-label" id="fin-gas-l">Gasto total</div><div class="kpi-val" id="fin-gas-v">$0</div><div class="fin-sub" id="fin-gas-s"></div></div><div><div class="sp" id="fin-gas-sp"></div><div class="cap">gasto diario</div></div></div>' +
         '<div class="fin-card m"><div class="bd"><div class="kpi-label">Margen bruto</div><div class="kpi-val" id="fin-mar-v">$0</div><div class="fin-sub" id="fin-mar-s"></div></div><div><div class="sp" id="fin-mar-sp"></div><div class="cap">margen acumulado</div></div></div>' +
       '</div>' +
       '<div class="kpi-grid cols3" id="dash-kpi-grid"></div>' +
       '<div id="d-aviso"></div>' +
+      '<div class="fin-sec" id="dash-resdoc" style="display:none"><div class="prod-head"><div class="prod-title">🩺 Resultado por doctora</div><div class="prod-period" id="dash-resdoc-periodo">—</div></div>' +
+        '<div class="prod-sub">Productividad (ingreso de sus consultas) − gasto asociado a su nombre. El gasto general de la clínica no se reparte.</div><div class="fin-2col" id="dash-resdoc-body"></div></div>' +
       '<div class="fin-sec" id="dash-gasto" style="display:none"><div class="prod-head"><div class="prod-title" style="font-size:13px">💸 Gasto</div><div class="prod-period" id="dash-gasto-periodo">—</div></div>' +
         '<div class="prod-sub">Por categoría y por medio de pago (solo el efectivo resta del efectivo del cierre)</div>' +
         '<div class="fin-2col"><div><div class="chart-title"><span id="dash-gasto-t1">Por categoría</span></div><div class="gx-bars" id="dash-gasto-bars"></div></div>' +
@@ -2176,10 +2408,10 @@ async function cargarDashboard() {
   $('dash-rango').value = D.modo === 'rec' ? D.rec : D.modo;
   ['dash-prev', 'dash-mes', 'dash-next'].forEach(id => $(id).style.display = D.modo === 'mes' ? '' : 'none');
   $('dash-hero-per').textContent = lbl;
-  const verGastos = PERFIL.rol === 'admin' && !D.doc;
+  const verGastos = PERFIL.rol === 'admin';
   const [rc, rg] = await Promise.all([
     cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e })),
-    verGastos ? traerTodo(() => sb.from('gastos').select('id,fecha,monto,medio_pago,categoria').gte('fecha', d).lte('fecha', h).order('fecha').order('id')).then(x => x.error ? { ok: false } : { ok: true, r: x.data }, () => ({ ok: false })) : Promise.resolve({ ok: true, r: null })
+    verGastos ? traerTodo(() => { let q = sb.from('gastos').select('id,fecha,monto,medio_pago,categoria,doctor_id').gte('fecha', d).lte('fecha', h); if (D.doc) q = q.eq('doctor_id', D.doc); return q.order('fecha').order('id'); }).then(x => x.error ? { ok: false } : { ok: true, r: x.data }, () => ({ ok: false })) : Promise.resolve({ ok: true, r: null })
   ]);
   if (seq !== D.seq) return;
   if (!rc.ok) { console.error(rc.e); $('dash-kpi-grid').innerHTML = '<div class="aviso warn" style="grid-column:1/-1">No se pudieron cargar los datos del dashboard.</div>'; return; }
@@ -2221,6 +2453,7 @@ async function pintarDashboard() {
   const finOn = Array.isArray(gastos);
   bloque('los indicadores', () => {
     $('dash-fin').style.display = finOn ? '' : 'none';
+    if (!finOn) $('dash-resdoc').style.display = 'none';
     $('dash-gasto').style.display = finOn ? '' : 'none';
     $('dash-ig-card').style.display = finOn ? '' : 'none';
     const pacs = new Set(asist.map(c => c.paciente_id)).size;
@@ -2230,10 +2463,12 @@ async function pintarDashboard() {
     k.push(['👥', 'Pacientes', String(pacs), '']);
     k.push(['🎟️', 'Ticket prom.', money(asist.length ? tot / asist.length : 0), '']);
     $('dash-kpi-grid').innerHTML = k.map(x => '<div class="kpi-card"><div class="ico">' + x[0] + '</div><div class="kpi-label">' + x[1] + '</div><div class="kpi-val">' + x[2] + '</div>' + (x[3] ? '<div class="kpi-sub">' + x[3] + '</div>' : '') + '</div>').join('');
-    $('d-aviso').innerHTML = (PERFIL.rol === 'admin' && (D.doc || D.tipo)) ? '<div class="aviso">Con filtro de ' + (D.doc ? 'doctora' : 'tipo de consulta') + ' no se muestran gasto ni margen: los gastos son de la clínica.</div>'
+    $('d-aviso').innerHTML = (PERFIL.rol === 'admin' && D.tipo) ? '<div class="aviso">Con filtro de tipo de consulta no se muestran gasto ni margen: el gasto no se registra por tipo de consulta.</div>'
+      : (PERFIL.rol === 'admin' && D.doc) ? '<div class="aviso">Gasto y margen de la doctora: solo los gastos asociados a su nombre (el gasto general de la clínica no se reparte).</div>'
       : (PERFIL.rol === 'admin' && D.gastos === undefined) ? '<div class="aviso warn">No se pudieron cargar los gastos; el resto del dashboard sí.</div>' : '';
     if (finOn) {
       const tg = sumar(gastos, x => num(x.monto)), mg = num(tot - tg);
+      $('fin-ing-l').textContent = D.doc ? 'Productividad' : 'Ingreso total'; $('fin-gas-l').textContent = D.doc ? 'Gasto asociado' : 'Gasto total';
       $('fin-ing-v').textContent = fmt0(tot); $('fin-ing-s').textContent = asist.length + ' consultas';
       $('fin-gas-v').textContent = fmt0(tg); $('fin-gas-s').innerHTML = tot > 0 ? '<b>' + (tg / tot * 100).toFixed(2) + '%</b> del ingreso' : 'sin ingreso en el periodo';
       $('fin-mar-v').textContent = (mg < 0 ? '-' : '') + fmt0(Math.abs(mg)); $('fin-mar-s').innerHTML = tot > 0 ? '<b>' + (mg / tot * 100).toFixed(2) + '%</b> de margen' : '—';
@@ -2251,6 +2486,19 @@ async function pintarDashboard() {
       $('dash-gasto-med').innerHTML = barras(porMed, m => m);
       $('dash-gasto-t1').textContent = 'Por categoría · ' + fmt0(tg);
       $('dash-gasto-periodo').textContent = $('dash-hero-per').textContent;
+      // Resultado por doctora (sin filtro): productividad − gasto asociado
+      const resOn = !D.doc && !ES_DOCTORA();
+      $('dash-resdoc').style.display = resOn ? '' : 'none';
+      if (resOn) {
+        const prod = {}, gas = {}; asist.forEach(c => prod[c.doctor_id] = num((prod[c.doctor_id] || 0) + ingreso(c))); gastos.forEach(g => { if (g.doctor_id) gas[g.doctor_id] = num((gas[g.doctor_id] || 0) + num(g.monto)); });
+        const ids = DOCTORAS.map(x => x.id).filter(id => prod[id] || gas[id]).sort((a, b) => ((prod[b] || 0) - (gas[b] || 0)) - ((prod[a] || 0) - (gas[a] || 0)));
+        const gGen = sumar(gastos.filter(g => !g.doctor_id), g => num(g.monto));
+        $('dash-resdoc-periodo').textContent = $('dash-hero-per').textContent;
+        $('dash-resdoc-body').innerHTML = ids.map((id, i) => { const pr = prod[id] || 0, ga = gas[id] || 0, mr = num(pr - ga), neg = mr < 0, pg = pr > 0 ? ga / pr * 100 : (ga > 0 ? 100 : 0);
+          return '<div class="fin-doc"><div class="fd-h"><span class="fd-dot" style="background:' + DOC_COLORS_GASTO[(i + 1) % DOC_COLORS_GASTO.length] + '"></span><span class="fd-n">' + esc(nombreDoctora(id)) + '</span><span class="fd-m">' + (neg ? '-' : '') + fmt0(Math.abs(mr)) + '</span><span class="fin-pill' + (neg ? ' neg' : '') + '">' + (pr > 0 ? (mr / pr * 100).toFixed(1) + '%' : '—') + '</span></div>' +
+            '<div class="fin-bar' + (neg ? ' neg' : '') + '"><i style="width:' + Math.min(pg, 100).toFixed(1) + '%"></i></div><div class="fin-bar-l"><span>Productividad <b>' + fmt0(pr) + '</b></span><span class="gx">Gasto <b>' + fmt0(ga) + '</b></span></div></div>'; }).join('') +
+          (gGen > 0 ? '<div class="fin-doc" style="border-style:dashed"><div class="fd-h"><span class="fd-dot" style="background:#64748b"></span><span class="fd-n">🏥 Gasto general de la clínica</span><span class="fd-m" style="color:#B8481F">' + fmt0(gGen) + '</span></div><div class="fin-bar-l" style="margin-top:8px"><span>No asociado a ninguna doctora</span></div></div>' : '');
+      }
     }
     $('d-box-doc').style.display = (ES_DOCTORA() || D.doc) ? 'none' : '';
   });
@@ -2310,6 +2558,278 @@ function graf(key, canvasId, cfg) {
   D.charts[key] = new Chart(cv.getContext('2d'), cfg);
 }
 
+/* ════════ Flash report: PDF del cierre del día / mes (mismo diseño que Skin Fabric) ════════ */
+const CDN_H2C = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+const FLASH_FONTS = '<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">';
+const FLASH_CSS = `:root{--navy:#0B1628;--navy2:#1B3A6B;--teal:#2ABFBF;--g1:#F1F4F9;--g2:#E3E8F0;--g4:#8794A8;--g6:#5B6B84;--purple:#7D3C98;--green:#14764f}
+*{box-sizing:border-box;margin:0}
+html,body{background:#fff}
+body{width:816px;font-family:'Instrument Sans','Helvetica Neue',Arial,sans-serif;color:var(--navy);font-size:10.5px}
+.page{width:816px;min-height:1056px;display:flex;flex-direction:column;background:#fff}
+.page.fix{height:1056px;overflow:hidden}
+.d{font-family:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif}
+.hd{background:linear-gradient(135deg,#0B1628,#173363);color:#fff;padding:26px 36px 20px;border-bottom:4px solid var(--teal);display:flex;justify-content:space-between;align-items:flex-end}
+.hd .br{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:700}
+.hd h1{font-size:26px;font-weight:800;margin-top:5px;letter-spacing:.2px;line-height:1.05}.hd h1 b{color:var(--teal)}
+.hd .dt{text-align:right;font-size:11px;color:rgba(255,255,255,.85);line-height:1.5}.hd .dt strong{display:block;font-size:15px;color:#fff;font-weight:700}
+.hd .lg2{height:30px;display:block;margin-bottom:8px}
+.wrap{padding:20px 36px 24px;flex:1}
+.hero{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:10px}
+.k{border:1px solid var(--g2);border-radius:12px;padding:11px 13px;background:#fff}
+.k .l{font-size:8.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--g4)}
+.k .v{font-size:21px;font-weight:800;margin-top:4px;line-height:1}
+.k .s{font-size:9.5px;color:var(--g6);margin-top:5px;line-height:1.35}
+.k.main{background:linear-gradient(135deg,#0B1628,#1B3A6B);border:0;color:#fff}.k.main .l{color:rgba(255,255,255,.7)}.k.main .v{font-size:31px}.k.main .s{color:rgba(255,255,255,.85)}
+.up{display:inline-block;background:rgba(42,191,191,.25);color:#7DE8E8;font-weight:800;border-radius:10px;padding:1px 7px;margin-right:4px}.up.dn{background:rgba(255,120,100,.25);color:#FFB3A6}
+.k .v.t{color:#0f8f8f}.k .v.f{color:var(--purple)}.k .v.e{color:var(--green)}
+.lg{display:flex;gap:12px;font-size:9px;color:var(--g6);font-weight:600;font-family:'Instrument Sans',Arial,sans-serif}.lg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
+.spart{background:var(--teal);display:block}.fpart{background:var(--purple);display:block}.bar.f{background:var(--purple)}
+h2{font-size:12px;font-weight:800;margin:18px 0 8px;display:flex;align-items:center;gap:8px}h2::after{content:'';flex:1;height:1px;background:var(--g2)}
+h2 small{font-family:'Instrument Sans',Arial,sans-serif;font-weight:600;color:var(--g4);font-size:9.5px}
+.bar{height:100%;border-radius:5px;display:flex;overflow:hidden}.bar.t{background:var(--teal)}.bar.n{background:var(--navy2)}
+.pr{display:grid;grid-template-columns:190px 1fr 110px 34px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--g2)}
+.pn small{display:block;color:var(--g4);font-size:9px;margin-top:3px}
+.np{display:inline-block;font-size:10.5px;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap}
+.np.d1{background:#DCEBFB;color:#173F82;box-shadow:inset 0 0 0 1px #A9C9F2}.np.d2{background:#D9F4F4;color:#0B6B6B;box-shadow:inset 0 0 0 1px #8FDADA}
+.pb{height:14px;background:var(--g1);border-radius:5px}
+.pv{text-align:right}.pv b{font-size:13px;font-weight:800;display:block}.pv small{font-size:8.5px;color:var(--g4)}.pp{text-align:right;font-weight:800;color:var(--g6);font-size:11px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.mr{display:grid;grid-template-columns:110px 1fr 62px 28px;gap:8px;align-items:center;padding:4px 0}
+.mn{font-weight:600;font-size:10px;white-space:nowrap}.mb{height:11px;background:var(--g1);border-radius:4px}.mr b{text-align:right;font-size:10.5px}.mp{text-align:right;color:var(--g4);font-size:9.5px;font-weight:700}
+.xr{display:grid;grid-template-columns:1fr 26px 62px 58px;gap:7px;align-items:center;padding:3.5px 0}
+.xn{font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xk{color:var(--g4);font-size:9px;font-weight:700;text-align:right;white-space:nowrap}.xb{height:9px;background:var(--g1);border-radius:4px}.xr b{text-align:right;font-size:10.5px}
+.sub{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--g4);margin:10px 0 3px}
+.al{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:2px}
+.a{border-radius:10px;padding:9px 12px;display:flex;gap:9px;align-items:center;font-size:10px;line-height:1.35}
+.a b{font-size:17px;font-family:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;font-weight:800;line-height:1;white-space:nowrap}
+.a.w{background:#FDF1DC;border:1px solid #F0C36D;color:#7A4D00}.a.o{background:#E3F6EE;border:1px solid #A9DFC5;color:var(--green)}.a.i{background:var(--g1);border:1px solid var(--g2);color:var(--g6)}
+.ft{padding:11px 36px;border-top:1px solid var(--g2);display:flex;justify-content:space-between;font-size:8.5px;color:var(--g4)}
+.hd.s{padding:16px 36px 13px}.hd.s h1{font-size:19px;margin-top:3px}.hd.s .br{font-size:9px}.hd.s .dt{font-size:10px;line-height:1.45}.hd.s .dt strong{font-size:12px}
+.wrap.ax{padding:14px 36px 0}
+.blk{margin-bottom:12px}
+.bh{display:flex;align-items:center;gap:9px;padding:6px 0 5px;border-bottom:2px solid var(--navy)}
+.bs{font-size:9.5px;color:var(--g6);font-weight:600}.bh .ln{flex:1}.btt{font-size:13px;font-family:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;font-weight:800}
+.cols,.rw{display:grid;grid-template-columns:20px 150px 150px 1fr 92px 54px;gap:8px;align-items:center}
+.fm{font-size:8.5px;color:var(--purple);line-height:1.3;font-weight:600}
+.cols{font-size:8px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--g4);padding:5px 0 3px}.cols .r{text-align:right}
+.rw{padding:5px 0;border-bottom:1px solid var(--g2);min-height:25px}
+.rw.z{background:#FAFBFD}
+.rw .n{color:var(--g4);font-size:9px;text-align:right}.rw .pc{font-weight:700;font-size:10px;line-height:1.2}
+.rw .sv{display:flex;flex-wrap:wrap;gap:3px}
+.svc{display:inline-block;font-size:8.5px;font-weight:700;border-radius:10px;padding:2px 7px;line-height:1.25}
+.svc.k1{background:#DFF3E5;color:#1c7a41}.svc.k2{background:#DCEAFB;color:#1f5fae}.svc.k3{background:#FDF0D2;color:#9a6a06}
+.fac{font-size:8px;font-weight:700;background:#FDF1DC;color:#9A6010;border:1px dashed #F0C36D;border-radius:8px;padding:1px 6px}
+.mut{color:var(--g4);font-size:9px}
+.py{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.pay{font-size:8.5px;font-weight:600;background:var(--g1);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.rw .mo{text-align:right;font-family:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:800}
+.tot{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;border-radius:10px;padding:10px 16px;margin-top:2px;font-size:10px}.tot b{font-size:17px;font-family:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif}
+`;
+const fm0 = n => (n < 0 ? '-' : '') + '$' + Math.round(Math.abs(n)).toLocaleString('es-MX');
+const capF = s => s.charAt(0).toUpperCase() + s.slice(1);
+const tonoDoc = id => DOCTORAS.findIndex(d => d.id === id) % 2 ? 'd2' : 'd1';
+const claseSvc = s => /primera vez/i.test(s) ? 'k1' : /subsecuente/i.test(s) ? 'k2' : 'k3';
+async function flashTotal(desde, hasta) {
+  const rows = await cargarConsultas(desde, hasta, false);
+  return sumar(rows.filter(c => !c.no_vino && (!C.doc || c.doctor_id === C.doc)), ingreso);
+}
+async function flashReunirDatos() {
+  const [desde, hasta] = cRango(), esDia = C.modo === 'dia';
+  const rows = C_ROWS, asist = rows.filter(c => !c.no_vino);
+  const total = sumar(asist, ingreso);
+  const pros = {}, medios = {}, mix = {}, det = {};
+  let serv = 0, farm = 0, nFarm = 0;
+  asist.forEach(c => {
+    const f = esFarmacia(c), v = ingreso(c);
+    const p = pros[c.doctor_id] || (pros[c.doctor_id] = { id: c.doctor_id, nombre: nombreDoctora(c.doctor_id), n: 0, serv: 0, farm: 0, t: 0 });
+    p.t = num(p.t + v); if (f) { p.farm = num(p.farm + v); farm = num(farm + v); nFarm++; } else { p.serv = num(p.serv + v); p.n++; serv = num(serv + v); }
+    pagosDe(c).forEach(([m, x]) => { if (x > 0) { const o = medios[m] || (medios[m] = { serv: 0, farm: 0 }); if (f) o.farm = num(o.farm + x); else o.serv = num(o.serv + x); } });
+    if (f) { const k = (c.descripcion || 'Producto').trim(); const y = det[k] || (det[k] = { n: 0, monto: 0 }); y.n++; y.monto = num(y.monto + v); }
+    else { const e = etiquetaServicio(c.motivo, c.tipo_consulta) + (c.descripcion ? ': ' + c.descripcion : ''); const x = mix[e] || (mix[e] = { n: 0, monto: 0 }); x.n++; x.monto = num(x.monto + v); }
+  });
+  const cuenta = re => asist.filter(c => re.test(c.tipo_consulta || '')).length;
+  const efCob = sumar(rows, efectivoDe);
+  const gastosOk = C_GASTOS && !C_GASTOS.error && C_GASTOS.permitido && !C.doc;
+  const salidas = gastosOk ? sumar(C_GASTOS.salidas || [], x => num(x.monto)) : null;
+  let comp = null;
+  try {
+    if (esDia) {
+      const prev = await sb.from('consultas').select('fecha').eq('deleted', false).eq('no_vino', false).lt('fecha', desde).order('fecha', { ascending: false }).limit(1);
+      const f = prev.data && prev.data[0] && prev.data[0].fecha;
+      if (f) comp = { total: await flashTotal(f, f), etiqueta: f === addDays(desde, -1) ? 'ayer' : fmtD(f).slice(0, 5) };
+    } else {
+      const ini = parseISO(desde), ant = new Date(ini.getFullYear(), ini.getMonth() - 1, 1);
+      const enCurso = todayLocal().slice(0, 7) === desde.slice(0, 7);
+      const ultimo = new Date(ini.getFullYear(), ini.getMonth(), 0).getDate();
+      const dia = Math.min(enCurso ? parseISO(todayLocal()).getDate() : 31, ultimo);
+      comp = { total: await flashTotal(isoLocal(ant), isoLocal(new Date(ant.getFullYear(), ant.getMonth(), dia))), etiqueta: 'mismo periodo de ' + MESES[ant.getMonth()] };
+    }
+  } catch (e) { console.warn('[flash] sin comparativo', e); }
+  // Anexo: detalle por doctora y paciente (solo en el reporte del día)
+  const anexo = [];
+  if (esDia) {
+    const porDoc = new Map();
+    asist.forEach(c => {
+      if (!porDoc.has(c.doctor_id)) porDoc.set(c.doctor_id, { id: c.doctor_id, nombre: nombreDoctora(c.doctor_id), filas: new Map() });
+      const b = porDoc.get(c.doctor_id), k = normTxt(c.paciente ? c.paciente.nombre : c.paciente_id);
+      if (!b.filas.has(k)) b.filas.set(k, { pac: c.paciente ? c.paciente.nombre : '—', svcs: [], farm: [], meds: [], monto: 0, fmonto: 0, factPend: false, n: 0 });
+      const r = b.filas.get(k);
+      if (esFarmacia(c)) { r.farm.push(c.descripcion || 'Producto'); r.fmonto = num(r.fmonto + ingreso(c)); }
+      else { const sv = etiquetaServicio(c.motivo, c.tipo_consulta) + (c.descripcion ? ': ' + c.descripcion : ''); if (!r.svcs.includes(sv)) r.svcs.push(sv); r.monto = num(r.monto + ingreso(c)); r.n++; }
+      pagosDe(c).forEach(([m, v]) => { if ((v > 0 || m === 'Cortesía') && !r.meds.includes(m)) r.meds.push(m); });
+      if (c.factura && !c.num_factura) r.factPend = true;
+    });
+    porDoc.forEach(b => { const filas = [...b.filas.values()]; const sv = sumar(filas, r => r.monto), fm = sumar(filas, r => r.fmonto); anexo.push({ id: b.id, nombre: b.nombre, filas, n: filas.filter(r => r.n).length, serv: sv, farm: fm, total: num(sv + fm) }); });
+    anexo.sort((a, b) => b.total - a.total);
+  }
+  return { esDia, desde, hasta, total, serv, farm, nFarm, nServ: asist.length - nFarm, n: asist.length, nPrimera: cuenta(/primera vez/i), nSub: cuenta(/subsecuente/i), nOtros: asist.filter(c => !/primera vez|subsecuente/i.test(c.tipo_consulta || '')).length,
+    noVino: rows.length - asist.length, factPend: asist.filter(c => c.factura && !c.num_factura).length, pros, medios, mix, det, efCob, salidas, comp, anexo,
+    doc: C.doc ? nombreDoctora(C.doc) : (ES_DOCTORA() ? PERFIL.nombre : '') };
+}
+function flashFechaTxt(d) {
+  const f = parseISO(d.desde);
+  return d.esDia ? capF(f.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).replace(',', ''))
+    : capF(f.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }));
+}
+function flashReportHtml(d, totalPaginas, paginasExtra) {
+  const ahora = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', ' ·');
+  let comp;
+  if (d.comp && d.comp.total > 0) { const dl = (d.total - d.comp.total) / d.comp.total * 100; comp = '<span class="up ' + (dl < 0 ? 'dn' : '') + '">' + (dl < 0 ? '▼' : '▲') + ' ' + Math.abs(dl).toFixed(1) + '%</span> vs. ' + esc(d.comp.etiqueta) + ' (' + fm0(d.comp.total) + ')'; }
+  else comp = d.esDia ? 'Sin día anterior para comparar' : 'Sin mes anterior para comparar';
+  const lista = Object.values(d.pros).sort((a, b) => b.t - a.t), maxT = Math.max(1, ...lista.map(p => p.t));
+  const prow = lista.map(p => '<div class="pr"><div class="pn"><span class="np ' + tonoDoc(p.id) + '">' + esc(corto(p.nombre)) + '</span><small>Doctora · ' + p.n + ' consulta' + (p.n === 1 ? '' : 's') + '</small></div>' +
+    '<div class="pb"><div class="bar" style="width:' + Math.max(p.t / maxT * 100, p.t > 0 ? 4 : 0).toFixed(1) + '%"><span class="spart" style="width:' + (p.t ? (p.serv / p.t * 100).toFixed(1) : 0) + '%"></span>' + (p.farm ? '<span class="fpart" style="width:' + (p.farm / p.t * 100).toFixed(1) + '%"></span>' : '') + '</div></div>' +
+    '<div class="pv"><b>' + fm0(p.t) + '</b><small>' + fm0(p.serv) + ' serv.' + (p.farm ? ' · ' + fm0(p.farm) + ' farm.' : '') + '</small></div><div class="pp">' + (d.total ? Math.round(p.t / d.total * 100) : 0) + '%</div></div>').join('');
+  const ml = Object.entries(d.medios).map(([n, v]) => ({ n, serv: v.serv, farm: v.farm, t: num(v.serv + v.farm) })).sort((a, b) => b.t - a.t), mxM = Math.max(1, ...ml.map(x => x.t));
+  const mrow = ml.map(x => '<div class="mr"><span class="mn">' + (PAGO_ICON[x.n] || '💰') + ' ' + esc(x.n) + '</span><div class="mb"><div class="bar" style="width:' + (x.t / mxM * 100).toFixed(1) + '%"><span class="spart" style="width:' + (x.t ? (x.serv / x.t * 100).toFixed(1) : 0) + '%"></span><span class="fpart" style="width:' + (x.t ? (x.farm / x.t * 100).toFixed(1) : 0) + '%"></span></div></div><b>' + fm0(x.t) + '</b><span class="mp">' + (d.total ? Math.round(x.t / d.total * 100) : 0) + '%</span></div>').join('');
+  const mixL = Object.entries(d.mix).sort((a, b) => b[1].monto - a[1].monto).slice(0, 6), mxX = Math.max(1, ...mixL.map(x => x[1].monto));
+  const xrow = mixL.map(([n, v]) => '<div class="xr"><span class="xn">' + esc(n) + '</span><span class="xk">×' + v.n + '</span><div class="xb"><div class="bar t" style="width:' + (v.monto / mxX * 100).toFixed(1) + '%"></div></div><b>' + fm0(v.monto) + '</b></div>').join('');
+  const detL = Object.entries(d.det).sort((a, b) => b[1].monto - a[1].monto).slice(0, 3), mxD = Math.max(1, ...detL.map(x => x[1].monto));
+  const drow = detL.map(([n, v]) => '<div class="xr"><span class="xn">' + esc(n) + '</span><span class="xk">' + v.n + ' vta</span><div class="xb"><div class="bar f" style="width:' + (v.monto / mxD * 100).toFixed(1) + '%"></div></div><b>' + fm0(v.monto) + '</b></div>').join('');
+  const quien = PERFIL ? 'por ' + esc(PERFIL.nombre) : '';
+  return '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Flash report</title>' + FLASH_FONTS + '<style>' + FLASH_CSS + '</style></head><body>' +
+    '<div class="page" id="flash-p1"><div class="hd"><div><div class="br">MARE Ginecología · Flash report</div><h1 class="d">' + (d.esDia ? 'Cierre del día' : 'Cierre del mes') + ' · <b>Productividad</b></h1></div>' +
+    '<div class="dt"><strong class="d">' + esc(flashFechaTxt(d)) + '</strong>' + (d.doc ? esc(d.doc) + '<br>' : '') + 'Generado el ' + esc(ahora) + '<br>' + quien + '</div></div>' +
+    '<div class="wrap"><div class="hero">' +
+      '<div class="k main"><div class="l">' + (d.esDia ? 'Ingreso total del día' : 'Ingreso total del mes') + '</div><div class="v d">' + fm0(d.total) + '</div><div class="s">' + comp + '</div></div>' +
+      '<div class="k"><div class="l">Servicios</div><div class="v t d">' + fm0(d.serv) + '</div><div class="s">' + d.nServ + ' consulta' + (d.nServ === 1 ? '' : 's') + ' · ticket ' + fm0(d.nServ ? d.serv / d.nServ : 0) + '</div></div>' +
+      '<div class="k"><div class="l">Farmacia</div><div class="v f d">' + fm0(d.farm) + '</div><div class="s">' + d.nFarm + ' venta' + (d.nFarm === 1 ? '' : 's') + '</div></div>' +
+      '<div class="k"><div class="l">Consultas</div><div class="v d">' + d.n + '</div><div class="s">' + d.nPrimera + ' primera vez · ' + d.nSub + ' subsec.</div></div>' +
+    '</div>' +
+    (d.doc && !ES_DOCTORA() ? '' : '<h2 class="d">Productividad por doctora <small>servicios + farmacia</small><span class="lg"><span><i style="background:var(--teal)"></i>Servicios</span><span><i style="background:var(--purple)"></i>Farmacia</span></span></h2>' + (prow || '<div style="color:var(--g4);padding:8px 0">Sin movimientos.</div>')) +
+    '<div class="two"><div><h2 class="d">Cobrado por medio de pago</h2>' + (mrow || '<div style="color:var(--g4)">Sin cobros.</div>') + '</div>' +
+    '<div><h2 class="d">Qué se vendió</h2><div class="sub" style="margin-top:0">Servicios · top ' + mixL.length + '</div>' + (xrow || '<div style="color:var(--g4)">—</div>') +
+      (detL.length ? '<div class="sub">Farmacia · top ' + detL.length + '</div>' + drow : '') + '</div></div>' +
+    '<h2 class="d">Pendientes para cerrar bien</h2><div class="al">' +
+      '<div class="a ' + (d.factPend > 0 ? 'w' : 'o') + '"><b>' + d.factPend + '</b><span>facturas solicitadas<br>sin N° de factura</span></div>' +
+      '<div class="a ' + (d.noVino > 0 ? 'w' : 'o') + '"><b>' + d.noVino + '</b><span>pacientes que<br>no vinieron</span></div>' +
+      (d.salidas != null ? '<div class="a i"><b>' + fm0(d.efCob - d.salidas) + '</b><span>efectivo neto (cobrado ' + fm0(d.efCob) + '<br>− gastos en efectivo ' + fm0(d.salidas) + ')</span></div>'
+        : '<div class="a i"><b>' + fm0(d.efCob) + '</b><span>cobrado en efectivo<br>para conciliar en caja</span></div>') +
+    '</div></div>' +
+    '<div class="ft"><span>MARE Ginecología Integral · Productividad · Cifras al momento de generar el reporte · Confidencial</span><span>Página 1 de ' + (totalPaginas || 1) + '</span></div></div>' +
+    (paginasExtra || '') + '</body></html>';
+}
+function flashAnexoFilaHtml(r, n, zebra) {
+  let sv = r.svcs.length ? r.svcs.map(x => '<span class="svc ' + claseSvc(x) + '">' + esc(x) + '</span>').join(' ') : '<span class="mut">Solo farmacia</span>';
+  if (r.factPend) sv += ' <span class="fac">🧾 factura pend.</span>';
+  const fmH = r.farm.length ? '<span class="fm">💊 ' + r.farm.map(esc).join(' · ') + '</span>' : '<span class="mut">—</span>';
+  const py = r.meds.map(x => '<span class="pay">' + (PAGO_ICON[x] || '💰') + ' ' + esc(x) + '</span>').join('');
+  return '<div class="rw' + (zebra ? ' z' : '') + '"><span class="n">' + n + '</span><span class="pc">' + esc(r.pac) + '</span><span class="sv">' + sv + '</span>' + fmH + '<span class="py">' + py + '</span><b class="mo">' + fm0(r.monto + r.fmonto) + '</b></div>';
+}
+function flashAnexoCabHtml(b, cont) {
+  return '<div class="bh"><span class="np ' + tonoDoc(b.id) + '">' + esc(corto(b.nombre)) + '</span><span class="bs">' + (cont ? '(continúa)' : b.n + ' consulta' + (b.n === 1 ? '' : 's') + ' · ' + b.filas.length + ' paciente' + (b.filas.length === 1 ? '' : 's')) + '</span><span class="ln"></span>' +
+    '<span style="font-size:9.5px;color:var(--g6)">' + fm0(b.serv) + ' <i style="font-style:normal;color:var(--g4)">serv.</i>' + (b.farm ? ' · ' + fm0(b.farm) + ' <i style="font-style:normal;color:var(--g4)">farm.</i>' : '') + '</span><b class="btt">' + fm0(b.total) + '</b></div>' +
+    '<div class="cols"><span></span><span>Paciente</span><span>Servicio</span><span>Farmacia</span><span>Pago</span><span class="r">Monto</span></div>';
+}
+function flashAnexoPagina(fechaTxt, ingresoTxt, cuerpo, n, tot) {
+  return '<div class="page fix"><div class="hd s"><div><div class="br">MARE Ginecología · Flash report · Anexo</div><h1 class="d">Detalle de <b>pacientes</b></h1></div><div class="dt"><strong class="d">' + esc(fechaTxt) + '</strong>Ingreso del día ' + ingresoTxt + '</div></div>' +
+    '<div class="wrap ax">' + cuerpo + '</div><div class="ft"><span>MARE Ginecología Integral · Productividad · Cifras al momento de generar el reporte · Confidencial</span><span>Página ' + n + ' de ' + tot + '</span></div></div>';
+}
+async function flashMontarIframe(html) {
+  const ifr = document.createElement('iframe');
+  ifr.setAttribute('aria-hidden', 'true');
+  ifr.style.cssText = 'position:fixed;left:-10000px;top:0;width:816px;height:1056px;border:0;visibility:hidden';
+  document.body.appendChild(ifr);
+  await new Promise(res => { ifr.onload = res; ifr.srcdoc = html; });
+  const doc = ifr.contentDocument;
+  try { await Promise.race([doc.fonts.ready, new Promise(r => setTimeout(r, 2500))]); } catch (e) { /* nada */ }
+  await new Promise(r => setTimeout(r, 250));
+  return ifr;
+}
+/* Mide cada fila en un documento de prueba y reparte el anexo en las hojas necesarias, cortando entre filas */
+async function flashAnexoPaginar(d) {
+  let n = 0;
+  const filasHtml = d.anexo.map(b => b.filas.map((r, i) => flashAnexoFilaHtml(r, ++n, i % 2 === 1)));
+  const totHtml = '<div class="tot"><span>Total del día · ' + n + ' paciente' + (n === 1 ? '' : 's') + '</span><b>' + fm0(d.total) + '</b></div>';
+  const medirHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8">' + FLASH_FONTS + '<style>' + FLASH_CSS + '</style></head><body>' +
+    '<div class="page fix"><div class="hd s"><div><div class="br">x</div><h1 class="d">x</h1></div><div class="dt"><strong class="d">x</strong>x</div></div><div class="wrap ax"><div class="blk"></div></div><div class="ft"><span>x</span><span>x</span></div></div>' +
+    '<div id="medidas" style="width:744px;position:absolute;left:0;top:1100px">' + d.anexo.map((b, bi) => '<div class="blk"><div class="cab">' + flashAnexoCabHtml(b, false) + '</div>' + filasHtml[bi].join('') + '</div>').join('') + '<div id="mtot">' + totHtml + '</div></div></body></html>';
+  const ifr = await flashMontarIframe(medirHtml);
+  try {
+    const doc = ifr.contentDocument;
+    const disp = 1056 - doc.querySelector('.hd').getBoundingClientRect().height - doc.querySelector('.ft').getBoundingClientRect().height - 20;
+    const medidas = [...doc.querySelectorAll('#medidas .blk')].map(bl => ({ cab: bl.querySelector('.cab').getBoundingClientRect().height, filas: [...bl.querySelectorAll('.rw')].map(x => x.getBoundingClientRect().height) }));
+    const hTot = doc.getElementById('mtot').getBoundingClientRect().height + 4;
+    const paginas = [{ segs: [] }]; let usado = 0;
+    const nueva = () => { paginas.push({ segs: [] }); usado = 0; };
+    medidas.forEach((md, bi) => {
+      let i = 0, cont = false;
+      while (i < md.filas.length) {
+        if (usado + md.cab + md.filas[i] > disp && usado > 0) nueva();
+        const seg = { bi, cont, desde: i, hasta: i }; usado += md.cab;
+        while (i < md.filas.length && usado + md.filas[i] <= disp) { usado += md.filas[i]; i++; seg.hasta = i; }
+        if (seg.hasta === seg.desde) { seg.hasta = ++i; usado += md.filas[seg.desde]; }
+        paginas[paginas.length - 1].segs.push(seg); cont = true;
+        if (i < md.filas.length) nueva();
+      }
+      usado += 12;
+    });
+    if (usado + hTot > disp) nueva();
+    paginas[paginas.length - 1].total = true;
+    return { paginas, filasHtml, totHtml };
+  } finally { ifr.remove(); }
+}
+async function flashHtmlAPdf(html, nombreArchivo) {
+  await Promise.all([cargarScript(CDN_H2C), cargarScript(CDN.jspdf)]);
+  const ifr = await flashMontarIframe(html);
+  try {
+    const doc = ifr.contentDocument, hojas = [...doc.querySelectorAll('.page')];
+    ifr.style.height = Math.max(1056, doc.documentElement.scrollHeight) + 'px';
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: 'pt', format: 'letter', orientation: 'portrait', compress: true });
+    const PW = 612, PH = 792;
+    for (let i = 0; i < hojas.length; i++) {
+      const canvas = await window.html2canvas(hojas[i], { scale: 2.5, backgroundColor: '#ffffff', width: 816, windowWidth: 816, useCORS: true, logging: false });
+      const ratio = canvas.height / canvas.width; let w = PW, h = PW * ratio;
+      if (h > PH) { h = PH; w = PH / ratio; }
+      if (i > 0) pdf.addPage('letter', 'portrait');
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', (PW - w) / 2, 0, w, h, undefined, 'FAST');
+    }
+    pdf.setProperties({ title: nombreArchivo.replace(/\.pdf$/, '').replace(/_/g, ' '), subject: 'Flash report · MARE Ginecología' });
+    pdf.save(nombreArchivo);
+  } finally { ifr.remove(); }
+}
+async function exportarFlashReport() {
+  const btn = $('c-flash'); if (!btn || btn.disabled) return;
+  if (!C_ROWS.length) return toast('No hay movimientos en este periodo para exportar.');
+  const txt0 = btn.textContent; btn.disabled = true; btn.textContent = '⏳ Generando…';
+  try {
+    const d = await flashReunirDatos();
+    const nombre = 'MARE_Flash_Report_' + (d.esDia ? d.desde : d.desde.slice(0, 7)) + (d.doc ? '_' + normTxt(corto(d.doc)).replace(/[^a-z0-9]+/g, '_') : '') + '.pdf';
+    let extra = '', totalPags = 1;
+    if (d.esDia && d.anexo.length) {
+      const pag = await flashAnexoPaginar(d);
+      totalPags = 1 + pag.paginas.length;
+      extra = pag.paginas.map((p, k) => flashAnexoPagina(flashFechaTxt(d), fm0(d.total),
+        p.segs.map(sg => '<div class="blk">' + flashAnexoCabHtml(d.anexo[sg.bi], sg.cont) + pag.filasHtml[sg.bi].slice(sg.desde, sg.hasta).join('') + '</div>').join('') + (p.total ? pag.totHtml : ''), 2 + k, totalPags)).join('');
+    }
+    window.__FLASH_HTML = flashReportHtml(d, totalPags, extra);   // para revisión en pruebas
+    await flashHtmlAPdf(window.__FLASH_HTML, nombre);
+    toast('PDF generado.');
+  } catch (e) { console.error('[flash report]', e); toast('No se pudo generar el PDF. Revisa tu conexión e inténtalo de nuevo.'); }
+  finally { btn.disabled = false; btn.textContent = txt0; }
+}
+
 /* ════════ Tiempo real y refresco ════════ */
 let RT = null, rtTimer = null;
 function refrescarActiva() {
@@ -2337,12 +2857,12 @@ function apagarRealtime() { try { if (RT) sb.removeChannel(RT); } catch (e) { /*
 
 function reiniciarEstadoConsultas() {
   H.per = null; H.sel = 'hoy'; H.rows = []; H.q = ''; H.doc = ''; H.mot = ''; H.med = ''; H.tg = new Set(); H.limite = 200; H.papelera = false;
-  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'doc'; C.modo = 'dia'; C_ROWS = []; C_GASTOS = null;
+  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'cierre-por-doctor-panel'; C.modo = 'dia'; C_ROWS = []; C_GASTOS = null;
   D.modo = 'mes'; D.rec = '30'; D.mes = null; D.doc = ''; D.tipo = ''; D.tend = 'dia'; D.ig = 'dia';
   Object.keys(D.charts).forEach(k => { try { D.charts[k].destroy(); } catch (e) { /* nada */ } }); D.charts = {};
   Object.keys(FORMS).forEach(k => delete FORMS[k]);
   if (typeof P !== 'undefined') { P.estado = 'vencida'; P.q = ''; P.doc = ''; P.serv = ''; P.lista = []; P.gest = []; P.cons = []; }
-  if (typeof GS !== 'undefined') { GS.mes = null; GS.cat = 'todos'; GS.med = ''; GS.fac = ''; GS.q = ''; GS.rows = []; GS.modo = 'mes'; GS.nuevoMedio = ''; GS.nuevoFac = false; Object.keys(GS.charts).forEach(k => { try { GS.charts[k].destroy(); } catch (e) { /* nada */ } }); GS.charts = {}; }
+  if (typeof GS !== 'undefined') { GS.mes = null; GS.doc = ''; GS.cat = 'todos'; GS.med = ''; GS.fac = ''; GS.q = ''; GS.rows = []; GS.modo = 'mes'; GS.nuevoMedio = ''; GS.nuevoFac = false; Object.keys(GS.charts).forEach(k => { try { GS.charts[k].destroy(); } catch (e) { /* nada */ } }); GS.charts = {}; }
 }
 
 /* @@PRM_GASTOS@@ */
@@ -2532,10 +3052,15 @@ $('cic-save').onclick = async () => {
 };
 
 /* ════════ GASTOS (diseño de Skin Fabric) ════════ */
-const GS = { modo: 'mes', mes: null, d: null, h: null, cat: 'todos', med: '', fac: '', q: '', rows: [], seq: 0, charts: {}, edit: null, medio: '', nombres: {}, nuevoMedio: '', nuevoFac: false };
+const GS = { modo: 'mes', mes: null, d: null, h: null, cat: 'todos', med: '', fac: '', doc: '', q: '', rows: [], seq: 0, charts: {}, edit: null, medio: '', nombres: {}, nuevoMedio: '', nuevoFac: false };
 const MEDIO_GASTO_TXT = { efectivo: 'Efectivo', transferencia: 'Transferencia', 'depósito': 'Depósito' };
 const MEDIO_GASTO_ICO = { efectivo: '💵', transferencia: '🏦', 'depósito': '🏧' };
 const stGasto = m => m === 'efectivo' ? 'st-ef' : m === 'transferencia' ? 'st-tr' : m === 'depósito' ? 'st-ta' : 'st-nv';
+const DOC_COLORS_GASTO = ['#1B3A6B', '#7D3C98', '#2E7D4F', '#9A6010', '#A3376B', '#0E7C74', '#B8481F'];
+const GENERAL = '__general';
+const nombreAsociado = id => id ? nombreDoctora(id) : 'General de la clínica';
+const optAsociar = sel => '<option value="">Seleccionar…</option><option value="' + GENERAL + '"' + (sel === GENERAL ? ' selected' : '') + '>🏥 General de la clínica</option>' +
+  DOCTORAS.filter(d => d.activo || d.id === sel).map(d => '<option value="' + esc(d.id) + '"' + (d.id === sel ? ' selected' : '') + '>' + esc(d.nombre) + '</option>').join('');
 const optCatGasto = sel => '<option value="">Seleccionar...</option>' + CATALOGOS.categoriasGasto.map(c => '<option value="' + esc(c) + '"' + (c === sel ? ' selected' : '') + '>' + esc(catInfo(c).label) + '</option>').join('');
 function chipsRadio(nombre, opciones, actual) {
   return opciones.map(o => '<label class="fact-chip' + (o.v === actual ? ' on' : '') + '"><input type="radio" name="' + nombre + '" value="' + esc(o.v) + '"' + (o.v === actual ? ' checked' : '') + '><span class="rdot"></span><span>' + esc(o.t) + '</span></label>').join('');
@@ -2562,6 +3087,7 @@ function renderGastos() {
         '</div></div></div>' +
       '<div class="filter-bar">' +
         '<input type="text" id="gasto-buscar" placeholder="Buscar en descripciones..." style="flex:2;min-width:140px" aria-label="Buscar en descripciones">' +
+        '<select id="gs-doc" aria-label="Asociado a"><option value="">Todas las doctoras y general</option><option value="' + GENERAL + '">🏥 General de la clínica</option>' + DOCTORAS.map(d => '<option value="' + esc(d.id) + '">' + esc(d.nombre) + '</option>').join('') + '</select>' +
         '<select id="gs-med" aria-label="Medio de pago"><option value="">Todos los medios</option>' + CATALOGOS.mediosGasto.map(m => '<option value="' + esc(m) + '">' + MEDIO_GASTO_TXT[m] + '</option>').join('') + '<option value="__sin">Sin medio</option></select>' +
         '<select id="gs-fac" aria-label="Facturación"><option value="">Facturado y no facturado</option><option value="si">Facturado</option><option value="no">No facturado</option></select>' +
       '</div>' +
@@ -2569,6 +3095,7 @@ function renderGastos() {
       '<div id="gs-aviso"></div>' +
       '<div class="split2" id="gasto-split">' +
         '<div class="form-panel" id="gasto-form-panel"><h4>➕ Registrar gasto</h4>' +
+          '<div class="fg"><label for="gasto-doctor-asociado">Asociar a</label><select id="gasto-doctor-asociado">' + optAsociar('') + '</select></div>' +
           '<div class="fg"><label for="gasto-fecha">Fecha del gasto</label><input type="date" id="gasto-fecha"></div>' +
           '<div class="fg"><label for="gasto-categoria">Categoría</label><select id="gasto-categoria">' + optCatGasto('') + '</select><div id="gasto-hints">' +
             CATALOGOS.categoriasGasto.map(c => '<div class="cat-hint" data-cat="' + esc(c) + '">' + esc(catInfo(c).desc) + '</div>').join('') + '</div></div>' +
@@ -2582,14 +3109,14 @@ function renderGastos() {
         '<div><div class="kpi-grid" id="gasto-kpis"></div>' +
           '<div class="chart-row">' +
             '<div class="chart-box"><div class="chart-title">🍩 Por categoría</div><div class="chart-donut-body"><div class="chart-canvas-wrap donut"><canvas id="chartGastoCat"></canvas></div><div class="chart-legend-custom" id="gasto-legend-cat"></div></div></div>' +
-            '<div class="chart-box"><div class="chart-title">💳 Por medio de pago</div><div class="chart-canvas-wrap"><canvas id="chartGastoMed"></canvas></div></div>' +
+            '<div class="chart-box"><div class="chart-title">🩺 Por doctora</div><div class="chart-canvas-wrap"><canvas id="chartGastoDoc"></canvas></div></div>' +
           '</div>' +
           '<div class="sec-title">¿Qué incluye cada categoría?</div>' +
           '<div class="cat-info-grid">' + CATALOGOS.categoriasGasto.map(c => '<div class="cat-info-card cat-' + catInfo(c).id + '"><div class="t">' + esc(catInfo(c).label) + '</div><div class="d">' + esc(catInfo(c).desc) + '</div></div>').join('') + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="sec-title">Todos los gastos <button class="sbtn btn-outline" id="gasto-btn-exportar" type="button">↓ Exportar</button></div>' +
-      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Monto</th><th>Medio</th><th>Facturación</th><th>Agregado por</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
+      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Asociado a</th><th>Monto</th><th>Medio</th><th>Facturación</th><th>Agregado por</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
         '<tbody id="gasto-tbody"></tbody></table><div class="empty-note" id="gasto-empty" style="display:none">Sin gastos para este filtro.</div></div>';
     // periodo
     $('gasto-per').querySelectorAll('.com-seg button').forEach(b => b.onclick = () => {
@@ -2608,6 +3135,7 @@ function renderGastos() {
     // filtros
     $('gasto-buscar').addEventListener('input', () => { GS.q = $('gasto-buscar').value; pintarGastos(); });
     $('gs-med').onchange = () => { GS.med = $('gs-med').value; pintarGastos(); };
+    $('gs-doc').onchange = () => { GS.doc = $('gs-doc').value; pintarGastos(); };
     $('gs-fac').onchange = () => { GS.fac = $('gs-fac').value; pintarGastos(); };
     // formulario
     $('gasto-fecha').value = todayLocal(); $('gasto-fecha').max = todayLocal();
@@ -2629,7 +3157,7 @@ async function cargarGastos() {
   $('gasto-hero-per').textContent = GS.modo === 'mes' ? MESES[+GS.mes.slice(5, 7) - 1].replace(/^./, c => c.toUpperCase()) + ' ' + GS.mes.slice(0, 4) : GS.modo === 'rango' ? fmtD(GS.d) + ' – ' + fmtD(GS.h) : 'Todo el historial';
   $('gasto-tbody').innerHTML = '<tr><td colspan="9" class="empty">Cargando…</td></tr>';
   const [r, rp] = await Promise.all([
-    traerTodo(() => sb.from('gastos').select('id,fecha,categoria,monto,descripcion,facturado,medio_pago,creado_por,created_at').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id')),
+    traerTodo(() => sb.from('gastos').select('id,fecha,categoria,monto,descripcion,facturado,medio_pago,doctor_id,creado_por,created_at').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id')),
     sb.from('personal').select('id,nombre').then(x => x, () => ({ data: [] }))
   ]);
   if (seq !== GS.seq) return;
@@ -2642,7 +3170,7 @@ const puedeEditarGasto = g => PERFIL.rol === 'admin' || g.creado_por === PERFIL.
 function filtrarGastos(conCat) {
   const q = normTxt(GS.q);
   return GS.rows.filter(g => (!conCat || GS.cat === 'todos' || g.categoria === GS.cat) && (!GS.med || (GS.med === '__sin' ? !g.medio_pago : g.medio_pago === GS.med)) &&
-    (!GS.fac || (GS.fac === 'si') === !!g.facturado) && (!q || normTxt(g.descripcion).includes(q)));
+    (!GS.fac || (GS.fac === 'si') === !!g.facturado) && (!GS.doc || (GS.doc === GENERAL ? !g.doctor_id : g.doctor_id === GS.doc)) && (!q || normTxt(g.descripcion).includes(q)));
 }
 function pintarGastos() {
   if (!$('gasto-tbody')) return;
@@ -2656,9 +3184,12 @@ function pintarGastos() {
     const tot = sumar(rows, x => num(x.monto)), ef = sumar(rows.filter(x => x.medio_pago === 'efectivo'), x => num(x.monto));
     const bank = sumar(rows.filter(x => x.medio_pago === 'transferencia' || x.medio_pago === 'depósito'), x => num(x.monto));
     const sinFac = rows.filter(x => !x.facturado);
-    $('gasto-kpis').innerHTML = [['💸', 'Gasto total', money(tot), rows.length + ' gasto(s)'], ['💵', 'En efectivo', money(ef), 'resta del efectivo del cierre'],
-      ['🏦', 'Transferencia y depósito', money(bank), 'no resta efectivo'], ['🧾', 'Sin factura', money(sumar(sinFac, x => num(x.monto))), sinFac.length + ' gasto(s)']]
-      .map((x, i) => '<div class="kpi-card"' + (i ? ' style="border-left:4px solid ' + ['', '#2E7D4F', '#1B5C9E', '#A3376B'][i] + '"' : '') + '><div class="ico">' + x[0] + '</div><div class="kpi-label">' + x[1] + '</div><div class="kpi-val">' + x[2] + '</div><div class="kpi-sub">' + x[3] + '</div></div>').join('');
+    const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
+    const personas = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
+    $('gasto-kpis').innerHTML =
+      '<div class="kpi-card"><div class="ico">💸</div><div class="kpi-label">Gasto total</div><div class="kpi-val">' + money(tot) + '</div><div class="kpi-sub">' + rows.length + ' gasto(s) · ' + money(bank) + ' por transferencia o depósito</div></div>' +
+      '<div class="kpi-card" style="border-left:4px solid #2E7D4F"><div class="ico">💵</div><div class="kpi-label">En efectivo</div><div class="kpi-val">' + money(ef) + '</div><div class="kpi-sub">resta del efectivo del cierre · ' + sinFac.length + ' sin factura</div></div>' +
+      personas.map((id, i) => '<div class="kpi-card" style="border-left:4px solid ' + DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length] + '"><div class="ico">' + (id === GENERAL ? '🏥' : '🩺') + '</div><div class="kpi-label">' + esc(id === GENERAL ? 'General de la clínica' : nombreDoctora(id)) + '</div><div class="kpi-val">' + money(porDoc[id] || 0) + '</div></div>').join('');
     const sm = GS.rows.filter(x => !x.medio_pago);
     $('gs-aviso').innerHTML = sm.length ? '<div class="aviso warn">' + sm.length + ' gasto(s) sin medio de pago en el periodo. Edítalos para indicarlo: sin ese dato no se sabe si restan efectivo.</div>' : '';
     $('gasto-form-panel').style.display = '';
@@ -2667,6 +3198,7 @@ function pintarGastos() {
       const ci = catInfo(g.categoria);
       return '<tr><td data-l="Fecha">' + fmtD(g.fecha) + '</td>' +
         '<td data-l="Categoría"><span class="badge-cat cat-' + ci.id + '">' + esc(ci.label) + '</span></td>' +
+        '<td data-l="Asociado a">' + (g.doctor_id ? personaPill(g.doctor_id, nombreDoctora(g.doctor_id)) : '<span class="h-mut">🏥 General</span>') + '</td>' +
         '<td data-l="Monto"><b>' + money(g.monto) + '</b></td>' +
         '<td data-l="Medio"><span class="st ' + stGasto(g.medio_pago) + '">' + (g.medio_pago ? MEDIO_GASTO_ICO[g.medio_pago] + ' ' : '') + esc(MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio') + '</span></td>' +
         '<td data-l="Facturación"><span class="badge-fact ' + (g.facturado ? 'fact-facturado_skin' : 'fact-no_facturado') + '">' + (g.facturado ? 'Facturado' : 'No facturado') + '</span></td>' +
@@ -2689,10 +3221,10 @@ async function graficasGastos(rows) {
     options: { maintainAspectRatio: false, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) } },
       datalabels: { color: '#fff', font: { size: 9, weight: '700' }, formatter: (v, ctx) => { const t = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); if (!t || !v) return ''; const p = Math.round(v / t * 100); return p >= 6 ? p + '%' : ''; } } } } });
   $('gasto-legend-cat').innerHTML = cats.map((c, i) => '<div class="leg-item"><span class="leg-dot" style="background:' + catInfo(c).color + '"></span>' + esc(catInfo(c).label) + ' <b style="margin-left:auto">' + fmt0(porCat[i]) + '</b></div>').join('');
-  const meds = CATALOGOS.mediosGasto.concat(rows.some(g => !g.medio_pago) ? [null] : []);
-  const porMed = meds.map(m => sumar(rows.filter(g => (g.medio_pago || null) === m), g => num(g.monto)));
-  grafEn(GS.charts, 'med', 'chartGastoMed', { type: 'bar', data: { labels: meds.map(m => m ? MEDIO_GASTO_TXT[m] : 'Sin medio'), datasets: [{ data: porMed, backgroundColor: ['#2E7D4F', '#1B5C9E', '#0E7C74', '#B8481F'], borderRadius: 6, maxBarThickness: 38 }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? money(v) : '' } },
+  const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
+  const ids = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
+  grafEn(GS.charts, 'doc', 'chartGastoDoc', { type: 'bar', data: { labels: ids.map(id => id === GENERAL ? 'General' : nombreDoctora(id).replace(/^Dra?\.\s*/, '').split(/\s+/)[0]), datasets: [{ data: ids.map(id => porDoc[id] || 0), backgroundColor: ids.map((id, i) => DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]), borderRadius: 6, maxBarThickness: 38 }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => money(c.raw) } }, datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? fmtCorto(v) : '' } },
       layout: { padding: { top: 14 } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9 }, callback: v => fmtCorto(v) } }, x: { ticks: { font: { size: 10 } } } } } });
 }
 async function guardarGasto(desdeModal) {
@@ -2700,12 +3232,13 @@ async function guardarGasto(desdeModal) {
   const f = desdeModal ? $('mg-fecha').value : $('gasto-fecha').value, cat = desdeModal ? $('mg-cat').value : $('gasto-categoria').value;
   const monto = num(desdeModal ? $('mg-monto').value : $('gasto-monto').value), desc = (desdeModal ? $('mg-desc').value : $('gasto-descripcion').value).trim();
   const medio = desdeModal ? GS.medio : GS.nuevoMedio, fac = desdeModal ? $('mg-fac').checked : GS.nuevoFac;
-  const falt = []; if (!f) falt.push('fecha'); else if (f > todayLocal()) falt.push('fecha (no puede ser futura)');
+  const asoc = desdeModal ? $('mg-doc').value : $('gasto-doctor-asociado').value;
+  const falt = []; if (!asoc) falt.push('a quién se asocia (doctora o general)'); if (!f) falt.push('fecha'); else if (f > todayLocal()) falt.push('fecha (no puede ser futura)');
   if (!cat) falt.push('categoría'); if (!(monto > 0)) falt.push('monto mayor a cero'); if (!desc) falt.push('descripción'); if (!medio) falt.push('medio de pago');
   if (falt.length) return err('Falta: ' + falt.join(', ') + '.');
   const b = $(desdeModal ? 'mg-save' : 'gasto-btn-guardar'); if (b.disabled) return; b.disabled = true;
   try {
-    const fila = { fecha: f, categoria: cat, monto, descripcion: desc, facturado: fac, medio_pago: medio };
+    const fila = { fecha: f, categoria: cat, monto, descripcion: desc, facturado: fac, medio_pago: medio, doctor_id: asoc === GENERAL ? null : asoc };
     const q = desdeModal && GS.edit ? sb.from('gastos').update(fila).eq('id', GS.edit.id).select('id') : sb.from('gastos').insert(Object.assign({ creado_por: PERFIL.id }, fila)).select('id');
     const { data, error } = await q;
     if (error || !data || !data.length) throw error || new Error('sin permiso');
@@ -2724,6 +3257,7 @@ function abrirGasto(g) {
   $('mg-t').textContent = g ? '✏️ Editar gasto' : '➕ Registrar gasto';
   $('mg-fecha').value = g ? g.fecha : todayLocal(); $('mg-fecha').max = todayLocal();
   $('mg-cat').innerHTML = optCatGasto(g ? g.categoria : '');
+  $('mg-doc').innerHTML = optAsociar(g ? (g.doctor_id || GENERAL) : '');
   $('mg-monto').value = g ? num(g.monto).toFixed(2) : ''; $('mg-desc').value = g ? g.descripcion : ''; $('mg-fac').checked = !!(g && g.facturado);
   GS.medio = g ? (g.medio_pago || '') : '';
   $('mg-medio').innerHTML = chipsRadio('mg-medio-r', MEDIOS_RADIO(), GS.medio); $('mg-medio').classList.add('fact-group');
@@ -2745,11 +3279,11 @@ async function exportarGastos() {
   if (!rows.length) return toast('No hay gastos para exportar con estos filtros.');
   try {
     await cargarScript(CDN.xlsx);
-    const head = ['Fecha', 'Categoría', 'Monto', 'Medio de pago', 'Facturado', 'Descripción', 'Agregado por', 'Registrado el'];
-    const body = rows.map(g => [fmtD(g.fecha), g.categoria, num(g.monto), MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio', g.facturado ? 'Sí' : 'No', g.descripcion, g.creado_por === PERFIL.id ? PERFIL.nombre : (GS.nombres[g.creado_por] || ''), fmtFechaHora(g.created_at)]);
-    body.push(['', 'TOTAL', sumar(rows, x => num(x.monto)), '', '', '', '', '']);
+    const head = ['Fecha', 'Categoría', 'Asociado a', 'Monto', 'Medio de pago', 'Facturado', 'Descripción', 'Agregado por', 'Registrado el'];
+    const body = rows.map(g => [fmtD(g.fecha), g.categoria, nombreAsociado(g.doctor_id), num(g.monto), MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio', g.facturado ? 'Sí' : 'No', g.descripcion, g.creado_por === PERFIL.id ? PERFIL.nombre : (GS.nombres[g.creado_por] || ''), fmtFechaHora(g.created_at)]);
+    body.push(['', '', 'TOTAL', sumar(rows, x => num(x.monto)), '', '', '', '', '']);
     const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet([head].concat(body));
-    ws['!cols'] = [11, 18, 12, 14, 10, 40, 22, 17].map(w => ({ wch: w }));
+    ws['!cols'] = [11, 18, 28, 12, 14, 10, 40, 22, 17].map(w => ({ wch: w }));
     XLSX.utils.book_append_sheet(wb, ws, 'Gastos');
     const [d, h] = gsRango();
     XLSX.writeFile(wb, 'MARE_Gastos_' + (GS.modo === 'todo' ? 'todo' : sufijoArchivo(d, h)) + '.xlsx');
