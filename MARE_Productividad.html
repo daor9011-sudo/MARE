@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-3"/>
+<meta name="app-version" content="2026.10.29-4"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,6 +258,9 @@ textarea.inp{height:auto;min-height:40px;padding:9px 12px;resize:vertical}
 @media (max-width:700px){.fbar.prm,.fbar.prm.p2{grid-template-columns:1fr 1fr}.fbar.prm .full2{grid-column:1/-1}}
 @media (max-width:560px){.fbar.prm,.fbar.prm.p2{grid-template-columns:1fr}#m-gasto .g3{grid-template-columns:1fr!important}#gs-nuevo{margin-left:0!important}}
 
+#upd-band{position:fixed;top:0;left:0;right:0;z-index:1000;background:#0B1628;color:#fff;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:8px 16px;font-size:12.5px;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+#m-persona .dayrow .btn{flex-shrink:0}
+@media (max-width:560px){#m-persona .g3{grid-template-columns:1fr!important}#m-persona .dayrow{flex-wrap:wrap}}
 #m-confirm{z-index:300}
 /* ── Pie, marca de agua, toast ── */
 .legal{text-align:center;font-size:11px;color:var(--g6);padding:6px 16px 26px}
@@ -288,6 +291,8 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
 </style>
 </head>
 <body>
+
+<div id="upd-band" class="hide" role="status"><span id="upd-txt"></span><button class="btn btn-p btn-sm" id="upd-btn">Actualizar ahora</button></div>
 
 <!-- Pantalla de carga -->
 <div id="loading-panel">
@@ -377,7 +382,9 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     <div class="subtabs" id="cfg-tabs">
       <button class="pill on" data-cfg="horario">Horario de recepción</button>
       <button class="pill" data-cfg="personal">Personal</button>
+      <button class="pill" data-cfg="catalogo">Catálogo</button>
       <button class="pill" data-cfg="ciclos">Ciclos PRM</button>
+      <button class="pill" data-cfg="bitacora">Bitácora</button>
     </div>
     <div id="cfg-horario">
       <div class="sec-box">
@@ -404,9 +411,28 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     </div>
     <div id="cfg-personal" class="hide">
       <div class="sec-box">
-        <h4>Personal y doctoras</h4>
+        <h4 style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">Personal y doctoras <button class="btn btn-p btn-sm" id="pers-nuevo">+ Agregar persona</button></h4>
         <div id="pers-list"><div class="note">Cargando…</div></div>
-        <div class="note">El alta de usuarios, el cambio de correo y el restablecimiento de contraseña llegan en la Fase 8 (requieren la función segura personal-admin). Por ahora el acceso se crea en Supabase › Authentication y se liga solo por correo al primer inicio de sesión.</div>
+        <div class="note">Rol, estado y permisos se guardan directo. Dar acceso, cambiar correo y poner contraseña nueva usan la función segura <b>personal-admin</b>, que guarda cada acción en la bitácora.</div>
+      </div>
+    </div>
+    <div id="cfg-catalogo" class="hide">
+      <div class="sec-box">
+        <h4>Catálogo de servicios</h4>
+        <div class="note" style="margin:0 0 10px">Lo que se ofrece en Registro. Desactiva un servicio en lugar de borrarlo: las consultas anteriores conservan su nombre.</div>
+        <div id="cat-list"><div class="note">Cargando…</div></div>
+        <div class="g3" style="margin-top:12px">
+          <div><label class="lbl" for="cat-new-mot">Nuevo · motivo</label><input class="inp" id="cat-new-mot" list="cat-mot-dl" maxlength="60" placeholder="Ej. Procedimientos"><datalist id="cat-mot-dl"></datalist></div>
+          <div><label class="lbl" for="cat-new-tipo">Nuevo · tipo de consulta</label><input class="inp" id="cat-new-tipo" maxlength="60" placeholder="Ej. Colocación de DIU"></div>
+          <div style="display:flex;align-items:flex-end"><label class="check" style="height:40px"><input type="checkbox" id="cat-new-desc"> Pide descripción</label></div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-p btn-sm" id="cat-save">Guardar catálogo</button></div>
+      </div>
+    </div>
+    <div id="cfg-bitacora" class="hide">
+      <div class="sec-box">
+        <h4 style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">Bitácora <span style="min-width:200px"><select class="inp" id="bit-tabla" aria-label="Filtrar bitácora"></select></span></h4>
+        <div id="bit-list"><div class="note">Cargando…</div></div>
       </div>
     </div>
   </div>
@@ -459,6 +485,31 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     </div>
     <div class="err hide" id="mg-err" style="margin:12px 0 0"></div>
     <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-p" id="mg-save">✓ Guardar</button></div>
+  </div>
+</div>
+
+
+<!-- Persona (Configuración) -->
+<div class="modal-overlay2" id="m-persona">
+  <div class="modal" style="max-width:600px" role="dialog" aria-labelledby="mpe-t">
+    <div class="modal-h"><h3 id="mpe-t">Persona</h3><button class="x" data-close>×</button></div>
+    <div class="g3" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)">
+      <div><label class="lbl" for="mpe-nombre">Nombre</label><input class="inp" id="mpe-nombre" maxlength="120"></div>
+      <div><label class="lbl" for="mpe-rol">Rol</label><select class="inp" id="mpe-rol"></select></div>
+    </div>
+    <label class="check" style="margin:12px 0"><input type="checkbox" id="mpe-activo"> Activo</label>
+    <div class="sec-box"><h4>Permisos</h4><div id="mpe-perms"></div></div>
+    <div class="sec-box" id="mpe-acc-nuevo"><h4>Acceso a la app</h4>
+      <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div><label class="lbl" for="mpe-email">Correo</label><input class="inp" type="email" id="mpe-email" autocomplete="off"></div>
+        <div><label class="lbl" for="mpe-pass">Contraseña temporal</label><input class="inp" type="text" id="mpe-pass" autocomplete="off" placeholder="Mínimo 8 caracteres"></div>
+      </div><div class="note" id="mpe-acc-nota"></div></div>
+    <div class="sec-box hide" id="mpe-acc-exist"><h4>Acceso a la app</h4>
+      <div class="dayrow" style="margin-bottom:8px"><input class="inp" type="email" id="mpe-email2" aria-label="Correo nuevo"><button class="btn btn-g btn-sm" id="mpe-cambiar-correo">Cambiar correo</button></div>
+      <div class="dayrow"><input class="inp" type="text" id="mpe-pass2" placeholder="Contraseña nueva (mín. 8)" aria-label="Contraseña nueva" autocomplete="off"><button class="btn btn-g btn-sm" id="mpe-restablecer">Poner contraseña</button></div>
+    </div>
+    <div class="err hide" id="mpe-err"></div>
+    <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-p" id="mpe-save">✓ Guardar</button></div>
   </div>
 </div>
 
@@ -754,6 +805,10 @@ function cfgTab(k) {
   $('cfg-horario').classList.toggle('hide', k !== 'horario');
   $('cfg-personal').classList.toggle('hide', k !== 'personal');
   $('cfg-ciclos').classList.toggle('hide', k !== 'ciclos');
+  $('cfg-catalogo').classList.toggle('hide', k !== 'catalogo');
+  $('cfg-bitacora').classList.toggle('hide', k !== 'bitacora');
+  if (k === 'catalogo') bloqueAsync('el catálogo', pintarCatalogoConfig);
+  if (k === 'bitacora') bloqueAsync('la bitácora', pintarBitacora);
   if (k === 'ciclos') bloqueAsync('los ciclos', pintarCiclosConfig);
   if (k === 'horario') bloqueAsync('el horario', pintarHorario);
   if (k === 'personal') bloqueAsync('el personal', pintarPersonal);
@@ -782,18 +837,6 @@ $('h-save').onclick = async () => {
   } catch (e) { console.error(e); toast('No se pudo guardar el horario.'); }
   finally { b.disabled = false; }
 };
-async function pintarPersonal() {
-  const { data, error } = await sb.from('personal').select('id,nombre,rol,email,activo,auth_user_id').order('rol').order('nombre');
-  if (error) { $('pers-list').innerHTML = '<div class="note">No se pudo cargar el personal.</div>'; return; }
-  const cls = { admin: 'st-ad', doctor: 'st-dr', recepcion: 'st-re', enfermeria: 'st-off' };
-  $('pers-list').innerHTML = '<table class="tbl"><thead><tr><th>Nombre</th><th>Rol</th><th>Correo</th><th>Acceso</th><th>Estado</th></tr></thead><tbody>' +
-    (data || []).map(p => '<tr><td data-l="Nombre"><b>' + esc(p.nombre) + '</b></td>' +
-      '<td data-l="Rol"><span class="st ' + (cls[p.rol] || 'st-off') + '">' + esc(ROL_TXT[p.rol] || p.rol) + '</span></td>' +
-      '<td data-l="Correo">' + (p.email ? esc(p.email) : '<span style="color:var(--g4)">—</span>') + '</td>' +
-      '<td data-l="Acceso">' + (p.auth_user_id ? 'Ligado' : (p.email ? 'Pendiente de primer acceso' : 'Sin usuario')) + '</td>' +
-      '<td data-l="Estado"><span class="st ' + (p.activo ? 'st-ok' : 'st-off') + '">' + (p.activo ? 'Activo' : 'Inactivo') + '</span></td></tr>').join('') +
-    '</tbody></table>';
-}
 
 /* ════════════════════════════════════════════════════════════════
    FASES 3 y 4 · Consultas: Registro, Historial, Cierre y Dashboard
@@ -2037,6 +2080,265 @@ async function eliminarGasto(g) {
   if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
   toast('Gasto eliminado.'); cargarGastos();
 }
+
+/* @@ADMIN@@ */
+/* ════════════════════════════════════════════════════════════════
+   FASE 8 · Administración: personal, catálogo y bitácora
+   ════════════════════════════════════════════════════════════════ */
+const PERMISOS_UI = [
+  ['puede_exportar', 'Puede exportar (Excel y PDF)', true],
+  ['puede_ver_gastos', 'Ve y registra gastos, y el efectivo del día en el Cierre', false],
+  ['puede_eliminar_papelera', 'Elimina definitivamente desde la papelera (solo aplica a admin)', true]
+];
+let PERS = [], PERS_EDIT = null;
+async function pintarPersonal() {
+  const { data, error } = await sb.from('personal').select('id,nombre,rol,email,activo,auth_user_id,permisos').order('rol').order('nombre');
+  if (error) { $('pers-list').innerHTML = '<div class="note">No se pudo cargar el personal.</div>'; return; }
+  PERS = data || [];
+  const cls = { admin: 'st-ad', doctor: 'st-dr', recepcion: 'st-re', enfermeria: 'st-off' };
+  $('pers-list').innerHTML = '<table class="tbl"><thead><tr><th>Nombre</th><th>Rol</th><th>Correo</th><th>Acceso</th><th>Estado</th><th></th></tr></thead><tbody>' +
+    PERS.map(p => '<tr><td data-l="Nombre"><b>' + esc(p.nombre) + '</b>' + (p.id === PERFIL.id ? ' <span class="sub2">(tú)</span>' : '') + '</td>' +
+      '<td data-l="Rol"><span class="st ' + (cls[p.rol] || 'st-off') + '">' + esc(ROL_TXT[p.rol] || p.rol) + '</span></td>' +
+      '<td data-l="Correo">' + (p.email ? esc(p.email) : '<span style="color:var(--g4)">—</span>') + '</td>' +
+      '<td data-l="Acceso">' + (p.auth_user_id ? 'Con acceso' : (p.email ? 'Pendiente de primer acceso' : 'Sin acceso')) + '</td>' +
+      '<td data-l="Estado"><span class="st ' + (p.activo ? 'st-ok' : 'st-off') + '">' + (p.activo ? 'Activo' : 'Inactivo') + '</span></td>' +
+      '<td data-l="Acciones"><button class="btn btn-g btn-sm" data-pe="' + esc(p.id) + '">Editar</button></td></tr>').join('') + '</tbody></table>';
+  $('pers-list').querySelectorAll('[data-pe]').forEach(b => b.onclick = () => abrirPersona(PERS.find(p => p.id === b.dataset.pe)));
+}
+function abrirPersona(p) {
+  PERS_EDIT = p || null;
+  $('mpe-t').textContent = p ? 'Editar · ' + p.nombre : 'Agregar persona';
+  $('mpe-nombre').value = p ? p.nombre : '';
+  $('mpe-rol').innerHTML = opt(Object.keys(ROL_TXT).filter(r => r !== 'enfermeria' || (p && p.rol === 'enfermeria')).map(r => ({ v: r, t: ROL_TXT[r] })), p ? null : 'Seleccionar…', p ? p.rol : '');
+  $('mpe-activo').checked = p ? !!p.activo : true;
+  const perms = (p && p.permisos) || {};
+  $('mpe-perms').innerHTML = PERMISOS_UI.map(([k, t, def]) => '<label class="check" style="margin-bottom:6px"><input type="checkbox" data-perm="' + k + '"' + ((k in perms ? perms[k] : def) ? ' checked' : '') + '> ' + esc(t) + '</label>').join('');
+  // acceso
+  const conAcceso = !!(p && p.auth_user_id);
+  $('mpe-acc-nuevo').classList.toggle('hide', conAcceso);
+  $('mpe-acc-exist').classList.toggle('hide', !conAcceso);
+  $('mpe-email').value = p && p.email ? p.email : ''; $('mpe-pass').value = '';
+  $('mpe-email2').value = p && p.email ? p.email : ''; $('mpe-pass2').value = '';
+  $('mpe-acc-nota').textContent = p ? 'Si no necesita entrar a la app (por ejemplo, una doctora que solo aparece en los registros), deja estos campos vacíos.' : 'Opcional. Sin correo, la persona queda registrada pero no puede entrar.';
+  $('mpe-err').classList.add('hide');
+  abrirModal('m-persona');
+}
+const errPersona = m => { $('mpe-err').textContent = m; $('mpe-err').classList.remove('hide'); };
+async function invocar(body) {
+  const { data, error } = await sb.functions.invoke('personal-admin', { body });
+  if (error) {
+    let msg = error.message || 'Error';
+    try { const ctx = error.context && typeof error.context.json === 'function' ? await error.context.json() : null; if (ctx && ctx.error) msg = ctx.error; } catch (e) { /* nada */ }
+    if (/Failed to send|not found|404/i.test(msg)) msg = 'La función personal-admin no está publicada en Supabase.';
+    throw new Error(msg);
+  }
+  if (!data || !data.ok) throw new Error((data && data.error) || 'No se pudo completar.');
+  return data;
+}
+$('mpe-save').onclick = async () => {
+  const nombre = $('mpe-nombre').value.replace(/\s+/g, ' ').trim(), rol = $('mpe-rol').value, activo = $('mpe-activo').checked;
+  const permisos = {}; document.querySelectorAll('#mpe-perms [data-perm]').forEach(c => permisos[c.dataset.perm] = c.checked);
+  if (nombre.length < 2) return errPersona('Escribe el nombre.');
+  if (!rol) return errPersona('Elige el rol.');
+  const p = PERS_EDIT;
+  if (p && p.id === PERFIL.id && (rol !== 'admin' || !activo)) return errPersona('No puedes quitarte el rol de administrador ni desactivarte a ti mismo.');
+  const email = $('mpe-email').value.trim().toLowerCase(), pass = $('mpe-pass').value;
+  // pedir acceso solo si escribió contraseña o un correo distinto al que ya tenía (las pendientes de primer acceso se editan sin contraseña)
+  const quiereAcceso = !(p && p.auth_user_id) && (pass.length > 0 || (email && email !== ((p && p.email) || '')));
+  if (quiereAcceso) {
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return errPersona('Escribe un correo válido para darle acceso.');
+    if (pass.length < 8) return errPersona('La contraseña temporal debe tener al menos 8 caracteres.');
+  }
+  const b = $('mpe-save'); if (b.disabled) return; b.disabled = true;
+  try {
+    if (p) {
+      const { data, error } = await sb.from('personal').update({ nombre, rol, activo, permisos: Object.assign({}, p.permisos || {}, permisos) }).eq('id', p.id).select('id');
+      if (error || !data || !data.length) throw error || new Error('sin permiso');
+      if (quiereAcceso) await invocar({ accion: 'crear', personal_id: p.id, email, password: pass });
+    } else if (quiereAcceso) {
+      const r = await invocar({ accion: 'crear', nombre, rol, email, password: pass, permisos });
+      if (!activo) await sb.from('personal').update({ activo: false }).eq('id', r.id);
+    } else {
+      const { data, error } = await sb.from('personal').insert({ nombre, rol, activo, permisos }).select('id');
+      if (error || !data || !data.length) throw error || new Error('sin permiso');
+    }
+    cerrarModal('m-persona'); toast(quiereAcceso ? 'Guardado. Comparte la contraseña temporal por un medio seguro.' : 'Guardado.');
+    await pintarPersonal(); await bloqueAsync('los catálogos', cargarBase);
+  } catch (e) {
+    console.warn(e);
+    errPersona(/administrador activo/.test(e.message || '') ? 'Debe quedar al menos un administrador activo.' : /personal_email_uq|duplicate/i.test(e.message || '') ? 'Ese correo ya lo usa otra persona.' : 'No se pudo guardar: ' + traducirError(e));
+  } finally { b.disabled = false; }
+};
+$('mpe-cambiar-correo').onclick = async () => {
+  const email = $('mpe-email2').value.trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return errPersona('Escribe un correo válido.');
+  if (PERS_EDIT && email === (PERS_EDIT.email || '')) return errPersona('Es el mismo correo.');
+  const b = $('mpe-cambiar-correo'); b.disabled = true;
+  try { await invocar({ accion: 'cambiar_correo', personal_id: PERS_EDIT.id, email }); toast('Correo actualizado.'); cerrarModal('m-persona'); await pintarPersonal(); }
+  catch (e) { errPersona(e.message); } finally { b.disabled = false; }
+};
+$('mpe-restablecer').onclick = async () => {
+  const pass = $('mpe-pass2').value;
+  if (pass.length < 8) return errPersona('La contraseña nueva debe tener al menos 8 caracteres.');
+  const b = $('mpe-restablecer'); b.disabled = true;
+  try { await invocar({ accion: 'restablecer', personal_id: PERS_EDIT.id, password: pass }); $('mpe-pass2').value = ''; toast('Contraseña actualizada. Compártela por un medio seguro.'); }
+  catch (e) { errPersona(e.message); } finally { b.disabled = false; }
+};
+$('pers-nuevo').onclick = () => abrirPersona(null);
+
+/* ── Catálogo de servicios ── */
+let CAT_ROWS = [];
+async function pintarCatalogoConfig() {
+  const { data, error } = await sb.from('catalogo_servicios').select('id,motivo,tipo_consulta,requiere_descripcion,activo,orden').order('orden').order('tipo_consulta');
+  if (error) { $('cat-list').innerHTML = '<div class="note">No se pudo cargar el catálogo.</div>'; return; }
+  CAT_ROWS = data || [];
+  $('cat-list').innerHTML = '<table class="tbl"><thead><tr><th>Motivo</th><th>Tipo de consulta</th><th>Pide descripción</th><th>Orden</th><th>Activo</th></tr></thead><tbody>' +
+    CAT_ROWS.map(c => '<tr data-id="' + esc(c.id) + '"><td data-l="Motivo"><b>' + esc(c.motivo) + '</b></td><td data-l="Tipo">' + esc(c.tipo_consulta) + '</td>' +
+      '<td data-l="Pide descripción"><input type="checkbox" data-f="requiere_descripcion"' + (c.requiere_descripcion ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:var(--teal)"></td>' +
+      '<td data-l="Orden"><input class="inp" type="number" data-f="orden" value="' + Number(c.orden) + '" style="width:80px"></td>' +
+      '<td data-l="Activo"><input type="checkbox" data-f="activo"' + (c.activo ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:var(--teal)"></td></tr>').join('') + '</tbody></table>';
+  $('cat-mot-dl').innerHTML = [...new Set(CAT_ROWS.map(c => c.motivo))].map(m => '<option value="' + esc(m) + '">').join('');
+}
+$('cat-save').onclick = async () => {
+  const b = $('cat-save'); b.disabled = true;
+  try {
+    for (const tr of document.querySelectorAll('#cat-list tr[data-id]')) {
+      const c = CAT_ROWS.find(x => x.id === tr.dataset.id); if (!c) continue;
+      const n = { requiere_descripcion: tr.querySelector('[data-f=requiere_descripcion]').checked, activo: tr.querySelector('[data-f=activo]').checked, orden: Math.round(Number(tr.querySelector('[data-f=orden]').value) || 0) };
+      if (n.requiere_descripcion !== c.requiere_descripcion || n.activo !== c.activo || n.orden !== c.orden) {
+        const { data, error } = await sb.from('catalogo_servicios').update(n).eq('id', c.id).select('id');
+        if (error || !data || !data.length) throw error || new Error('sin permiso');
+      }
+    }
+    const mot = $('cat-new-mot').value.replace(/\s+/g, ' ').trim(), tipo = $('cat-new-tipo').value.replace(/\s+/g, ' ').trim();
+    if (mot || tipo) {
+      if (!mot || !tipo) throw new Error('Para agregar un servicio escribe el motivo y el tipo.');
+      if (CAT_ROWS.some(c => normTxt(c.motivo) === normTxt(mot) && normTxt(c.tipo_consulta) === normTxt(tipo))) throw new Error('Ese servicio ya existe.');
+      const { data, error } = await sb.from('catalogo_servicios').insert({ motivo: mot, tipo_consulta: tipo, activo: true, requiere_descripcion: $('cat-new-desc').checked, orden: (Math.max(0, ...CAT_ROWS.map(c => c.orden)) + 10) }).select('id');
+      if (error || !data || !data.length) throw error || new Error('sin permiso');
+      $('cat-new-mot').value = ''; $('cat-new-tipo').value = ''; $('cat-new-desc').checked = false;
+    }
+    toast('Catálogo guardado.'); await pintarCatalogoConfig(); await bloqueAsync('los catálogos', cargarBase);
+    if (FORMS.r) { delete FORMS.r; if ($('body-registro')) $('body-registro').innerHTML = ''; if (TAB === 'registro') renderRegistro(); }
+  } catch (e) { console.warn(e); toast(e.message && !/row-level|42501/.test(e.message) ? e.message : 'No se pudo guardar el catálogo.'); }
+  finally { b.disabled = false; }
+};
+
+/* ── Bitácora con etiquetas legibles ── */
+const TABLA_TXT = { consultas: 'Consulta', pacientes: 'Paciente', gastos: 'Gasto', personal: 'Personal', horario_acceso: 'Horario de recepción', catalogo_servicios: 'Catálogo', ciclos_prm: 'Ciclo PRM', gestiones: 'Gestión' };
+const ACCION_TXT = { insert: 'Alta', update: 'Cambio', delete: 'Eliminación definitiva', vincular_usuario: 'Primer acceso', alta_acceso: 'Acceso creado', cambio_correo: 'Cambio de correo', restablecer_contrasena: 'Contraseña restablecida' };
+const CAMPO_TXT = { monto: 'monto', monto_2: '2.º monto', medio_pago: 'medio de pago', medio_pago_2: '2.º medio', fecha: 'fecha', doctor_id: 'doctora', paciente_id: 'paciente', motivo: 'motivo', tipo_consulta: 'tipo', descripcion: 'descripción',
+  factura: 'factura', num_factura: 'núm. factura', numero_recibo: 'recibo', notas: 'notas', no_vino: 'no vino', deleted: 'en papelera', categoria: 'categoría', facturado: 'facturado', nombre: 'nombre', rol: 'rol', email: 'correo',
+  activo: 'activo', permisos: 'permisos', hora_inicio: 'entrada', hora_fin: 'salida', bloquear_domingo: 'bloquear domingo', dias_ciclo: 'días', requiere_descripcion: 'pide descripción', orden: 'orden', telefono: 'teléfono' };
+const IGNORAR = new Set(['id', 'created_at', 'updated_at', 'edited_at', 'edited_by', 'deleted_at', 'deleted_by', 'created_by', 'creado_por', 'editado_por', 'editado_en', 'updated_by', 'auth_user_id', 'origen']);
+let BIT = { rows: [], tabla: '', limite: 100 };
+function valorTxt(k, v) {
+  if (v === null || v === undefined || v === '') return '—';
+  if (/^monto/.test(k)) return money(v);
+  if (typeof v === 'boolean') return v ? 'sí' : 'no';
+  if (k === 'doctor_id') return nombreDoctora(v);
+  if (k === 'fecha') return fmtD(v);
+  if (typeof v === 'object') return JSON.stringify(v);
+  return String(v);
+}
+function resumenBitacora(a) {
+  const d = a.detalle || {}, an = d.antes || {}, de = d.despues || {};
+  if (a.accion === 'update') {
+    const cambios = Object.keys(de).filter(k => !IGNORAR.has(k) && JSON.stringify(an[k]) !== JSON.stringify(de[k]));
+    if (a.tabla === 'consultas' && cambios.length === 1 && cambios[0] === 'deleted') return de.deleted ? 'Mandó a papelera la consulta del ' + fmtD(de.fecha) + ' (' + money(num(de.monto) + num(de.monto_2)) + ')' : 'Restauró la consulta del ' + fmtD(de.fecha);
+    return cambios.length ? cambios.map(k => (CAMPO_TXT[k] || k) + ': ' + valorTxt(k, an[k]) + ' → ' + valorTxt(k, de[k])).join(' · ') : 'Sin cambios visibles';
+  }
+  const f = a.accion === 'delete' ? an : de;
+  if (a.tabla === 'consultas' && (a.accion === 'insert' || a.accion === 'delete')) return fmtD(f.fecha) + ' · ' + nombreDoctora(f.doctor_id) + ' · ' + [f.motivo, f.tipo_consulta].filter(Boolean).join(' · ') + ' · ' + (f.no_vino ? 'no vino' : money(num(f.monto) + num(f.monto_2)));
+  if (a.tabla === 'gastos' && (a.accion === 'insert' || a.accion === 'delete')) return fmtD(f.fecha) + ' · ' + (f.descripcion || '') + ' · ' + money(f.monto) + ' · ' + (f.medio_pago || 'sin medio');
+  if (a.accion === 'cambio_correo') return valorTxt('email', d.antes) + ' → ' + valorTxt('email', d.despues);
+  if (d.email) return String(d.email) + (d.rol ? ' · ' + (ROL_TXT[d.rol] || d.rol) : '');
+  if (f.nombre) return f.nombre + (f.rol ? ' · ' + (ROL_TXT[f.rol] || f.rol) : '');
+  if (f.motivo) return f.motivo + ' · ' + (f.tipo_consulta || '') + (f.dias_ciclo ? ' · ' + f.dias_ciclo + ' días' : '');
+  return '';
+}
+async function pintarBitacora() {
+  $('bit-list').innerHTML = '<div class="note">Cargando…</div>';
+  let q = sb.from('audit_log').select('id,actor_id,accion,tabla,registro_id,detalle,created_at').order('created_at', { ascending: false }).limit(500);
+  if (BIT.tabla) q = q.eq('tabla', BIT.tabla);
+  const [{ data, error }, rp] = await Promise.all([q, sb.from('personal').select('id,nombre')]);
+  if (error) { $('bit-list').innerHTML = '<div class="note">No se pudo cargar la bitácora.</div>'; return; }
+  const nom = {}; (rp.data || []).forEach(p => nom[p.id] = p.nombre);
+  BIT.rows = data || [];
+  const vis = BIT.rows.slice(0, BIT.limite);
+  $('bit-list').innerHTML = vis.length ? '<table class="tbl"><thead><tr><th>Cuándo</th><th>Quién</th><th>Qué</th><th>Detalle</th></tr></thead><tbody>' +
+    vis.map(a => '<tr><td data-l="Cuándo" style="white-space:nowrap">' + esc(fmtFechaHora(a.created_at)) + '</td><td data-l="Quién">' + esc(a.actor_id ? (nom[a.actor_id] || 'Persona') : 'Sistema') + '</td>' +
+      '<td data-l="Qué"><b>' + esc(ACCION_TXT[a.accion] || a.accion) + '</b> · ' + esc(TABLA_TXT[a.tabla] || a.tabla || '') + '</td>' +
+      '<td data-l="Detalle" style="font-size:12px">' + esc(resumenBitacora(a)) + '</td></tr>').join('') + '</tbody></table>' +
+    (BIT.rows.length > BIT.limite ? '<div class="more"><button class="btn btn-g btn-sm" id="bit-more">Mostrar más</button></div>' : '')
+    : '<div class="empty">Sin movimientos.</div>';
+  if ($('bit-more')) $('bit-more').onclick = () => { BIT.limite += 100; pintarBitacora(); };
+}
+$('bit-tabla').innerHTML = opt(Object.keys(TABLA_TXT).map(k => ({ v: k, t: TABLA_TXT[k] })), 'Todo');
+$('bit-tabla').onchange = () => { BIT.tabla = $('bit-tabla').value; BIT.limite = 100; bloqueAsync('la bitácora', pintarBitacora); };
+
+/* @@ACTUALIZAR@@ */
+/* ════════════════════════════════════════════════════════════════
+   FASE 9 · Actualización automática sin temporizador
+   ════════════════════════════════════════════════════════════════ */
+const UPD = { tecleoMs: 20000, reintentoMs: 1500, pollMs: 120000, candadoMs: 600000, pendiente: null, timer: null, ultimaTecla: 0 };
+const VERSION_RX = new RegExp('<meta name="app-' + 'version" content="([^"]+)"');   // armado así para no repetir el meta en el archivo
+const LLAVE_UPD = 'mare_upd_intento';
+document.addEventListener('input', e => { if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) UPD.ultimaTecla = Date.now(); }, true);
+document.addEventListener('keydown', e => { if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) UPD.ultimaTecla = Date.now(); }, true);
+function capturaAMedias() {
+  try { if (FORMS.r && $('r-save') && FORMS.r.tieneCaptura()) return true; } catch (e) { /* nada */ }
+  return false;
+}
+function motivoOcupado() {
+  if (document.querySelector('.modal-overlay2.show')) return 'ventana';
+  if (Date.now() - UPD.ultimaTecla < UPD.tecleoMs) return 'tecleo';
+  if (capturaAMedias()) return 'captura';
+  return '';
+}
+function leerCandado() { try { return JSON.parse(sessionStorage.getItem(LLAVE_UPD) || 'null'); } catch (e) { return null; } }
+function bandaUpd(modo) {
+  const b = $('upd-band'); if (!b) return;
+  if (!modo) { b.classList.add('hide'); return; }
+  $('upd-txt').textContent = modo === 'bucle' ? 'Hay una versión nueva pero el navegador sigue mostrando la anterior. Cierra y vuelve a abrir la pestaña.'
+    : 'Hay una versión nueva. Se actualizará en cuanto termines lo que estás haciendo.';
+  $('upd-btn').textContent = modo === 'bucle' ? 'Recargar' : 'Actualizar ahora';
+  b.dataset.modo = modo; b.classList.remove('hide');
+}
+function recargarA(v) {
+  try { sessionStorage.setItem(LLAVE_UPD, JSON.stringify({ v, t: Date.now() })); } catch (e) { /* sin almacenamiento: se recarga igual */ }
+  location.replace(location.pathname + '?_v=' + encodeURIComponent(v));
+}
+function intentarActualizar() {
+  clearTimeout(UPD.timer);
+  const v = UPD.pendiente; if (!v || v === APP_VERSION) { bandaUpd(null); return; }
+  const c = leerCandado();
+  if (c && c.v === v && Date.now() - c.t < UPD.candadoMs) { bandaUpd('bucle'); return; }   // ya se intentó y el servidor sigue dando lo viejo
+  if (motivoOcupado()) { bandaUpd('esperando'); UPD.timer = setTimeout(intentarActualizar, UPD.reintentoMs); return; }
+  recargarA(v);
+}
+async function revisarVersion() {
+  if (!/^https?:/.test(location.protocol)) return;          // abierto como archivo local: no aplica
+  if (navigator.onLine === false) return;
+  try {
+    const r = await fetch(location.pathname + '?_chk=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return;
+    const m = (await r.text()).match(VERSION_RX);
+    if (!m) return;
+    UPD.pendiente = m[1];
+    if (UPD.pendiente === APP_VERSION) { bandaUpd(null); try { sessionStorage.removeItem(LLAVE_UPD); } catch (e) { /* nada */ } return; }
+    intentarActualizar();
+  } catch (e) { /* sin red o respuesta rota: se reintenta en la siguiente revisión */ }
+}
+$('upd-btn').onclick = () => {
+  if ($('upd-band').dataset.modo === 'bucle') { try { sessionStorage.removeItem(LLAVE_UPD); } catch (e) { /* nada */ } location.reload(); }
+  else if (UPD.pendiente) recargarA(UPD.pendiente);
+};
+window.mareRevisarVersion = revisarVersion;
+setTimeout(revisarVersion, 4000);
+setInterval(revisarVersion, UPD.pollMs);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') revisarVersion(); });
+window.addEventListener('online', revisarVersion);
 
 /* ════════ Arranque ════════ */
 async function boot() {
