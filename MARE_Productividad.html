@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-2"/>
+<meta name="app-version" content="2026.10.29-3"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -248,6 +248,16 @@ textarea.inp{height:auto;min-height:40px;padding:9px 12px;resize:vertical}
   .hk{padding:8px 10px}.hk .v{font-size:15.5px}
 }
 
+
+.fbar.prm{grid-template-columns:minmax(170px,1.4fr) minmax(150px,1fr) minmax(160px,1fr)}
+.fbar.prm.p2{grid-template-columns:minmax(170px,1.4fr) minmax(160px,1fr)}
+.kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.st-ok{background:#e7f4ec;color:#245f3d}.st-off{background:#eef1f7;color:#64748b}
+#m-paciente .li{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px dashed var(--g2);font-size:12.5px}
+@media (max-width:860px){.kpis.k4{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.fbar.prm,.fbar.prm.p2{grid-template-columns:1fr 1fr}.fbar.prm .full2{grid-column:1/-1}}
+@media (max-width:560px){.fbar.prm,.fbar.prm.p2{grid-template-columns:1fr}#m-gasto .g3{grid-template-columns:1fr!important}#gs-nuevo{margin-left:0!important}}
+
 #m-confirm{z-index:300}
 /* ── Pie, marca de agua, toast ── */
 .legal{text-align:center;font-size:11px;color:var(--g6);padding:6px 16px 26px}
@@ -367,6 +377,7 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     <div class="subtabs" id="cfg-tabs">
       <button class="pill on" data-cfg="horario">Horario de recepción</button>
       <button class="pill" data-cfg="personal">Personal</button>
+      <button class="pill" data-cfg="ciclos">Ciclos PRM</button>
     </div>
     <div id="cfg-horario">
       <div class="sec-box">
@@ -381,6 +392,14 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
         </div>
         <div class="note">Hora de la Ciudad de México. Si la salida es menor que la entrada, el horario cruza la medianoche. Fuera de horario, la base de datos le niega los datos a recepción aunque tenga la pestaña abierta.</div>
         <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-sm" id="h-save">Guardar horario</button><span class="note" id="h-meta" style="margin:0;align-self:center"></span></div>
+      </div>
+    </div>
+    <div id="cfg-ciclos" class="hide">
+      <div class="sec-box">
+        <h4>Ciclos de seguimiento (PRM)</h4>
+        <div class="note" style="margin:0 0 10px">Cada cuántos días debería volver una paciente según su último servicio. Deja el campo vacío si el servicio no tiene seguimiento.</div>
+        <div id="cic-list"><div class="note">Cargando…</div></div>
+        <div style="margin-top:12px"><button class="btn btn-p btn-sm" id="cic-save">Guardar ciclos</button></div>
       </div>
     </div>
     <div id="cfg-personal" class="hide">
@@ -402,6 +421,44 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
       La información que contiene es confidencial y está protegida por la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.
       Queda prohibida su reproducción, distribución o divulgación sin autorización expresa. Cada acceso y cada cambio quedan registrados.
     </div>
+  </div>
+</div>
+
+
+<!-- Paciente (PRM) -->
+<div class="modal-overlay2" id="m-paciente">
+  <div class="modal lg" role="dialog" aria-labelledby="mp-t">
+    <div class="modal-h"><div><h3 id="mp-t">Paciente</h3><div class="note" id="mp-sub" style="margin:2px 0 0"></div></div><button class="x" data-close>×</button></div>
+    <div class="sec-box">
+      <h4>Registrar gestión</h4>
+      <div class="chips" id="mp-tipo" style="margin-bottom:10px"></div>
+      <div class="g3">
+        <div><label class="lbl" for="mp-fecha">Fecha</label><input class="inp" type="date" id="mp-fecha"></div>
+        <div><label class="lbl" for="mp-res">Resultado</label><select class="inp" id="mp-res"></select></div>
+        <div><label class="lbl" for="mp-nota">Nota</label><input class="inp" id="mp-nota" maxlength="1000" placeholder="Opcional"></div>
+      </div>
+      <div class="err hide" id="mp-err" style="margin:10px 0 0"></div>
+      <div class="mfoot" style="margin-top:12px"><button class="btn btn-p btn-sm" id="mp-save">✓ Guardar gestión</button></div>
+    </div>
+    <div class="sec-box" style="margin-bottom:0"><h4>Historial de la paciente</h4><div id="mp-linea" class="cc" style="border:none;padding:0"></div></div>
+  </div>
+</div>
+
+<!-- Gasto -->
+<div class="modal-overlay2" id="m-gasto">
+  <div class="modal" style="max-width:560px" role="dialog" aria-labelledby="mg-t">
+    <div class="modal-h"><h3 id="mg-t">+ Registrar gasto</h3><button class="x" data-close>×</button></div>
+    <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+      <div><label class="lbl" for="mg-fecha">Fecha</label><input class="inp" type="date" id="mg-fecha"></div>
+      <div><label class="lbl" for="mg-cat">Categoría</label><select class="inp" id="mg-cat"></select></div>
+      <div><label class="lbl" for="mg-monto">Monto</label><input class="inp" type="number" id="mg-monto" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>
+      <div style="display:flex;align-items:flex-end"><label class="check" style="height:40px"><input type="checkbox" id="mg-fac"> Facturado</label></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="mg-desc">Descripción</label><input class="inp" id="mg-desc" maxlength="200" placeholder="Ej. garrafones de agua"></div>
+      <div style="grid-column:1/-1"><span class="lbl">Medio de pago (obligatorio)</span><div class="chips" id="mg-medio"></div>
+        <div class="note">Solo los gastos en efectivo restan del efectivo del cierre.</div></div>
+    </div>
+    <div class="err hide" id="mg-err" style="margin:12px 0 0"></div>
+    <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-p" id="mg-save">✓ Guardar</button></div>
   </div>
 </div>
 
@@ -673,8 +730,8 @@ const RENDER = {
   historial: () => renderHistorial(),
   cierre: () => renderCierre(),
   dashboard: () => renderDashboard(),
-  prm: () => marcador('prm'),
-  gastos: () => marcador('gastos')
+  prm: () => renderPRM(),
+  gastos: () => renderGastos()
 };
 
 $('btn-logout').onclick = () => cerrarSesion(false);
@@ -696,6 +753,8 @@ function cfgTab(k) {
   $('cfg-tabs').querySelectorAll('[data-cfg]').forEach(b => b.classList.toggle('on', b.dataset.cfg === k));
   $('cfg-horario').classList.toggle('hide', k !== 'horario');
   $('cfg-personal').classList.toggle('hide', k !== 'personal');
+  $('cfg-ciclos').classList.toggle('hide', k !== 'ciclos');
+  if (k === 'ciclos') bloqueAsync('los ciclos', pintarCiclosConfig);
   if (k === 'horario') bloqueAsync('el horario', pintarHorario);
   if (k === 'personal') bloqueAsync('el personal', pintarPersonal);
 }
@@ -1629,6 +1688,7 @@ function refrescarActiva() {
   if (TAB === 'historial') cargarHistorial();
   else if (TAB === 'cierre') cargarCierre();
   else if (TAB === 'dashboard') cargarDashboard();
+  else if (TAB === 'prm') cargarPRM();
 }
 function activarRealtime() {
   if (RT || !sb.channel) return;
@@ -1637,6 +1697,10 @@ function activarRealtime() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'consultas' }, () => {
         clearTimeout(rtTimer);
         rtTimer = setTimeout(() => { if (!hayModalAbierto()) refrescarActiva(); }, 600);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'gestiones' }, () => {
+        clearTimeout(rtTimer);
+        rtTimer = setTimeout(() => { if (TAB === 'prm' && !hayModalAbierto()) cargarPRM(); }, 600);
       })
       .subscribe();
   } catch (e) { console.error('[tiempo real]', e); }
@@ -1649,6 +1713,329 @@ function reiniciarEstadoConsultas() {
   D.modo = 'rec'; D.dias = 30; D.mes = null; D.doc = '';
   Object.keys(D.charts).forEach(k => { try { D.charts[k].destroy(); } catch (e) { /* nada */ } }); D.charts = {};
   Object.keys(FORMS).forEach(k => delete FORMS[k]);
+  if (typeof P !== 'undefined') { P.estado = 'vencida'; P.q = ''; P.doc = ''; P.serv = ''; P.lista = []; P.gest = []; P.cons = []; }
+  if (typeof GS !== 'undefined') { GS.mes = null; GS.cat = ''; GS.med = ''; GS.rows = []; GS.modo = 'mes'; Object.keys(GS.charts).forEach(k => { try { GS.charts[k].destroy(); } catch (e) { /* nada */ } }); GS.charts = {}; }
+}
+
+/* @@PRM_GASTOS@@ */
+/* ════════════════════════════════════════════════════════════════
+   FASES 5 y 6 · PRM / CRM y Gastos
+   ════════════════════════════════════════════════════════════════ */
+const diasEntre = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 864e5);
+const TIPOS_GESTION = [['llamada', '📞 Llamada'], ['whatsapp', '💬 WhatsApp'], ['correo', '✉ Correo'], ['otro', '• Otro']];
+const RESULTADOS = ['agendó', 'contestó', 'no contestó', 'no le interesa', 'otro'];
+const VENTANA_POR_VENCER = 15;
+function grafEn(store, key, canvasId, cfg) {
+  try { if (store[key]) store[key].destroy(); } catch (e) { /* nada */ }
+  const cv = $(canvasId); if (!cv) return;
+  store[key] = new Chart(cv.getContext('2d'), cfg);
+}
+
+/* ════════ PRM / CRM ════════ */
+const P = { estado: 'vencida', q: '', doc: '', serv: '', lista: [], ciclos: [], gest: [], limite: 150, seq: 0, pacModal: null };
+function renderPRM() {
+  if (!$('prm-body')) {
+    $('body-prm').innerHTML =
+      '<div class="hero"><div><div class="t">Seguimiento de pacientes</div><div class="s" id="prm-sub">Quién debería volver según el ciclo de su último servicio</div></div>' +
+      '<div class="hkpis"><div class="hk"><div class="l">Vencidas</div><div class="v tl" id="pk-ven">0</div></div><div class="hk"><div class="l">Por vencer</div><div class="v" id="pk-por">0</div></div><div class="hk"><div class="l">Contactadas</div><div class="v" id="pk-con">0</div></div></div></div>' +
+      '<div id="prm-aviso"></div>' +
+      '<div class="fbar prm' + (ES_DOCTORA() ? ' p2' : '') + '">' +
+        '<div class="full2"><label class="lbl" for="prm-q">Buscar paciente</label><input class="inp" id="prm-q" placeholder="Nombre o teléfono…"></div>' +
+        (ES_DOCTORA() ? '' : '<div><label class="lbl" for="prm-doc">Doctora</label><select class="inp" id="prm-doc"></select></div>') +
+        '<div><label class="lbl" for="prm-serv">Último servicio</label><select class="inp" id="prm-serv"></select></div>' +
+      '</div>' +
+      '<div class="toggles" id="prm-est"><button class="chip on" data-e="vencida">Vencidas</button><button class="chip" data-e="por_vencer">Por vencer</button><button class="chip" data-e="ciclo">Todas con ciclo</button><button class="chip" data-e="sin_ciclo">Sin ciclo</button><button class="chip" data-e="todas">Todas</button></div>' +
+      '<table class="tbl"><thead><tr><th>Paciente</th><th>Última visita</th><th>Debería volver</th><th>Última gestión</th><th></th></tr></thead><tbody id="prm-body"></tbody></table>' +
+      '<div class="more hide" id="prm-more"><button class="btn btn-g btn-sm" id="prm-morebtn">Mostrar más</button></div>';
+    if ($('prm-doc')) { $('prm-doc').innerHTML = opt(DOCTORAS.map(d => ({ v: d.id, t: d.nombre })), 'Todas'); $('prm-doc').onchange = () => { P.doc = $('prm-doc').value; P.limite = 150; pintarPRM(); }; }
+    $('prm-q').addEventListener('input', () => { P.q = $('prm-q').value; P.limite = 150; pintarPRM(); });
+    $('prm-serv').onchange = () => { P.serv = $('prm-serv').value; P.limite = 150; pintarPRM(); };
+    $('prm-est').querySelectorAll('[data-e]').forEach(b => b.onclick = () => { P.estado = b.dataset.e; P.limite = 150; $('prm-est').querySelectorAll('[data-e]').forEach(x => x.classList.toggle('on', x === b)); pintarPRM(); });
+    $('prm-morebtn').onclick = () => { P.limite += 150; pintarPRM(); };
+  }
+  return cargarPRM();
+}
+async function cargarPRM() {
+  if (!$('prm-body')) return;
+  const seq = ++P.seq;
+  $('prm-body').innerHTML = '<tr><td colspan="5" class="empty">Cargando…</td></tr>';
+  const [rc, rk, rg] = await Promise.all([
+    cargarConsultas('2000-01-01', todayLocal(), false).then(r => ({ ok: true, r }), e => ({ ok: false, e })),
+    sb.from('ciclos_prm').select('id,motivo,tipo_consulta,dias_ciclo,activo').then(x => x, e => ({ error: e })),
+    traerTodo(() => sb.from('gestiones').select('id,paciente_id,tipo,resultado,nota,fecha,creado_por,created_at').order('fecha', { ascending: false }).order('id'))
+  ]);
+  if (seq !== P.seq) return;
+  if (!rc.ok) { console.error(rc.e); $('prm-body').innerHTML = '<tr><td colspan="5" class="empty">No se pudieron cargar las consultas.</td></tr>'; return; }
+  P.ciclos = rk.error ? [] : (rk.data || []);
+  P.gest = rg.error ? [] : (rg.data || []);
+  P.cons = rc.r;
+  $('prm-aviso').innerHTML = (rk.error || rg.error) ? '<div class="aviso warn">No se pudieron cargar ' + (rk.error ? 'los ciclos' : 'las gestiones') + '; la lista puede estar incompleta.</div>'
+    : (!P.ciclos.some(c => c.activo) ? '<div class="aviso">Aún no hay ciclos configurados. ' + (PERFIL.rol === 'admin' ? 'Defínelos en ⚙ Configuración › Ciclos PRM (por ejemplo, Consulta · Subsecuente cada 180 días).' : 'Pídele al administrador que los configure.') + '</div>' : '');
+  calcularPRM();
+  const servs = [...new Set(P.lista.map(x => x.servicio))].sort();
+  $('prm-serv').innerHTML = opt(servs, 'Todos', P.serv);
+  pintarPRM();
+}
+function calcularPRM() {
+  const hoy = todayLocal();
+  const ciclo = {}; P.ciclos.filter(c => c.activo).forEach(c => ciclo[c.motivo + '|' + c.tipo_consulta] = c.dias_ciclo);
+  const ultG = {}; P.gest.forEach(g => { if (!ultG[g.paciente_id] || g.fecha > ultG[g.paciente_id].fecha) ultG[g.paciente_id] = g; });
+  const porPac = {};
+  P.cons.filter(c => !c.no_vino).forEach(c => { const u = porPac[c.paciente_id]; if (!u || c.fecha > u.fecha || (c.fecha === u.fecha && c.created_at > u.created_at)) porPac[c.paciente_id] = c; });
+  P.lista = Object.values(porPac).map(c => {
+    const dias = ciclo[c.motivo + '|' + c.tipo_consulta];
+    const vence = dias ? addDays(c.fecha, dias) : null;
+    const falta = vence ? diasEntre(hoy, vence) : null;
+    const g = ultG[c.paciente_id] || null;
+    const estado = !vence ? 'sin_ciclo' : falta < 0 ? 'vencida' : falta <= VENTANA_POR_VENCER ? 'por_vencer' : 'al_dia';
+    const contactada = !!(g && vence && g.fecha >= addDays(vence, -VENTANA_POR_VENCER));
+    return { pac: c.paciente || { id: c.paciente_id, nombre: '—' }, ult: c, servicio: [c.motivo, c.tipo_consulta].filter(Boolean).join(' · '), dias, vence, falta, g, estado, contactada };
+  });
+}
+function pintarPRM() {
+  if (!$('prm-body')) return;
+  bloque('el PRM', () => {
+    const q = normTxt(P.q), qd = soloDigitos(P.q);
+    const base = P.lista.filter(x => (!P.doc || x.ult.doctor_id === P.doc) && (!P.serv || x.servicio === P.serv) &&
+      (!q || normTxt(x.pac.nombre).includes(q) || (qd.length >= 3 && soloDigitos(x.pac.telefono).includes(qd))));
+    $('pk-ven').textContent = base.filter(x => x.estado === 'vencida').length;
+    $('pk-por').textContent = base.filter(x => x.estado === 'por_vencer').length;
+    $('pk-con').textContent = base.filter(x => x.contactada && (x.estado === 'vencida' || x.estado === 'por_vencer')).length;
+    const rows = base.filter(x => P.estado === 'todas' || (P.estado === 'ciclo' ? x.estado !== 'sin_ciclo' : x.estado === P.estado))
+      .sort((a, b) => (a.vence || '9999') < (b.vence || '9999') ? -1 : (a.vence || '9999') > (b.vence || '9999') ? 1 : normTxt(a.pac.nombre) < normTxt(b.pac.nombre) ? -1 : 1);
+    $('prm-sub').textContent = rows.length + (rows.length === 1 ? ' paciente' : ' pacientes') + ' en esta vista' + (ES_DOCTORA() ? ' · solo tus pacientes' : '');
+    const est = x => x.estado === 'vencida' ? '<span class="st st-nv">Vencida hace ' + (-x.falta) + ' d</span>'
+      : x.estado === 'por_vencer' ? '<span class="st st-co">' + (x.falta === 0 ? 'Vence hoy' : 'En ' + x.falta + ' d') + '</span>'
+      : x.estado === 'al_dia' ? '<span class="st st-ok">En ' + x.falta + ' d</span>' : '<span class="st st-off">Sin ciclo</span>';
+    const vis = rows.slice(0, P.limite);
+    $('prm-body').innerHTML = vis.length ? vis.map((x, i) => {
+      const tel = soloDigitos(x.pac.telefono);
+      return '<tr><td data-l="Paciente"><div><b>' + esc(x.pac.nombre) + '</b>' + (x.pac.telefono ? '<div class="sub2">' + esc(x.pac.telefono) + '</div>' : '') + '</div></td>' +
+        '<td data-l="Última visita"><div>' + fmtD(x.ult.fecha) + '<div class="sub2">' + esc(x.servicio) + (ES_DOCTORA() ? '' : ' · ' + esc(corto(nombreDoctora(x.ult.doctor_id)))) + '</div></div></td>' +
+        '<td data-l="Debería volver"><div>' + (x.vence ? fmtD(x.vence) + '<div>' + est(x) + '</div>' : est(x)) + '</div></td>' +
+        '<td data-l="Última gestión">' + (x.g ? '<div>' + fmtD(x.g.fecha) + ' · ' + esc((TIPOS_GESTION.find(t => t[0] === x.g.tipo) || ['', x.g.tipo])[1]) + '<div class="sub2">' + esc(x.g.resultado || '') + (x.contactada ? ' · ✓ contactada' : '') + '</div></div>' : '<span class="muted">Sin gestiones</span>') + '</td>' +
+        '<td data-l="Acciones"><span style="display:inline-flex;gap:5px">' +
+          (tel.length === 10 ? '<a class="ic" style="display:inline-flex;align-items:center;text-decoration:none" title="Abrir WhatsApp" target="_blank" rel="noopener" href="https://wa.me/52' + tel + '">💬</a>' : '') +
+          '<button class="btn btn-g btn-sm" data-pac="' + esc(x.pac.id) + '">Ver y registrar</button></span></td></tr>';
+    }).join('') : '<tr><td colspan="5" class="empty">' + (P.estado === 'vencida' ? 'No hay pacientes vencidas con estos filtros.' : 'Sin pacientes en esta vista.') + '</td></tr>';
+    $('prm-more').classList.toggle('hide', rows.length <= P.limite);
+    $('prm-body').querySelectorAll('[data-pac]').forEach(b => b.onclick = () => abrirPaciente(b.dataset.pac));
+  });
+}
+let G_TIPO = 'llamada';
+function abrirPaciente(pid) {
+  const x = P.lista.find(y => y.pac.id === pid); if (!x) return;
+  P.pacModal = pid;
+  $('mp-t').textContent = x.pac.nombre;
+  $('mp-sub').textContent = (x.pac.telefono ? 'Tel. ' + x.pac.telefono + ' · ' : '') + (x.vence ? 'Debería volver el ' + fmtD(x.vence) + ' (' + x.servicio + ', cada ' + x.dias + ' días)' : 'Su último servicio no tiene ciclo configurado');
+  $('mp-fecha').value = todayLocal(); $('mp-fecha').max = todayLocal(); $('mp-nota').value = ''; $('mp-res').innerHTML = opt(RESULTADOS, 'Resultado…');
+  G_TIPO = 'llamada'; pintarTiposGestion(); pintarLineaPaciente();
+  $('mp-err').classList.add('hide');
+  abrirModal('m-paciente');
+}
+function pintarTiposGestion() {
+  $('mp-tipo').innerHTML = TIPOS_GESTION.map(t => '<button type="button" class="chip' + (t[0] === G_TIPO ? ' on' : '') + '" data-t="' + t[0] + '">' + t[1] + '</button>').join('');
+  $('mp-tipo').querySelectorAll('[data-t]').forEach(b => b.onclick = () => { G_TIPO = b.dataset.t; pintarTiposGestion(); });
+}
+function pintarLineaPaciente() {
+  const pid = P.pacModal;
+  const items = (P.cons || []).filter(c => c.paciente_id === pid).map(c => ({ f: c.fecha, k: 'c', c }))
+    .concat(P.gest.filter(g => g.paciente_id === pid).map(g => ({ f: g.fecha, k: 'g', g })))
+    .sort((a, b) => a.f < b.f ? 1 : a.f > b.f ? -1 : (a.k === 'g' ? -1 : 1));
+  $('mp-linea').innerHTML = items.length ? items.map(it => it.k === 'c'
+    ? '<div class="li"><span>🩺 <b>' + fmtD(it.f) + '</b> · ' + esc(servicioTxt(it.c)) + (ES_DOCTORA() ? '' : ' · ' + esc(corto(nombreDoctora(it.c.doctor_id)))) + (it.c.no_vino ? ' · <span class="st st-nv">No vino</span>' : '') + '</span><b>' + (it.c.no_vino ? '—' : money(ingreso(it.c))) + '</b></div>'
+    : '<div class="li"><span>' + esc((TIPOS_GESTION.find(t => t[0] === it.g.tipo) || ['', it.g.tipo])[1]) + ' <b>' + fmtD(it.f) + '</b>' + (it.g.resultado ? ' · ' + esc(it.g.resultado) : '') + (it.g.nota ? '<div class="sub2">' + esc(it.g.nota) + '</div>' : '') + '</span>' +
+      ((PERFIL.rol === 'admin' || it.g.creado_por === PERFIL.id) ? '<button class="ic" title="Eliminar gestión" data-delg="' + esc(it.g.id) + '">🗑</button>' : '') + '</div>').join('')
+    : '<div class="empty">Sin historial.</div>';
+  $('mp-linea').querySelectorAll('[data-delg]').forEach(b => b.onclick = async () => {
+    b.disabled = true;
+    const { data, error } = await sb.from('gestiones').delete().eq('id', b.dataset.delg).select('id');
+    if (error || !data || !data.length) { b.disabled = false; return toast('No se pudo eliminar la gestión.'); }
+    P.gest = P.gest.filter(g => g.id !== b.dataset.delg); calcularPRM(); pintarLineaPaciente(); pintarPRM(); toast('Gestión eliminada.');
+  });
+}
+$('mp-save').onclick = async () => {
+  const f = $('mp-fecha').value, err = m => { $('mp-err').textContent = m; $('mp-err').classList.remove('hide'); };
+  if (!f || f > todayLocal()) return err('Elige una fecha que no sea futura.');
+  if (!$('mp-res').value) return err('Elige el resultado de la gestión.');
+  const b = $('mp-save'); if (b.disabled) return; b.disabled = true;
+  try {
+    const { data, error } = await sb.from('gestiones').insert({ paciente_id: P.pacModal, tipo: G_TIPO, resultado: $('mp-res').value, nota: $('mp-nota').value.trim() || null, fecha: f, creado_por: PERFIL.id })
+      .select('id,paciente_id,tipo,resultado,nota,fecha,creado_por,created_at');
+    if (error || !data || !data.length) throw error || new Error('sin permiso');
+    P.gest.unshift(data[0]); calcularPRM(); pintarLineaPaciente(); pintarPRM();
+    $('mp-nota').value = ''; $('mp-res').value = ''; $('mp-err').classList.add('hide'); toast('Gestión registrada.');
+  } catch (e) { console.error(e); err('No se pudo guardar: ' + traducirError(e)); }
+  finally { b.disabled = false; }
+};
+
+/* ════════ Configuración › Ciclos PRM (solo admin) ════════ */
+async function pintarCiclosConfig() {
+  const [rk, rc] = await Promise.all([sb.from('ciclos_prm').select('id,motivo,tipo_consulta,dias_ciclo,activo'), sb.from('catalogo_servicios').select('motivo,tipo_consulta,activo,orden').order('orden')]);
+  if (rk.error || rc.error) { $('cic-list').innerHTML = '<div class="note">No se pudieron cargar los ciclos.</div>'; return; }
+  const ex = {}; (rk.data || []).forEach(c => ex[c.motivo + '|' + c.tipo_consulta] = c);
+  const servs = []; (rc.data || []).forEach(s => { const k = s.motivo + '|' + s.tipo_consulta; if (!servs.some(x => x.k === k)) servs.push({ k, motivo: s.motivo, tipo: s.tipo_consulta }); });
+  (rk.data || []).forEach(c => { const k = c.motivo + '|' + c.tipo_consulta; if (!servs.some(x => x.k === k)) servs.push({ k, motivo: c.motivo, tipo: c.tipo_consulta }); });
+  CIC_EXIST = ex;
+  $('cic-list').innerHTML = '<table class="tbl"><thead><tr><th>Servicio</th><th>Debe volver cada</th><th>Activo</th></tr></thead><tbody>' +
+    servs.map((s, i) => { const c = ex[s.k];
+      return '<tr data-k="' + esc(s.k) + '"><td data-l="Servicio"><b>' + esc(s.motivo) + '</b> · ' + esc(s.tipo) + '</td>' +
+        '<td data-l="Cada"><span style="display:inline-flex;align-items:center;gap:6px"><input class="inp" type="number" min="1" max="1825" step="1" style="width:100px" data-dias value="' + (c ? c.dias_ciclo : '') + '" placeholder="—"> días</span></td>' +
+        '<td data-l="Activo"><input type="checkbox" data-act ' + (!c || c.activo ? 'checked' : '') + ' style="width:16px;height:16px;accent-color:var(--teal)"></td></tr>'; }).join('') + '</tbody></table>';
+}
+let CIC_EXIST = {};
+$('cic-save').onclick = async () => {
+  const b = $('cic-save'); b.disabled = true;
+  try {
+    const filas = [...document.querySelectorAll('#cic-list tr[data-k]')];
+    for (const tr of filas) {
+      const k = tr.dataset.k, [motivo, tipo] = k.split('|'), raw = tr.querySelector('[data-dias]').value.trim(), act = tr.querySelector('[data-act]').checked, c = CIC_EXIST[k];
+      const dias = raw === '' ? null : Math.round(Number(raw));
+      if (dias != null && !(dias >= 1 && dias <= 1825)) { toast('Los días deben estar entre 1 y 1825 (' + motivo + ' · ' + tipo + ').'); return; }
+      let r = null;
+      if (c && dias == null) r = await sb.from('ciclos_prm').delete().eq('id', c.id).select('id');
+      else if (c && (c.dias_ciclo !== dias || c.activo !== act)) r = await sb.from('ciclos_prm').update({ dias_ciclo: dias, activo: act }).eq('id', c.id).select('id');
+      else if (!c && dias != null) r = await sb.from('ciclos_prm').insert({ motivo, tipo_consulta: tipo, dias_ciclo: dias, activo: act }).select('id');
+      if (r && (r.error || !r.data || !r.data.length)) throw r.error || new Error('sin permiso');
+    }
+    toast('Ciclos guardados.'); await pintarCiclosConfig(); if (TAB === 'prm') cargarPRM();
+  } catch (e) { console.error(e); toast('No se pudieron guardar los ciclos: ' + traducirError(e)); }
+  finally { b.disabled = false; }
+};
+
+/* ════════ GASTOS ════════ */
+const GS = { modo: 'mes', mes: null, d: null, h: null, cat: '', med: '', rows: [], seq: 0, charts: {}, edit: null, medio: '' };
+const MEDIO_GASTO_TXT = { efectivo: 'Efectivo', transferencia: 'Transferencia', 'depósito': 'Depósito' };
+const stGasto = m => m === 'efectivo' ? 'st-ef' : m === 'transferencia' ? 'st-tr' : m === 'depósito' ? 'st-ta' : 'st-nv';
+function renderGastos() {
+  if (!GS.mes) { GS.mes = todayLocal().slice(0, 7); GS.d = inicioMes(todayLocal()); GS.h = todayLocal(); }
+  if (!$('gs-body')) {
+    $('body-gastos').innerHTML =
+      '<div class="cbar">' +
+        '<div class="seg" id="gs-modo"><button data-m="mes" class="on">Mes</button><button data-m="rango">Rango</button></div>' +
+        '<input class="inp" type="month" id="gs-mes" style="max-width:190px">' +
+        '<div class="rgrow hide" id="gs-rgw" style="min-width:280px"><input class="inp" type="date" id="gs-rd" aria-label="Desde"><input class="inp" type="date" id="gs-rh" aria-label="Hasta"></div>' +
+        '<div style="min-width:170px"><select class="inp" id="gs-cat"></select></div>' +
+        '<div style="min-width:150px"><select class="inp" id="gs-med"></select></div>' +
+        '<button class="btn btn-p btn-sm" id="gs-nuevo" style="margin-left:auto">+ Registrar gasto</button>' +
+      '</div>' +
+      '<div class="hero" style="grid-template-columns:1fr"><div><div class="t" id="gs-title">—</div><div class="s" id="gs-sub">—</div></div></div>' +
+      '<div class="kpis k4" id="gs-kpis"></div><div id="gs-aviso"></div>' +
+      '<div class="dgrid" style="margin-bottom:14px">' +
+        '<div class="chart-box"><h4>Por categoría</h4><div class="cv"><canvas id="gs-c-cat"></canvas></div></div>' +
+        '<div class="chart-box"><h4>Por medio de pago</h4><div class="cv"><canvas id="gs-c-med"></canvas></div></div>' +
+        '<div class="chart-box wide"><h4 id="gs-t-tiempo">En el tiempo</h4><div class="cv"><canvas id="gs-c-tiempo"></canvas></div></div>' +
+      '</div>' +
+      '<table class="tbl"><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Medio</th><th>Factura</th><th style="text-align:right">Monto</th><th></th></tr></thead><tbody id="gs-body"></tbody></table>';
+    $('gs-cat').innerHTML = opt(CATALOGOS.categoriasGasto.map(c => ({ v: c, t: c.charAt(0).toUpperCase() + c.slice(1) })), 'Todas las categorías');
+    $('gs-med').innerHTML = opt(CATALOGOS.mediosGasto.map(m => ({ v: m, t: MEDIO_GASTO_TXT[m] })), 'Todos los medios');
+    $('gs-modo').querySelectorAll('button').forEach(b => b.onclick = () => { GS.modo = b.dataset.m; $('gs-modo').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      $('gs-mes').classList.toggle('hide', GS.modo !== 'mes'); $('gs-rgw').classList.toggle('hide', GS.modo !== 'rango'); cargarGastos(); });
+    $('gs-mes').onchange = () => { if ($('gs-mes').value) { GS.mes = $('gs-mes').value; cargarGastos(); } };
+    const rg = () => { if ($('gs-rd').value && $('gs-rh').value) { GS.d = $('gs-rd').value; GS.h = $('gs-rh').value; if (GS.d > GS.h) [GS.d, GS.h] = [GS.h, GS.d]; cargarGastos(); } };
+    $('gs-rd').onchange = rg; $('gs-rh').onchange = rg;
+    $('gs-cat').onchange = () => { GS.cat = $('gs-cat').value; pintarGastos(); };
+    $('gs-med').onchange = () => { GS.med = $('gs-med').value; pintarGastos(); };
+    $('gs-nuevo').onclick = () => abrirGasto(null);
+  }
+  return cargarGastos();
+}
+const gsRango = () => GS.modo === 'mes' ? [GS.mes + '-01', finMes(GS.mes + '-01')] : [GS.d, GS.h];
+async function cargarGastos() {
+  if (!$('gs-body')) return;
+  const seq = ++GS.seq, [d, h] = gsRango();
+  $('gs-mes').value = GS.mes; $('gs-rd').value = GS.d; $('gs-rh').value = GS.h;
+  $('gs-body').innerHTML = '<tr><td colspan="7" class="empty">Cargando…</td></tr>';
+  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,categoria,monto,descripcion,facturado,medio_pago,creado_por,created_at').gte('fecha', d).lte('fecha', h)
+    .order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id'));
+  if (seq !== GS.seq) return;
+  if (r.error) { console.error(r.error); $('gs-body').innerHTML = '<tr><td colspan="7" class="empty">No se pudieron cargar los gastos. ' + esc(traducirError(r.error)) + '</td></tr>'; return; }
+  GS.rows = r.data;
+  pintarGastos();
+}
+const puedeEditarGasto = g => PERFIL.rol === 'admin' || g.creado_por === PERFIL.id;
+function pintarGastos() {
+  if (!$('gs-body')) return;
+  const [d, h] = gsRango();
+  const rows = GS.rows.filter(g => (!GS.cat || g.categoria === GS.cat) && (!GS.med || g.medio_pago === GS.med));
+  bloque('el resumen de gastos', () => {
+    $('gs-title').textContent = GS.modo === 'mes' ? 'Gastos de ' + MESES[parseISO(d).getMonth()] + ' ' + parseISO(d).getFullYear() : 'Gastos del periodo';
+    $('gs-sub').textContent = fmtD(d) + ' – ' + fmtD(h) + ' · ' + rows.length + (rows.length === 1 ? ' gasto' : ' gastos');
+    const tot = sumar(rows, x => num(x.monto)), ef = sumar(rows.filter(x => x.medio_pago === 'efectivo'), x => num(x.monto));
+    const bank = sumar(rows.filter(x => x.medio_pago === 'transferencia' || x.medio_pago === 'depósito'), x => num(x.monto));
+    const sinFac = rows.filter(x => !x.facturado);
+    $('gs-kpis').innerHTML = [['⇣', 'Total', money(tot), ''], ['💵', 'En efectivo', money(ef), 'resta del efectivo del cierre'], ['🏦', 'Transferencia y depósito', money(bank), 'no resta efectivo'],
+      ['🧾', 'Sin factura', String(sinFac.length), money(sumar(sinFac, x => num(x.monto)))]]
+      .map(x => '<div class="kpi"><div class="ico">' + x[0] + '</div><div class="l">' + x[1] + '</div><div class="v">' + x[2] + '</div>' + (x[3] ? '<div class="s">' + x[3] + '</div>' : '') + '</div>').join('');
+    const sm = rows.filter(x => !x.medio_pago);
+    $('gs-aviso').innerHTML = sm.length ? '<div class="aviso warn">' + sm.length + ' gasto(s) sin medio de pago. Edítalos para indicarlo: sin ese dato no se sabe si restan efectivo.</div>' : '';
+    $('gs-body').innerHTML = rows.length ? rows.map(g => '<tr><td data-l="Fecha">' + fmtD(g.fecha) + '</td><td data-l="Categoría">' + esc(g.categoria) + '</td><td data-l="Descripción">' + esc(g.descripcion) + '</td>' +
+      '<td data-l="Medio"><span class="st ' + stGasto(g.medio_pago) + '">' + esc(MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio') + '</span></td>' +
+      '<td data-l="Factura">' + (g.facturado ? '<span class="st st-fa">Sí</span>' : '<span class="muted">No</span>') + '</td>' +
+      '<td data-l="Monto" class="num">' + money(g.monto) + '</td>' +
+      '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<span style="display:inline-flex;gap:5px"><button class="ic" title="Editar" data-ge="' + esc(g.id) + '">✎</button><button class="ic" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></span>' : '') + '</td></tr>').join('')
+      : '<tr><td colspan="7" class="empty">Sin gastos en este periodo.</td></tr>';
+    $('gs-body').querySelectorAll('[data-ge]').forEach(b => b.onclick = () => abrirGasto(GS.rows.find(g => g.id === b.dataset.ge)));
+    $('gs-body').querySelectorAll('[data-gd]').forEach(b => b.onclick = () => eliminarGasto(GS.rows.find(g => g.id === b.dataset.gd)));
+  });
+  graficasGastos(rows, d, h).catch(e => console.error('[gráficas de gastos]', e));
+}
+async function graficasGastos(rows, d, h) {
+  if (!(await asegurarCharts())) { document.querySelectorAll('#body-gastos .cv').forEach(c => c.innerHTML = '<div class="empty">No se pudieron cargar las gráficas.</div>'); return; }
+  if (window.ChartDataLabels && !asegurarCharts._reg) { Chart.register(ChartDataLabels); asegurarCharts._reg = true; }
+  const bc = {}; rows.forEach(g => bc[g.categoria] = num((bc[g.categoria] || 0) + num(g.monto)));
+  const ck = Object.keys(bc).sort((a, b) => bc[b] - bc[a]);
+  grafEn(GS.charts, 'cat', 'gs-c-cat', { type: 'bar', data: { labels: ck, datasets: [{ data: ck.map(k => bc[k]), backgroundColor: ck.map((k, i) => ['#0B1628', '#1B3A6B', '#22488a', '#6E8FC2', '#94a3b8', '#B5C7E3'][i % 6]), borderRadius: 6, maxBarThickness: 34 }] },
+    options: baseOpts({ datalabels: { anchor: 'end', align: 'end', formatter: fmtCorto, color: '#0B1628', font: { weight: 700 } } }, true) });
+  const bm = {}; rows.forEach(g => { const k = MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio'; bm[k] = num((bm[k] || 0) + num(g.monto)); });
+  const mk = Object.keys(bm);
+  grafEn(GS.charts, 'med', 'gs-c-med', { type: 'doughnut', data: { labels: mk, datasets: [{ data: mk.map(k => bm[k]), backgroundColor: mk.map((k, i) => PAL[i]), borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '58%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) } },
+      datalabels: { color: '#fff', font: { weight: 700 }, formatter: (v, c) => { const s = c.dataset.data.reduce((a, b) => a + b, 0); return s && v / s > .06 ? Math.round(v / s * 100) + '%' : ''; } } } } });
+  const porMes = diasEntre(d, h) > 62;
+  const serie = {}; rows.forEach(g => { const k = porMes ? g.fecha.slice(0, 7) : g.fecha; serie[k] = num((serie[k] || 0) + num(g.monto)); });
+  const et = []; if (porMes) { for (let x = d.slice(0, 7) + '-01'; x <= h; x = isoLocal(new Date(parseISO(x).getFullYear(), parseISO(x).getMonth() + 1, 1))) et.push(x.slice(0, 7)); } else { for (let x = d; x <= h; x = addDays(x, 1)) et.push(x); }
+  $('gs-t-tiempo').textContent = 'En el tiempo ' + (porMes ? '(por mes)' : '(por día)');
+  grafEn(GS.charts, 'tiempo', 'gs-c-tiempo', { type: 'bar', data: { labels: et.map(x => porMes ? MESES[+x.slice(5, 7) - 1].slice(0, 3) + ' ' + x.slice(2, 4) : x.slice(8, 10) + '/' + x.slice(5, 7)),
+    datasets: [{ data: et.map(x => serie[x] || 0), backgroundColor: '#1B3A6B', borderRadius: 4, maxBarThickness: 28 }] }, options: baseOpts({ datalabels: { display: false } }) });
+}
+function abrirGasto(g) {
+  GS.edit = g || null;
+  $('mg-t').textContent = g ? '✎ Editar gasto' : '+ Registrar gasto';
+  $('mg-fecha').value = g ? g.fecha : todayLocal(); $('mg-fecha').max = todayLocal();
+  $('mg-cat').innerHTML = opt(CATALOGOS.categoriasGasto.map(c => ({ v: c, t: c.charAt(0).toUpperCase() + c.slice(1) })), 'Seleccionar…', g ? g.categoria : '');
+  $('mg-monto').value = g ? num(g.monto).toFixed(2) : ''; $('mg-desc').value = g ? g.descripcion : ''; $('mg-fac').checked = !!(g && g.facturado);
+  GS.medio = g ? (g.medio_pago || '') : ''; pintarMedioGasto();
+  $('mg-err').classList.add('hide');
+  abrirModal('m-gasto');
+}
+function pintarMedioGasto() {
+  $('mg-medio').innerHTML = CATALOGOS.mediosGasto.map(m => '<button type="button" class="chip' + (m === GS.medio ? ' on' : '') + '" data-m="' + m + '">' + MEDIO_GASTO_TXT[m] + '</button>').join('');
+  $('mg-medio').querySelectorAll('[data-m]').forEach(b => b.onclick = () => { GS.medio = b.dataset.m; pintarMedioGasto(); });
+}
+$('mg-save').onclick = async () => {
+  const err = m => { $('mg-err').textContent = m; $('mg-err').classList.remove('hide'); };
+  const f = $('mg-fecha').value, cat = $('mg-cat').value, monto = num($('mg-monto').value), desc = $('mg-desc').value.trim();
+  const falt = []; if (!f) falt.push('fecha'); else if (f > todayLocal()) falt.push('fecha (no puede ser futura)');
+  if (!cat) falt.push('categoría'); if (!(monto > 0)) falt.push('monto mayor a cero'); if (!desc) falt.push('descripción'); if (!GS.medio) falt.push('medio de pago');
+  if (falt.length) return err('Falta: ' + falt.join(', ') + '.');
+  const b = $('mg-save'); if (b.disabled) return; b.disabled = true;
+  try {
+    const fila = { fecha: f, categoria: cat, monto, descripcion: desc, facturado: $('mg-fac').checked, medio_pago: GS.medio };
+    const q = GS.edit ? sb.from('gastos').update(fila).eq('id', GS.edit.id).select('id') : sb.from('gastos').insert(Object.assign({ creado_por: PERFIL.id }, fila)).select('id');
+    const { data, error } = await q;
+    if (error || !data || !data.length) throw error || new Error('sin permiso');
+    cerrarModal('m-gasto'); toast(GS.edit ? 'Gasto actualizado.' : 'Gasto registrado.'); cargarGastos();
+  } catch (e) { console.error(e); err('No se pudo guardar: ' + traducirError(e)); }
+  finally { b.disabled = false; }
+};
+async function eliminarGasto(g) {
+  if (!g) return;
+  const ok = await confirmar('Eliminar gasto', 'Se eliminará "' + g.descripcion + '" del ' + fmtD(g.fecha) + ' por ' + money(g.monto) + '. Quedará registro en la bitácora.', 'Eliminar');
+  if (!ok) return;
+  const { data, error } = await sb.from('gastos').delete().eq('id', g.id).select('id');
+  if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
+  toast('Gasto eliminado.'); cargarGastos();
 }
 
 /* ════════ Arranque ════════ */
