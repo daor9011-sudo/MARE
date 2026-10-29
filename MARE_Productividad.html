@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-1"/>
+<meta name="app-version" content="2026.10.29-2"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1220,8 +1220,8 @@ async function mandarAPapelera(c) {
   if (!c) return;
   const ok = await confirmar('Mandar a papelera', 'La consulta de ' + (c.paciente ? c.paciente.nombre : '—') + ' del ' + fmtD(c.fecha) + ' (' + money(ingreso(c)) + ') dejará de contar en el historial y en el cierre.' + (PUEDE_PAPELERA() ? ' Podrás restaurarla desde la papelera.' : ''), 'Mandar a papelera');
   if (!ok) return;
-  const { data, error } = await sb.from('consultas').update({ deleted: true }).eq('id', c.id).select('id');
-  if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
+  const { data, error } = await sb.rpc('mandar_a_papelera', { p_id: c.id });
+  if (error || data !== true) return toast('No se pudo eliminar: ' + traducirError(error || 'la consulta ya no está disponible'));
   H.rows = H.rows.filter(x => x.id !== c.id); pintarHistorial();
   toast('Consulta enviada a la papelera.');
 }
