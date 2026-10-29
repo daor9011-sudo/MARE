@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-9"/>
+<meta name="app-version" content="2026.10.29-10"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -867,8 +867,6 @@ textarea.app-input{height:auto}
   .s3-brand-center{grid-column:2!important;justify-self:end!important;text-align:right!important}
   .s3-brand-title{font-size:14px!important}
 }
-#gasto-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:560px){#gasto-kpis{grid-template-columns:1fr}}
 #m-confirm{z-index:300}
 /* ── Pie, marca de agua, toast ── */
 .legal{text-align:center;font-size:11px;color:var(--g6);padding:6px 16px 26px}
@@ -896,6 +894,7 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
   .uname{display:none}
   .hbtn .tx{display:none}
 }
+@media (min-width:821px){#gasto-kpis{grid-template-columns:repeat(var(--gk,3),minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -2258,13 +2257,16 @@ function pintarCierrePorMedio(porMedio, total, hayFarm) {
   const cont = $('cierre-por-pago');
   const medios = Object.entries(porMedio).map(([nombre, v]) => Object.assign({ nombre }, v)).sort((a, b) => b.total - a.total);
   if (!medios.length) { cont.innerHTML = '<div class="empty-note">Sin resultados para este periodo.</div>'; return; }
-  const sumS = sumar(medios, m => m.serv), sumF = sumar(medios, m => m.farm), cobrado = num(sumS + sumF);
-  const cuadra = mismoMonto(cobrado, total);
-  const cuadre = '<div class="cs-sec">Cuadre de caja por medio de pago <span id="c-cuadra" style="font-weight:700;letter-spacing:0;text-transform:none;color:' + (cuadra ? 'var(--pos)' : 'var(--neg)') + '">' + (cuadra ? '✓ cuadra con el ingreso total' : '⚠ diferencia de ' + money(total - cobrado)) + '</span></div>' +
-    '<table class="cuadre"><thead><tr><th>Medio</th><th>Servicios</th><th>💊 Farmacia</th><th>Total</th><th>%</th></tr></thead><tbody>' +
-    medios.map(m => '<tr><td>' + pillMedio(m.nombre) + '</td><td>' + money(m.serv) + '</td><td class="f">' + money(m.farm) + '</td><td class="t">' + money(m.total) + '</td><td>' + (cobrado > 0 ? Math.round(m.total / cobrado * 100) : 0) + '%</td></tr>').join('') +
-    '<tr class="tot"><td>Total cobrado</td><td>' + money(sumS) + '</td><td class="f">' + money(sumF) + '</td><td>' + money(cobrado) + '</td><td>100%</td></tr></tbody></table>';
-  cont.innerHTML = cuadre + '<div class="pago-cards">' + medios.filter(m => m.total > 0.004 || m.nombre !== 'Cortesía').map(m => {
+  // Igual que Skin Fabric: el cuadre Servicios · Farmacia · Total solo aparece si hay farmacia en el periodo
+  let cuadre = '';
+  if (hayFarm) {
+    const sumS = sumar(medios, m => m.serv), sumF = sumar(medios, m => m.farm), cobrado = num(sumS + sumF);
+    cuadre = '<div class="cs-sec">Cuadre de caja por medio de pago</div>' +
+      '<table class="cuadre"><thead><tr><th>Medio</th><th>Servicios</th><th>💊 Farmacia</th><th>Total</th><th>%</th></tr></thead><tbody>' +
+      medios.map(m => '<tr><td>' + pillMedio(m.nombre) + '</td><td>' + money(m.serv) + '</td><td class="f">' + money(m.farm) + '</td><td class="t">' + money(m.total) + '</td><td>' + (cobrado > 0 ? Math.round(m.total / cobrado * 100) : 0) + '%</td></tr>').join('') +
+      '<tr class="tot"><td>Total cobrado</td><td>' + money(sumS) + '</td><td class="f">' + money(sumF) + '</td><td>' + money(cobrado) + '</td><td>100%</td></tr></tbody></table>';
+  }
+  cont.innerHTML = cuadre + '<div class="pago-cards">' + medios.map(m => {
     const c = getMedioColor(m.nombre), p = total > 0 ? Math.round(m.total / total * 100) : 0;
     const split = hayFarm && m.total > 0
       ? '<div class="cs-split"><i class="s" style="width:' + Math.round(m.serv / m.total * 100) + '%"></i><i class="f" style="width:' + Math.round(m.farm / m.total * 100) + '%"></i></div>' +
@@ -2272,7 +2274,7 @@ function pintarCierrePorMedio(porMedio, total, hayFarm) {
       : '<div class="barra-bg"><div class="barra-fill" style="width:' + p + '%;background:' + c.bar + '"></div></div>';
     return '<div class="pago-card" style="background:' + c.bg + ';border:1.5px solid ' + c.border + '"><div class="ico">' + c.ico + '</div><div class="nombre" style="color:' + c.fg + '">' + esc(m.nombre) + '</div>' +
       '<div class="total">' + money(m.total) + '</div><div class="sub">' + p + '% del total · ' + m.n + ' pago(s)</div>' + split +
-      (ES_DOCTORA() ? '' : '<div class="pago-desglose">' + Object.entries(m.porDoc).sort((a, b) => b[1] - a[1]).map(([k, v]) => '<div><span>' + esc(k) + '</span><span>' + money(v) + '</span></div>').join('') + '</div>') + '</div>';
+      '<div class="pago-desglose">' + Object.entries(m.porDoc).sort((a, b) => b[1] - a[1]).map(([k, v]) => '<div><span>' + esc(k) + '</span><span>' + money(v) + '</span></div>').join('') + '</div></div>';
   }).join('') + '</div>';
 }
 function pintarCierreFarmacia(filas, totF) {
@@ -3083,7 +3085,7 @@ function renderGastos() {
       '</div>' +
       '<div class="sec-title">Todos los gastos<button class="sbtn btn-outline" id="gasto-btn-exportar" type="button">↓ Exportar</button></div>' +
       barraFiltros('') +
-      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Monto</th><th>Facturación</th><th>Asociado a</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
+      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Monto</th><th>Facturación</th><th>Agregado por</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
         '<tbody id="gasto-tbody"></tbody></table><div class="empty-note" id="gasto-empty" style="display:none">Sin gastos para este filtro.</div></div>';
     // periodo
     $('gasto-per').querySelectorAll('.com-seg button').forEach(b => b.onclick = () => {
@@ -3135,6 +3137,11 @@ async function cargarGastos() {
   return pintarGastos();
 }
 const puedeEditarGasto = g => PERFIL.rol === 'admin' || g.creado_por === PERFIL.id;
+// Personas del resumen y de la gráfica: las que tienen gasto en el periodo (General primero), como el resumen por persona de Skin Fabric
+function personasGasto(porDoc) {
+  return (porDoc[GENERAL] ? [GENERAL] : []).concat(DOCTORAS.filter(d => porDoc[d.id]).map(d => d.id));
+}
+const fmtFechaHoraCorta = ts => { if (!ts) return '—'; const d = new Date(ts); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
 function filtrarGastos() {
   const q = normTxt(GS.q);
   return GS.rows.filter(g => (GS.cat === 'todos' || g.categoria === GS.cat) && (!GS.fac || g.facturacion === GS.fac) &&
@@ -3153,7 +3160,8 @@ function pintarGastos() {
   bloque('el resumen de gastos', () => {
     const tot = sumar(rows, x => num(x.monto));
     const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
-    const personas = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
+    const personas = personasGasto(porDoc);
+    $('gasto-kpis').style.setProperty('--gk', Math.min(Math.max(personas.length + 1, 3), 4));
     $('gasto-kpis').innerHTML = '<div class="kpi-card"><div class="ico">💸</div><div class="kpi-label">Gasto total</div><div class="kpi-val">' + money(tot) + '</div></div>' +
       personas.map((id, i) => '<div class="kpi-card" style="border-left:4px solid ' + DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length] + '"><div class="ico">' + (id === GENERAL ? '🏥' : '🩺') + '</div><div class="kpi-label">' + esc(nombreAsociado(id === GENERAL ? null : id)) + '</div><div class="kpi-val">' + money(porDoc[id] || 0) + '</div></div>').join('');
     $('gasto-empty').style.display = rows.length ? 'none' : ''; $('gasto-empty').textContent = 'Sin gastos para este filtro.';
@@ -3161,10 +3169,10 @@ function pintarGastos() {
       const ci = catInfo(g.categoria), fi = factInfo(g.facturacion);
       return '<tr data-id="' + esc(g.id) + '"><td data-l="Fecha">' + fmtD(g.fecha) + '</td>' +
         '<td data-l="Categoría"><span class="badge-cat cat-' + ci.id + '">' + esc(ci.label) + '</span></td>' +
-        '<td data-l="Monto" class="monto-cell"><b>' + money(g.monto) + '</b></td>' +
+        '<td data-l="Monto" class="monto-cell">' + money(g.monto) + '</td>' +
         '<td data-l="Facturación"><span class="badge-fact ' + fi.cls + '">' + esc(fi.label) + '</span></td>' +
-        '<td data-l="Asociado a" class="autor-cell"><b>' + esc(nombreAsociado(g.doctor_id)) + '</b></td>' +
-        '<td data-l="Registrado el" class="autor-cell">' + esc(fmtFechaHora(g.created_at)) + '</td>' +
+        '<td data-l="Agregado por" class="autor-cell"><b>' + esc(nombreAsociado(g.doctor_id)) + '</b></td>' +
+        '<td data-l="Registrado el" class="autor-cell">' + esc(fmtFechaHoraCorta(g.created_at)) + '</td>' +
         '<td data-l="Descripción">' + esc(g.descripcion) + '</td>' +
         '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<div style="display:flex;gap:6px"><button class="sbtn btn-edit" type="button" title="Editar" data-ge="' + esc(g.id) + '">✏️</button><button class="sbtn btn-del" type="button" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></div>' : '') + '</td></tr>';
     }).join('');
@@ -3183,11 +3191,13 @@ async function graficasGastos(rows) {
       datalabels: { color: '#fff', font: { size: 9, weight: '700' }, formatter: (v, ctx) => { const t = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); if (!t || !v) return ''; const p = Math.round(v / t * 100); return p >= 6 ? p + '%' : ''; } } } } });
   $('gasto-legend-cat').innerHTML = cats.map(c => '<div class="leg-item"><span class="leg-dot" style="background:' + catInfo(c).color + '"></span>' + esc(catInfo(c).label) + '</div>').join('');
   const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
-  const ids = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
-  grafEn(GS.charts, 'doc', 'chartGastoDoc', { type: 'bar', data: { labels: ids.map(id => id === GENERAL ? 'General' : nombreDoctora(id).replace(/^Dra?\.\s*/, '').split(/\s+/)[0]), datasets: [{ data: ids.map(id => porDoc[id] || 0), backgroundColor: ids.map((id, i) => DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]), borderRadius: 6, maxBarThickness: 38 }] },
+  const ids = personasGasto(porDoc);
+  grafEn(GS.charts, 'doc', 'chartGastoDoc', { type: 'bar', data: { labels: ids.map(id => partirNombre(nombreAsociado(id === GENERAL ? null : id))), datasets: [{ data: ids.map(id => porDoc[id] || 0), backgroundColor: ids.map((id, i) => DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]), borderRadius: 6, maxBarThickness: 38 }] },
     options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => money(c.raw) } }, datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? money(v) : '' } },
-      layout: { padding: { top: 14 } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9 } } }, x: { ticks: { font: { size: 10 } } } } } });
+      layout: { padding: { top: 14 } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9 } } }, x: { ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: false } } } } });
 }
+// Nombre completo en dos renglones para que no se incline la etiqueta ("Dra. Maitane" / "Alonso de Mendieta")
+function partirNombre(n) { const w = String(n).split(/\s+/); if (w.length < 3) return n; const k = /^dra?\.$/i.test(w[0]) ? 2 : Math.ceil(w.length / 2); return [w.slice(0, k).join(' '), w.slice(k).join(' ')]; }
 async function guardarGasto(desdeModal) {
   const err = m => { const e = $(desdeModal ? 'mg-err' : 'gasto-err'); e.textContent = m; e.classList.remove('hide'); };
   const g = id => $(desdeModal ? 'mg-' + id : { fecha: 'gasto-fecha', cat: 'gasto-categoria', monto: 'gasto-monto', desc: 'gasto-descripcion', doc: 'gasto-doctor-asociado' }[id]);
