@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-8"/>
+<meta name="app-version" content="2026.10.29-9"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1081,22 +1081,20 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
   </div>
 </div>
 
-<!-- Gasto -->
+<!-- Gasto (editar, como en Skin Fabric) -->
 <div class="modal-overlay2" id="m-gasto">
   <div class="modal" style="max-width:560px" role="dialog" aria-labelledby="mg-t">
-    <div class="modal-h"><h3 id="mg-t">+ Registrar gasto</h3><button class="x" data-close>×</button></div>
+    <div class="modal-h"><h3 id="mg-t">Editar gasto</h3><button class="x" data-close>×</button></div>
     <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-      <div><label class="lbl" for="mg-fecha">Fecha</label><input class="inp" type="date" id="mg-fecha"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="mg-doc">Asociar a</label><select class="inp" id="mg-doc"></select></div>
+      <div><label class="lbl" for="mg-fecha">Fecha del gasto</label><input class="inp" type="date" id="mg-fecha"></div>
       <div><label class="lbl" for="mg-cat">Categoría</label><select class="inp" id="mg-cat"></select></div>
-      <div><label class="lbl" for="mg-monto">Monto</label><input class="inp" type="number" id="mg-monto" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>
-      <div style="display:flex;align-items:flex-end"><label class="check" style="height:40px"><input type="checkbox" id="mg-fac"> Facturado</label></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="mg-desc">Descripción</label><input class="inp" id="mg-desc" maxlength="200" placeholder="Ej. garrafones de agua"></div>
-      <div style="grid-column:1/-1"><span class="lbl">Medio de pago (obligatorio)</span><div class="chips" id="mg-medio"></div>
-        <div class="note">Solo los gastos en efectivo restan del efectivo del cierre.</div></div>
+      <div><label class="lbl" for="mg-monto">Monto ($)</label><input class="inp" type="number" id="mg-monto" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="mg-desc">Descripción del gasto</label><textarea class="inp" id="mg-desc" rows="2" maxlength="200"></textarea></div>
+      <div style="grid-column:1/-1"><span class="lbl">Facturación</span><div class="fact-group" id="mg-fact"></div></div>
     </div>
     <div class="err hide" id="mg-err" style="margin:12px 0 0"></div>
-    <div class="mfoot"><button class="btn btn-g" data-close>Cancelar</button><button class="btn btn-p" id="mg-save">✓ Guardar</button></div>
+    <div class="mfoot"><button class="appbtn appbtn-s" data-close style="background:var(--g1);color:var(--g6);box-shadow:none">Cancelar</button><button class="appbtn appbtn-p" id="mg-save">Guardar cambios</button></div>
   </div>
 </div>
 
@@ -2152,7 +2150,6 @@ function renderCierre() {
         '<div class="kpi-card"><div class="ico">🎟️</div><div class="kpi-label">Ticket servicios</div><div class="kpi-val" id="ck-tic">$0.00</div><div class="kpi-sub" id="ck-tic-s">—</div></div>' +
         '<div class="kpi-card kpi-farm"><div class="ico">🎟️</div><div class="kpi-label">Ticket farmacia</div><div class="kpi-val" id="ck-ticf">$0.00</div><div class="kpi-sub" id="ck-ticf-s">—</div></div>' +
       '</div>' +
-      '<div id="c-efe"></div>' +
       '<div class="prm-tabs" id="cierre-tabs">' +
         '<button type="button" class="prm-tab-btn act" data-target="cierre-por-doctor-panel">👥 Por Doctora</button>' +
         '<button type="button" class="prm-tab-btn" data-target="cierre-por-pago-panel">💳 Por Medio de Pago</button>' +
@@ -2178,7 +2175,7 @@ function renderCierre() {
   return cargarCierre();
 }
 const cRango = () => C.modo === 'dia' ? [C.dia, C.dia] : [C.mes + '-01', finMes(C.mes + '-01')];
-let C_ROWS = [], C_GASTOS = null;
+let C_ROWS = [];
 async function cargarCierre() {
   if (!$('cierre-kpis')) return;
   const seq = ++C.seq, [d, h] = cRango();
@@ -2188,13 +2185,10 @@ async function cargarCierre() {
   $('cierre-por-doctor').innerHTML = '<div class="empty-note">Cargando…</div>';
   // Bloques independientes: si el efectivo falla, el resto del cierre se muestra igual.
   const pCons = cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e }));
-  const pGas = (ES_DOCTORA() || C.doc) ? Promise.resolve({ ok: true, r: null })
-    : sb.rpc('cierre_gastos_info', { p_desde: d, p_hasta: h }).then(x => x.error ? { ok: false, e: x.error } : { ok: true, r: x.data }, e => ({ ok: false, e }));
-  const [rc, rg] = await Promise.all([pCons, pGas]);
+  const rc = await pCons;
   if (seq !== C.seq) return;
   if (!rc.ok) { console.error(rc.e); C_ROWS = []; ['cierre-por-doctor', 'cierre-por-pago', 'cierre-por-farm'].forEach(id => $(id).innerHTML = '<div class="empty-note">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'); }
   else C_ROWS = (C.doc ? rc.r.filter(c => c.doctor_id === C.doc) : rc.r);
-  C_GASTOS = rg.ok ? rg.r : { error: true };
   pintarCierre(rc.ok);
 }
 function pintarCierre(consOk) {
@@ -2213,7 +2207,6 @@ function pintarCierre(consOk) {
     $('ck-tic').textContent = money(serv.length ? totS / serv.length : 0); $('ck-tic-s').textContent = serv.length + ' consulta(s)';
     $('ck-ticf').textContent = money(farm.length ? totF / farm.length : 0); $('ck-ticf-s').textContent = farm.length ? farm.length + ' venta(s)' : 'sin ventas';
   });
-  bloque('el efectivo del día', () => pintarEfectivoCierre(rows, d, h));
   if (!consOk) return;
   // agrupar por doctora y por medio de pago
   const porDoc = {}, porMedio = {};
@@ -2303,30 +2296,6 @@ function pintarCierreFarmacia(filas, totF) {
     '<div class="farm-box"><button class="toggle-link" type="button" id="cierre-farm-det-btn">Ver detalle de ventas (' + filas.length + ') ▾</button><div class="acordeon-pac" id="cierre-farm-det">' + detalle + '</div></div>';
   $('cierre-farm-det-btn').onclick = () => $('cierre-farm-det').classList.toggle('open');
 }
-/* Efectivo del día: cobrado − gastos pagados en efectivo. Nunca muestra caja acumulada. */
-function pintarEfectivoCierre(rows) {
-  const box = $('c-efe');
-  if (ES_DOCTORA()) { box.innerHTML = ''; return; }
-  const lbl = C.modo === 'dia' ? 'del día' : 'del periodo';
-  if (C.doc) { box.innerHTML = '<div class="aviso">El efectivo ' + lbl + ' se muestra solo con "Todo el personal", porque los gastos son de la clínica y no de una doctora.</div>'; return; }
-  const g = C_GASTOS;
-  if (!g || g.error) { box.innerHTML = '<div class="aviso warn">No se pudo cargar el efectivo ' + lbl + '. El resto del cierre sigue disponible.</div>'; return; }
-  if (!g.permitido) { box.innerHTML = ''; return; }
-  const cob = sumar(rows, efectivoDe), sal = Array.isArray(g.salidas) ? g.salidas : [], tsal = sumar(sal, x => num(x.monto)), neto = num(cob - tsal);
-  const sm = g.sin_medio && g.sin_medio.n > 0 ? '<div class="aviso warn" style="margin:10px 0 0">Hay ' + g.sin_medio.n + ' gasto(s) sin medio de pago (' + money(g.sin_medio.total) + ') en este periodo. Corrígelos en Gastos para que el efectivo cuadre.</div>' : '';
-  box.innerHTML = '<div class="fin-sec"><div class="prod-head"><div class="prod-title">💵 Efectivo ' + lbl + '</div><div class="prod-period">Solo efectivo · no incluye tarjeta, transferencia ni cortesía</div></div>' +
-    '<div class="kpi-grid cols3" style="margin:8px 0 0">' +
-      '<div class="kpi-card" style="border-left:4px solid #2E7D4F"><div class="kpi-label">Efectivo cobrado</div><div class="kpi-val">' + money(cob) + '</div></div>' +
-      '<div class="kpi-card" style="border-left:4px solid #B8481F"><div class="kpi-label">− Gastos pagados en efectivo</div><div class="kpi-val" style="color:var(--neg)">' + money(tsal) + '</div></div>' +
-      '<div class="kpi-card" style="border-left:4px solid var(--teal);background:#F2FBFB"><div class="kpi-label">= Efectivo neto ' + lbl + '</div><div class="kpi-val" style="color:' + (neto < 0 ? 'var(--neg)' : 'var(--pos)') + '">' + money(neto) + '</div></div>' +
-    '</div>' +
-    (sal.length ? '<button class="toggle-link" type="button" id="c-efe-tg">' + (C.modo === 'dia' ? 'Ocultar' : 'Ver') + ' gastos en efectivo (' + sal.length + ') ▾</button><div class="acordeon-pac' + (C.modo === 'dia' ? ' open' : '') + '" id="c-efe-det">' +
-      sal.map(x => '<div class="pac-row-grid"><span class="pac-nombre">' + esc(x.descripcion) + '</span><span class="pac-detalle">' + esc(x.categoria) + (C.modo === 'mes' ? ' · ' + fmtD(x.fecha) : '') + '</span><span class="pac-monto">' + money(x.monto) + '</span></div>').join('') + '</div>'
-      : '<div class="kpi-sub" style="margin-top:8px">Sin gastos en efectivo ' + lbl + '.</div>') +
-    sm + '<div class="kpi-sub" style="margin-top:8px">Los gastos pagados por transferencia o depósito no restan efectivo.</div></div>';
-  if ($('c-efe-tg')) $('c-efe-tg').onclick = () => { const on = $('c-efe-det').classList.toggle('open'); $('c-efe-tg').textContent = (on ? 'Ocultar' : 'Ver') + $('c-efe-tg').textContent.replace(/^(Ocultar|Ver)/, ''); };
-}
-
 /* ════════ DASHBOARD (diseño de Skin Fabric) ════════ */
 const D = { modo: 'mes', rec: '30', mes: null, d: null, h: null, doc: '', tipo: '', seq: 0, charts: {}, tend: 'dia', ig: 'dia', rows: [], gastos: null };
 function renderDashboard() {
@@ -2355,9 +2324,9 @@ function renderDashboard() {
       '<div class="fin-sec" id="dash-resdoc" style="display:none"><div class="prod-head"><div class="prod-title">🩺 Resultado por doctora</div><div class="prod-period" id="dash-resdoc-periodo">—</div></div>' +
         '<div class="prod-sub">Productividad (ingreso de sus consultas) − gasto asociado a su nombre. El gasto general de la clínica no se reparte.</div><div class="fin-2col" id="dash-resdoc-body"></div></div>' +
       '<div class="fin-sec" id="dash-gasto" style="display:none"><div class="prod-head"><div class="prod-title" style="font-size:13px">💸 Gasto</div><div class="prod-period" id="dash-gasto-periodo">—</div></div>' +
-        '<div class="prod-sub">Por categoría y por medio de pago (solo el efectivo resta del efectivo del cierre)</div>' +
+        '<div class="prod-sub">Global y por doctora</div>' +
         '<div class="fin-2col"><div><div class="chart-title"><span id="dash-gasto-t1">Por categoría</span></div><div class="gx-bars" id="dash-gasto-bars"></div></div>' +
-        '<div><div class="chart-title"><span>Por medio de pago</span></div><div class="gx-bars" id="dash-gasto-med"></div></div></div></div>' +
+        '<div><div class="chart-title"><span>Por doctora</span></div><div class="gx-bars" id="dash-gasto-med"></div></div></div></div>' +
       '<div class="fac2" id="dash-ig-card" style="display:none;margin-bottom:10px"><div class="chart-title"><span>⚖️ Ingreso vs gasto</span>' +
         '<span class="chart-toggle"><button id="dash-ig-dia" class="on" type="button">Día</button><button id="dash-ig-mes" class="off" type="button">Mes</button></span></div>' +
         '<div style="height:220px"><canvas id="d-c-ig"></canvas></div>' +
@@ -2411,7 +2380,7 @@ async function cargarDashboard() {
   const verGastos = PERFIL.rol === 'admin';
   const [rc, rg] = await Promise.all([
     cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e })),
-    verGastos ? traerTodo(() => { let q = sb.from('gastos').select('id,fecha,monto,medio_pago,categoria,doctor_id').gte('fecha', d).lte('fecha', h); if (D.doc) q = q.eq('doctor_id', D.doc); return q.order('fecha').order('id'); }).then(x => x.error ? { ok: false } : { ok: true, r: x.data }, () => ({ ok: false })) : Promise.resolve({ ok: true, r: null })
+    verGastos ? traerTodo(() => { let q = sb.from('gastos').select('id,fecha,monto,categoria,doctor_id').gte('fecha', d).lte('fecha', h); if (D.doc) q = q.eq('doctor_id', D.doc); return q.order('fecha').order('id'); }).then(x => x.error ? { ok: false } : { ok: true, r: x.data }, () => ({ ok: false })) : Promise.resolve({ ok: true, r: null })
   ]);
   if (seq !== D.seq) return;
   if (!rc.ok) { console.error(rc.e); $('dash-kpi-grid').innerHTML = '<div class="aviso warn" style="grid-column:1/-1">No se pudieron cargar los datos del dashboard.</div>'; return; }
@@ -2479,7 +2448,7 @@ async function pintarDashboard() {
       D.serieFin = porF;
       // gasto por categoría y por medio
       const porCat = {}, porMed = {};
-      gastos.forEach(g => { porCat[g.categoria] = num((porCat[g.categoria] || 0) + num(g.monto)); const m = MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio'; porMed[m] = num((porMed[m] || 0) + num(g.monto)); });
+      gastos.forEach(g => { porCat[g.categoria] = num((porCat[g.categoria] || 0) + num(g.monto)); const m = g.doctor_id ? nombreDoctora(g.doctor_id) : 'General de la clínica'; porMed[m] = num((porMed[m] || 0) + num(g.monto)); });
       const barras = (obj, nom) => { const ks = Object.keys(obj).filter(x => obj[x] > 0).sort((a, b) => obj[b] - obj[a]), mx = Math.max(1, ...ks.map(x => obj[x]));
         return ks.length ? ks.map(x => '<div class="gx-row"><span>' + esc(nom(x)) + '</span><div class="tr"><i style="width:' + (obj[x] / mx * 100).toFixed(1) + '%"></i></div><b>' + fmt0(obj[x]) + '</b><small>' + (tg ? (obj[x] / tg * 100).toFixed(2) : '0.00') + '%</small></div>').join('') : '<div class="empty-note">Sin gastos en el periodo.</div>'; };
       $('dash-gasto-bars').innerHTML = barras(porCat, c => catInfo(c).label.replace(/^\S+\s/, ''));
@@ -2648,9 +2617,7 @@ async function flashReunirDatos() {
     else { const e = etiquetaServicio(c.motivo, c.tipo_consulta) + (c.descripcion ? ': ' + c.descripcion : ''); const x = mix[e] || (mix[e] = { n: 0, monto: 0 }); x.n++; x.monto = num(x.monto + v); }
   });
   const cuenta = re => asist.filter(c => re.test(c.tipo_consulta || '')).length;
-  const efCob = sumar(rows, efectivoDe);
-  const gastosOk = C_GASTOS && !C_GASTOS.error && C_GASTOS.permitido && !C.doc;
-  const salidas = gastosOk ? sumar(C_GASTOS.salidas || [], x => num(x.monto)) : null;
+  const efTr = sumar(asist, c => pagosDe(c).filter(p => p[0] === 'Efectivo' || p[0] === 'Transferencia').reduce((a, p) => a + p[1], 0));
   let comp = null;
   try {
     if (esDia) {
@@ -2683,7 +2650,7 @@ async function flashReunirDatos() {
     anexo.sort((a, b) => b.total - a.total);
   }
   return { esDia, desde, hasta, total, serv, farm, nFarm, nServ: asist.length - nFarm, n: asist.length, nPrimera: cuenta(/primera vez/i), nSub: cuenta(/subsecuente/i), nOtros: asist.filter(c => !/primera vez|subsecuente/i.test(c.tipo_consulta || '')).length,
-    noVino: rows.length - asist.length, factPend: asist.filter(c => c.factura && !c.num_factura).length, pros, medios, mix, det, efCob, salidas, comp, anexo,
+    noVino: rows.length - asist.length, factPend: asist.filter(c => c.factura && !c.num_factura).length, pros, medios, mix, det, efTr, comp, anexo,
     doc: C.doc ? nombreDoctora(C.doc) : (ES_DOCTORA() ? PERFIL.nombre : '') };
 }
 function flashFechaTxt(d) {
@@ -2723,8 +2690,7 @@ function flashReportHtml(d, totalPaginas, paginasExtra) {
     '<h2 class="d">Pendientes para cerrar bien</h2><div class="al">' +
       '<div class="a ' + (d.factPend > 0 ? 'w' : 'o') + '"><b>' + d.factPend + '</b><span>facturas solicitadas<br>sin N° de factura</span></div>' +
       '<div class="a ' + (d.noVino > 0 ? 'w' : 'o') + '"><b>' + d.noVino + '</b><span>pacientes que<br>no vinieron</span></div>' +
-      (d.salidas != null ? '<div class="a i"><b>' + fm0(d.efCob - d.salidas) + '</b><span>efectivo neto (cobrado ' + fm0(d.efCob) + '<br>− gastos en efectivo ' + fm0(d.salidas) + ')</span></div>'
-        : '<div class="a i"><b>' + fm0(d.efCob) + '</b><span>cobrado en efectivo<br>para conciliar en caja</span></div>') +
+      '<div class="a i"><b>' + fm0(d.efTr) + '</b><span>en efectivo y transferencia<br>para conciliar en caja</span></div>' +
     '</div></div>' +
     '<div class="ft"><span>MARE Ginecología Integral · Productividad · Cifras al momento de generar el reporte · Confidencial</span><span>Página 1 de ' + (totalPaginas || 1) + '</span></div></div>' +
     (paginasExtra || '') + '</body></html>';
@@ -2857,12 +2823,12 @@ function apagarRealtime() { try { if (RT) sb.removeChannel(RT); } catch (e) { /*
 
 function reiniciarEstadoConsultas() {
   H.per = null; H.sel = 'hoy'; H.rows = []; H.q = ''; H.doc = ''; H.mot = ''; H.med = ''; H.tg = new Set(); H.limite = 200; H.papelera = false;
-  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'cierre-por-doctor-panel'; C.modo = 'dia'; C_ROWS = []; C_GASTOS = null;
+  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'cierre-por-doctor-panel'; C.modo = 'dia'; C_ROWS = [];
   D.modo = 'mes'; D.rec = '30'; D.mes = null; D.doc = ''; D.tipo = ''; D.tend = 'dia'; D.ig = 'dia';
   Object.keys(D.charts).forEach(k => { try { D.charts[k].destroy(); } catch (e) { /* nada */ } }); D.charts = {};
   Object.keys(FORMS).forEach(k => delete FORMS[k]);
   if (typeof P !== 'undefined') { P.estado = 'vencida'; P.q = ''; P.doc = ''; P.serv = ''; P.lista = []; P.gest = []; P.cons = []; }
-  if (typeof GS !== 'undefined') { GS.mes = null; GS.doc = ''; GS.cat = 'todos'; GS.med = ''; GS.fac = ''; GS.q = ''; GS.rows = []; GS.modo = 'mes'; GS.nuevoMedio = ''; GS.nuevoFac = false; Object.keys(GS.charts).forEach(k => { try { GS.charts[k].destroy(); } catch (e) { /* nada */ } }); GS.charts = {}; }
+  if (typeof GS !== 'undefined') { GS.mes = null; GS.doc = ''; GS.cat = 'todos'; GS.fac = ''; GS.q = ''; GS.rows = []; GS.modo = 'mes'; GS.nuevoFac = 'no_facturado'; Object.keys(GS.charts).forEach(k => { try { GS.charts[k].destroy(); } catch (e) { /* nada */ } }); GS.charts = {}; }
 }
 
 /* @@PRM_GASTOS@@ */
@@ -3051,22 +3017,25 @@ $('cic-save').onclick = async () => {
   finally { b.disabled = false; }
 };
 
-/* ════════ GASTOS (diseño de Skin Fabric) ════════ */
-const GS = { modo: 'mes', mes: null, d: null, h: null, cat: 'todos', med: '', fac: '', doc: '', q: '', rows: [], seq: 0, charts: {}, edit: null, medio: '', nombres: {}, nuevoMedio: '', nuevoFac: false };
-const MEDIO_GASTO_TXT = { efectivo: 'Efectivo', transferencia: 'Transferencia', 'depósito': 'Depósito' };
-const MEDIO_GASTO_ICO = { efectivo: '💵', transferencia: '🏦', 'depósito': '🏧' };
-const stGasto = m => m === 'efectivo' ? 'st-ef' : m === 'transferencia' ? 'st-tr' : m === 'depósito' ? 'st-ta' : 'st-nv';
+/* ════════ GASTOS (igual que Skin Fabric) ════════ */
+const GS = { modo: 'mes', mes: null, d: null, h: null, cat: 'todos', fac: '', doc: '', q: '', rows: [], seq: 0, charts: {}, edit: null, nuevoFac: 'no_facturado', editFac: 'no_facturado' };
 const DOC_COLORS_GASTO = ['#1B3A6B', '#7D3C98', '#2E7D4F', '#9A6010', '#A3376B', '#0E7C74', '#B8481F'];
 const GENERAL = '__general';
+const FACTURACION = [
+  { id: 'no_facturado', label: 'No Facturado', cls: 'fact-no_facturado' },
+  { id: 'facturado_clinica', label: 'Facturado a MARE', cls: 'fact-facturado_skin' },
+  { id: 'facturado_doctor', label: 'Facturado a Dra.', cls: 'fact-facturado_doctor' }
+];
+const factInfo = id => FACTURACION.find(f => f.id === id) || FACTURACION[0];
 const nombreAsociado = id => id ? nombreDoctora(id) : 'General de la clínica';
-const optAsociar = sel => '<option value="">Seleccionar…</option><option value="' + GENERAL + '"' + (sel === GENERAL ? ' selected' : '') + '>🏥 General de la clínica</option>' +
+const optAsociar = sel => '<option value="">Seleccionar doctora…</option><option value="' + GENERAL + '"' + (sel === GENERAL ? ' selected' : '') + '>🏥 General de la clínica</option>' +
   DOCTORAS.filter(d => d.activo || d.id === sel).map(d => '<option value="' + esc(d.id) + '"' + (d.id === sel ? ' selected' : '') + '>' + esc(d.nombre) + '</option>').join('');
 const optCatGasto = sel => '<option value="">Seleccionar...</option>' + CATALOGOS.categoriasGasto.map(c => '<option value="' + esc(c) + '"' + (c === sel ? ' selected' : '') + '>' + esc(catInfo(c).label) + '</option>').join('');
-function chipsRadio(nombre, opciones, actual) {
-  return opciones.map(o => '<label class="fact-chip' + (o.v === actual ? ' on' : '') + '"><input type="radio" name="' + nombre + '" value="' + esc(o.v) + '"' + (o.v === actual ? ' checked' : '') + '><span class="rdot"></span><span>' + esc(o.t) + '</span></label>').join('');
+const optFiltroDoc = () => '<option value="">Todas las doctoras</option><option value="' + GENERAL + '">🏥 General de la clínica</option>' + DOCTORAS.map(d => '<option value="' + esc(d.id) + '">' + esc(d.nombre) + '</option>').join('');
+const optFiltroFac = () => '<option value="">Facturado y no facturado</option>' + FACTURACION.slice(1).map(f => '<option value="' + f.id + '">' + f.label + '</option>').join('') + '<option value="no_facturado">No facturado</option>';
+function chipsFact(nombre, actual) {
+  return FACTURACION.map(f => '<label class="fact-chip' + (f.id === actual ? ' on' : '') + '"><input type="radio" name="' + nombre + '" value="' + f.id + '"' + (f.id === actual ? ' checked' : '') + '><span class="rdot"></span><span>' + f.label + '</span></label>').join('');
 }
-const MEDIOS_RADIO = () => CATALOGOS.mediosGasto.map(m => ({ v: m, t: MEDIO_GASTO_ICO[m] + ' ' + MEDIO_GASTO_TXT[m] }));
-const FAC_RADIO = [{ v: 'no', t: 'No facturado' }, { v: 'si', t: 'Facturado' }];
 function enlazarChips(cont, onChange) {
   cont.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', () => {
     cont.querySelectorAll('.fact-chip').forEach(ch => ch.classList.toggle('on', ch.querySelector('input').checked)); onChange(r.value);
@@ -3076,6 +3045,11 @@ function renderGastos() {
   if (!GS.mes) { GS.mes = todayLocal().slice(0, 7); GS.d = inicioMes(todayLocal()); GS.h = finMes(todayLocal()); }
   if (!$('gasto-tbody')) {
     $('v-gastos').querySelector('.tab-title').classList.add('hide');
+    const barraFiltros = sfx => '<div class="filter-bar">' +
+      '<input type="text" id="gasto-buscar' + sfx + '" placeholder="Buscar en descripciones..." style="flex:2;min-width:140px" aria-label="Buscar en descripciones">' +
+      '<select id="gasto-doctor-filtro' + sfx + '" aria-label="Doctora">' + optFiltroDoc() + '</select>' +
+      '<select id="gasto-facturacion-filtro' + sfx + '" aria-label="Facturación">' + optFiltroFac() + '</select></div>' +
+      '<div class="excl-filters" id="gasto-pills' + sfx + '"></div>';
     $('body-gastos').innerHTML =
       '<div class="com-hero gasto-hero"><div class="com-hero-top"><div class="com-hero-ico">💸</div><div><h1>Gastos</h1><p>Egresos de la clínica · <b id="gasto-hero-per">—</b></p></div>' +
         '<div class="com-per" id="gasto-per" data-modo="mes">' +
@@ -3085,14 +3059,7 @@ function renderGastos() {
           '<span class="cl-h"><i class="dk">a</i><i class="mb">Hasta</i></span><input type="date" id="gasto-hasta" aria-label="Hasta">' +
           '<button type="button" id="gasto-btn-todo">Ver todo</button><div class="com-todo-note">Todo el historial · sin filtro de fechas</div>' +
         '</div></div></div>' +
-      '<div class="filter-bar">' +
-        '<input type="text" id="gasto-buscar" placeholder="Buscar en descripciones..." style="flex:2;min-width:140px" aria-label="Buscar en descripciones">' +
-        '<select id="gs-doc" aria-label="Asociado a"><option value="">Todas las doctoras y general</option><option value="' + GENERAL + '">🏥 General de la clínica</option>' + DOCTORAS.map(d => '<option value="' + esc(d.id) + '">' + esc(d.nombre) + '</option>').join('') + '</select>' +
-        '<select id="gs-med" aria-label="Medio de pago"><option value="">Todos los medios</option>' + CATALOGOS.mediosGasto.map(m => '<option value="' + esc(m) + '">' + MEDIO_GASTO_TXT[m] + '</option>').join('') + '<option value="__sin">Sin medio</option></select>' +
-        '<select id="gs-fac" aria-label="Facturación"><option value="">Facturado y no facturado</option><option value="si">Facturado</option><option value="no">No facturado</option></select>' +
-      '</div>' +
-      '<div class="excl-filters" id="gasto-pills"></div>' +
-      '<div id="gs-aviso"></div>' +
+      barraFiltros('-top') +
       '<div class="split2" id="gasto-split">' +
         '<div class="form-panel" id="gasto-form-panel"><h4>➕ Registrar gasto</h4>' +
           '<div class="fg"><label for="gasto-doctor-asociado">Asociar a</label><select id="gasto-doctor-asociado">' + optAsociar('') + '</select></div>' +
@@ -3101,8 +3068,7 @@ function renderGastos() {
             CATALOGOS.categoriasGasto.map(c => '<div class="cat-hint" data-cat="' + esc(c) + '">' + esc(catInfo(c).desc) + '</div>').join('') + '</div></div>' +
           '<div class="fg"><label for="gasto-monto">Monto ($)</label><input type="number" id="gasto-monto" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal"></div>' +
           '<div class="fg"><label for="gasto-descripcion">Descripción del gasto</label><textarea id="gasto-descripcion" rows="2" placeholder="¿En qué se gastó?" maxlength="200"></textarea></div>' +
-          '<div class="fg"><label>Medio de pago <span style="color:#e53e3e">*</span></label><div class="fact-group" id="gasto-medio-group">' + chipsRadio('gasto-medio', MEDIOS_RADIO(), '') + '</div></div>' +
-          '<div class="fg"><label>Facturación</label><div class="fact-group" id="gasto-fact-group">' + chipsRadio('gasto-fac', FAC_RADIO, 'no') + '</div></div>' +
+          '<div class="fg"><label>Facturación</label><div class="fact-group" id="gasto-fact-group">' + chipsFact('gasto-facturacion', 'no_facturado') + '</div></div>' +
           '<div class="err hide" id="gasto-err" style="margin-bottom:10px"></div>' +
           '<button class="sbtn" id="gasto-btn-guardar" type="button" style="width:100%;justify-content:center">✓ Guardar gasto</button>' +
         '</div>' +
@@ -3112,18 +3078,18 @@ function renderGastos() {
             '<div class="chart-box"><div class="chart-title">🩺 Por doctora</div><div class="chart-canvas-wrap"><canvas id="chartGastoDoc"></canvas></div></div>' +
           '</div>' +
           '<div class="sec-title">¿Qué incluye cada categoría?</div>' +
-          '<div class="cat-info-grid">' + CATALOGOS.categoriasGasto.map(c => '<div class="cat-info-card cat-' + catInfo(c).id + '"><div class="t">' + esc(catInfo(c).label) + '</div><div class="d">' + esc(catInfo(c).desc) + '</div></div>').join('') + '</div>' +
+          '<div class="cat-info-grid" id="gasto-cat-info">' + CATALOGOS.categoriasGasto.map(c => '<div class="cat-info-card cat-' + catInfo(c).id + '"><div class="t">' + esc(catInfo(c).label) + '</div><div class="d">' + esc(catInfo(c).desc) + '</div></div>').join('') + '</div>' +
         '</div>' +
       '</div>' +
-      '<div class="sec-title">Todos los gastos <button class="sbtn btn-outline" id="gasto-btn-exportar" type="button">↓ Exportar</button></div>' +
-      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Asociado a</th><th>Monto</th><th>Medio</th><th>Facturación</th><th>Agregado por</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
+      '<div class="sec-title">Todos los gastos<button class="sbtn btn-outline" id="gasto-btn-exportar" type="button">↓ Exportar</button></div>' +
+      barraFiltros('') +
+      '<div class="tx-table-wrap"><table class="tx-table"><thead><tr><th>Fecha</th><th>Categoría</th><th>Monto</th><th>Facturación</th><th>Asociado a</th><th>Registrado el</th><th>Descripción</th><th style="width:78px"></th></tr></thead>' +
         '<tbody id="gasto-tbody"></tbody></table><div class="empty-note" id="gasto-empty" style="display:none">Sin gastos para este filtro.</div></div>';
     // periodo
     $('gasto-per').querySelectorAll('.com-seg button').forEach(b => b.onclick = () => {
       const m = b.dataset.m;
       if (m === 'mes') { GS.modo = 'mes'; if (!GS.mes) GS.mes = todayLocal().slice(0, 7); GS.d = GS.mes + '-01'; GS.h = finMes(GS.d); }
-      else if (m === 'rango') GS.modo = 'rango';
-      else { GS.modo = 'todo'; }
+      else GS.modo = m;
       cargarGastos();
     });
     $('gasto-mes').onchange = () => { if ($('gasto-mes').value) { GS.modo = 'mes'; GS.mes = $('gasto-mes').value; GS.d = GS.mes + '-01'; GS.h = finMes(GS.d); cargarGastos(); } };
@@ -3132,20 +3098,26 @@ function renderGastos() {
     const rg = () => { if ($('gasto-desde').value && $('gasto-hasta').value) { GS.modo = 'rango'; GS.d = $('gasto-desde').value; GS.h = $('gasto-hasta').value; if (GS.d > GS.h) [GS.d, GS.h] = [GS.h, GS.d]; cargarGastos(); } };
     $('gasto-desde').onchange = rg; $('gasto-hasta').onchange = rg;
     $('gasto-btn-todo').onclick = () => { GS.modo = 'todo'; cargarGastos(); };
-    // filtros
-    $('gasto-buscar').addEventListener('input', () => { GS.q = $('gasto-buscar').value; pintarGastos(); });
-    $('gs-med').onchange = () => { GS.med = $('gs-med').value; pintarGastos(); };
-    $('gs-doc').onchange = () => { GS.doc = $('gs-doc').value; pintarGastos(); };
-    $('gs-fac').onchange = () => { GS.fac = $('gs-fac').value; pintarGastos(); };
+    // las dos barras de filtros (arriba y sobre la tabla) quedan sincronizadas, como en Skin Fabric
+    ['', '-top'].forEach(sfx => {
+      $('gasto-buscar' + sfx).addEventListener('input', e => { GS.q = e.target.value; sincronizarFiltrosGasto(); pintarGastos(); });
+      $('gasto-doctor-filtro' + sfx).onchange = e => { GS.doc = e.target.value; sincronizarFiltrosGasto(); pintarGastos(); };
+      $('gasto-facturacion-filtro' + sfx).onchange = e => { GS.fac = e.target.value; sincronizarFiltrosGasto(); pintarGastos(); };
+    });
     // formulario
     $('gasto-fecha').value = todayLocal(); $('gasto-fecha').max = todayLocal();
     $('gasto-categoria').onchange = () => document.querySelectorAll('#gasto-hints .cat-hint').forEach(hn => hn.classList.toggle('show', hn.dataset.cat === $('gasto-categoria').value));
-    enlazarChips($('gasto-medio-group'), v => { GS.nuevoMedio = v; });
-    enlazarChips($('gasto-fact-group'), v => { GS.nuevoFac = v === 'si'; });
+    enlazarChips($('gasto-fact-group'), v => { GS.nuevoFac = v; });
     $('gasto-btn-guardar').onclick = () => guardarGasto(false);
     $('gasto-btn-exportar').onclick = exportarGastos;
   }
   return cargarGastos();
+}
+function sincronizarFiltrosGasto() {
+  ['', '-top'].forEach(sfx => {
+    if ($('gasto-buscar' + sfx).value !== GS.q) $('gasto-buscar' + sfx).value = GS.q;
+    $('gasto-doctor-filtro' + sfx).value = GS.doc; $('gasto-facturacion-filtro' + sfx).value = GS.fac;
+  });
 }
 const gsRango = () => GS.modo === 'todo' ? ['2000-01-01', '2100-12-31'] : [GS.d, GS.h];
 async function cargarGastos() {
@@ -3155,57 +3127,46 @@ async function cargarGastos() {
   $('gasto-per').querySelectorAll('.com-seg button').forEach(b => b.classList.toggle('on', b.dataset.m === GS.modo));
   $('gasto-mes').value = GS.modo === 'mes' ? GS.mes : ''; $('gasto-desde').value = GS.modo === 'todo' ? '' : GS.d; $('gasto-hasta').value = GS.modo === 'todo' ? '' : GS.h;
   $('gasto-hero-per').textContent = GS.modo === 'mes' ? MESES[+GS.mes.slice(5, 7) - 1].replace(/^./, c => c.toUpperCase()) + ' ' + GS.mes.slice(0, 4) : GS.modo === 'rango' ? fmtD(GS.d) + ' – ' + fmtD(GS.h) : 'Todo el historial';
-  $('gasto-tbody').innerHTML = '<tr><td colspan="9" class="empty">Cargando…</td></tr>';
-  const [r, rp] = await Promise.all([
-    traerTodo(() => sb.from('gastos').select('id,fecha,categoria,monto,descripcion,facturado,medio_pago,doctor_id,creado_por,created_at').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id')),
-    sb.from('personal').select('id,nombre').then(x => x, () => ({ data: [] }))
-  ]);
+  $('gasto-tbody').innerHTML = '<tr><td colspan="8" class="empty">Cargando…</td></tr>';
+  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,categoria,monto,descripcion,facturado,facturacion,doctor_id,creado_por,created_at').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id'));
   if (seq !== GS.seq) return;
-  (rp.data || []).forEach(p => GS.nombres[p.id] = p.nombre);
   if (r.error) { console.error(r.error); $('gasto-tbody').innerHTML = ''; $('gasto-empty').textContent = 'No se pudieron cargar los gastos. ' + traducirError(r.error); $('gasto-empty').style.display = ''; return; }
-  GS.rows = r.data;
+  GS.rows = r.data.map(g => Object.assign(g, { facturacion: g.facturacion || (g.facturado ? 'facturado_clinica' : 'no_facturado') }));
   return pintarGastos();
 }
 const puedeEditarGasto = g => PERFIL.rol === 'admin' || g.creado_por === PERFIL.id;
-function filtrarGastos(conCat) {
+function filtrarGastos() {
   const q = normTxt(GS.q);
-  return GS.rows.filter(g => (!conCat || GS.cat === 'todos' || g.categoria === GS.cat) && (!GS.med || (GS.med === '__sin' ? !g.medio_pago : g.medio_pago === GS.med)) &&
-    (!GS.fac || (GS.fac === 'si') === !!g.facturado) && (!GS.doc || (GS.doc === GENERAL ? !g.doctor_id : g.doctor_id === GS.doc)) && (!q || normTxt(g.descripcion).includes(q)));
+  return GS.rows.filter(g => (GS.cat === 'todos' || g.categoria === GS.cat) && (!GS.fac || g.facturacion === GS.fac) &&
+    (!GS.doc || (GS.doc === GENERAL ? !g.doctor_id : g.doctor_id === GS.doc)) && (!q || normTxt(g.descripcion).includes(q)));
 }
 function pintarGastos() {
   if (!$('gasto-tbody')) return;
-  const rows = filtrarGastos(true);
+  const rows = filtrarGastos();
   bloque('las categorías', () => {
-    $('gasto-pills').innerHTML = '<div class="excl-link g-pill' + (GS.cat === 'todos' ? ' active' : '') + '" data-cat="todos">Todas</div>' +
-      CATALOGOS.categoriasGasto.map(c => '<div class="excl-link g-pill' + (GS.cat === c ? ' active' : '') + '" data-cat="' + esc(c) + '">' + esc(catInfo(c).label) + '</div>').join('');
-    $('gasto-pills').querySelectorAll('.g-pill').forEach(p => p.onclick = () => { GS.cat = p.dataset.cat; pintarGastos(); });
+    ['gasto-pills', 'gasto-pills-top'].forEach(id => {
+      $(id).innerHTML = '<div class="excl-link g-pill' + (GS.cat === 'todos' ? ' active' : '') + '" data-cat="todos">Todas</div>' +
+        CATALOGOS.categoriasGasto.map(c => '<div class="excl-link g-pill' + (GS.cat === c ? ' active' : '') + '" data-cat="' + esc(c) + '">' + esc(catInfo(c).label) + '</div>').join('');
+      $(id).querySelectorAll('.g-pill').forEach(p => p.onclick = () => { GS.cat = p.dataset.cat; pintarGastos(); });
+    });
   });
   bloque('el resumen de gastos', () => {
-    const tot = sumar(rows, x => num(x.monto)), ef = sumar(rows.filter(x => x.medio_pago === 'efectivo'), x => num(x.monto));
-    const bank = sumar(rows.filter(x => x.medio_pago === 'transferencia' || x.medio_pago === 'depósito'), x => num(x.monto));
-    const sinFac = rows.filter(x => !x.facturado);
+    const tot = sumar(rows, x => num(x.monto));
     const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
     const personas = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
-    $('gasto-kpis').innerHTML =
-      '<div class="kpi-card"><div class="ico">💸</div><div class="kpi-label">Gasto total</div><div class="kpi-val">' + money(tot) + '</div><div class="kpi-sub">' + rows.length + ' gasto(s) · ' + money(bank) + ' por transferencia o depósito</div></div>' +
-      '<div class="kpi-card" style="border-left:4px solid #2E7D4F"><div class="ico">💵</div><div class="kpi-label">En efectivo</div><div class="kpi-val">' + money(ef) + '</div><div class="kpi-sub">resta del efectivo del cierre · ' + sinFac.length + ' sin factura</div></div>' +
-      personas.map((id, i) => '<div class="kpi-card" style="border-left:4px solid ' + DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length] + '"><div class="ico">' + (id === GENERAL ? '🏥' : '🩺') + '</div><div class="kpi-label">' + esc(id === GENERAL ? 'General de la clínica' : nombreDoctora(id)) + '</div><div class="kpi-val">' + money(porDoc[id] || 0) + '</div></div>').join('');
-    const sm = GS.rows.filter(x => !x.medio_pago);
-    $('gs-aviso').innerHTML = sm.length ? '<div class="aviso warn">' + sm.length + ' gasto(s) sin medio de pago en el periodo. Edítalos para indicarlo: sin ese dato no se sabe si restan efectivo.</div>' : '';
-    $('gasto-form-panel').style.display = '';
+    $('gasto-kpis').innerHTML = '<div class="kpi-card"><div class="ico">💸</div><div class="kpi-label">Gasto total</div><div class="kpi-val">' + money(tot) + '</div></div>' +
+      personas.map((id, i) => '<div class="kpi-card" style="border-left:4px solid ' + DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length] + '"><div class="ico">' + (id === GENERAL ? '🏥' : '🩺') + '</div><div class="kpi-label">' + esc(nombreAsociado(id === GENERAL ? null : id)) + '</div><div class="kpi-val">' + money(porDoc[id] || 0) + '</div></div>').join('');
     $('gasto-empty').style.display = rows.length ? 'none' : ''; $('gasto-empty').textContent = 'Sin gastos para este filtro.';
     $('gasto-tbody').innerHTML = rows.map(g => {
-      const ci = catInfo(g.categoria);
-      return '<tr><td data-l="Fecha">' + fmtD(g.fecha) + '</td>' +
+      const ci = catInfo(g.categoria), fi = factInfo(g.facturacion);
+      return '<tr data-id="' + esc(g.id) + '"><td data-l="Fecha">' + fmtD(g.fecha) + '</td>' +
         '<td data-l="Categoría"><span class="badge-cat cat-' + ci.id + '">' + esc(ci.label) + '</span></td>' +
-        '<td data-l="Asociado a">' + (g.doctor_id ? personaPill(g.doctor_id, nombreDoctora(g.doctor_id)) : '<span class="h-mut">🏥 General</span>') + '</td>' +
-        '<td data-l="Monto"><b>' + money(g.monto) + '</b></td>' +
-        '<td data-l="Medio"><span class="st ' + stGasto(g.medio_pago) + '">' + (g.medio_pago ? MEDIO_GASTO_ICO[g.medio_pago] + ' ' : '') + esc(MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio') + '</span></td>' +
-        '<td data-l="Facturación"><span class="badge-fact ' + (g.facturado ? 'fact-facturado_skin' : 'fact-no_facturado') + '">' + (g.facturado ? 'Facturado' : 'No facturado') + '</span></td>' +
-        '<td data-l="Agregado por">' + esc(g.creado_por === PERFIL.id ? PERFIL.nombre : (GS.nombres[g.creado_por] || '—')) + '</td>' +
-        '<td data-l="Registrado el">' + esc(fmtFechaHora(g.created_at)) + '</td>' +
+        '<td data-l="Monto" class="monto-cell"><b>' + money(g.monto) + '</b></td>' +
+        '<td data-l="Facturación"><span class="badge-fact ' + fi.cls + '">' + esc(fi.label) + '</span></td>' +
+        '<td data-l="Asociado a" class="autor-cell"><b>' + esc(nombreAsociado(g.doctor_id)) + '</b></td>' +
+        '<td data-l="Registrado el" class="autor-cell">' + esc(fmtFechaHora(g.created_at)) + '</td>' +
         '<td data-l="Descripción">' + esc(g.descripcion) + '</td>' +
-        '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<span style="display:inline-flex;gap:5px"><button class="sbtn btn-edit" type="button" title="Editar" data-ge="' + esc(g.id) + '">✏️</button><button class="sbtn btn-del" type="button" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></span>' : '') + '</td></tr>';
+        '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<div style="display:flex;gap:6px"><button class="sbtn btn-edit" type="button" title="Editar" data-ge="' + esc(g.id) + '">✏️</button><button class="sbtn btn-del" type="button" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></div>' : '') + '</td></tr>';
     }).join('');
     $('gasto-tbody').querySelectorAll('[data-ge]').forEach(b => b.onclick = () => abrirGasto(GS.rows.find(g => g.id === b.dataset.ge)));
     $('gasto-tbody').querySelectorAll('[data-gd]').forEach(b => b.onclick = () => eliminarGasto(GS.rows.find(g => g.id === b.dataset.gd)));
@@ -3220,32 +3181,31 @@ async function graficasGastos(rows) {
   grafEn(GS.charts, 'cat', 'chartGastoCat', { type: 'doughnut', data: { labels: cats.map(c => catInfo(c).label), datasets: [{ data: porCat, backgroundColor: cats.map(c => catInfo(c).color), borderWidth: 2, borderColor: '#fff' }] },
     options: { maintainAspectRatio: false, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) } },
       datalabels: { color: '#fff', font: { size: 9, weight: '700' }, formatter: (v, ctx) => { const t = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); if (!t || !v) return ''; const p = Math.round(v / t * 100); return p >= 6 ? p + '%' : ''; } } } } });
-  $('gasto-legend-cat').innerHTML = cats.map((c, i) => '<div class="leg-item"><span class="leg-dot" style="background:' + catInfo(c).color + '"></span>' + esc(catInfo(c).label) + ' <b style="margin-left:auto">' + fmt0(porCat[i]) + '</b></div>').join('');
+  $('gasto-legend-cat').innerHTML = cats.map(c => '<div class="leg-item"><span class="leg-dot" style="background:' + catInfo(c).color + '"></span>' + esc(catInfo(c).label) + '</div>').join('');
   const porDoc = {}; rows.forEach(g => { const k = g.doctor_id || GENERAL; porDoc[k] = num((porDoc[k] || 0) + num(g.monto)); });
   const ids = [GENERAL].concat(DOCTORAS.filter(d => d.activo || porDoc[d.id]).map(d => d.id));
   grafEn(GS.charts, 'doc', 'chartGastoDoc', { type: 'bar', data: { labels: ids.map(id => id === GENERAL ? 'General' : nombreDoctora(id).replace(/^Dra?\.\s*/, '').split(/\s+/)[0]), datasets: [{ data: ids.map(id => porDoc[id] || 0), backgroundColor: ids.map((id, i) => DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]), borderRadius: 6, maxBarThickness: 38 }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => money(c.raw) } }, datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? fmtCorto(v) : '' } },
-      layout: { padding: { top: 14 } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9 }, callback: v => fmtCorto(v) } }, x: { ticks: { font: { size: 10 } } } } } });
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => money(c.raw) } }, datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? money(v) : '' } },
+      layout: { padding: { top: 14 } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9 } } }, x: { ticks: { font: { size: 10 } } } } } });
 }
 async function guardarGasto(desdeModal) {
   const err = m => { const e = $(desdeModal ? 'mg-err' : 'gasto-err'); e.textContent = m; e.classList.remove('hide'); };
-  const f = desdeModal ? $('mg-fecha').value : $('gasto-fecha').value, cat = desdeModal ? $('mg-cat').value : $('gasto-categoria').value;
-  const monto = num(desdeModal ? $('mg-monto').value : $('gasto-monto').value), desc = (desdeModal ? $('mg-desc').value : $('gasto-descripcion').value).trim();
-  const medio = desdeModal ? GS.medio : GS.nuevoMedio, fac = desdeModal ? $('mg-fac').checked : GS.nuevoFac;
-  const asoc = desdeModal ? $('mg-doc').value : $('gasto-doctor-asociado').value;
+  const g = id => $(desdeModal ? 'mg-' + id : { fecha: 'gasto-fecha', cat: 'gasto-categoria', monto: 'gasto-monto', desc: 'gasto-descripcion', doc: 'gasto-doctor-asociado' }[id]);
+  const f = g('fecha').value, cat = g('cat').value, monto = num(g('monto').value), desc = g('desc').value.trim(), asoc = g('doc').value;
+  const fac = desdeModal ? GS.editFac : GS.nuevoFac;
   const falt = []; if (!asoc) falt.push('a quién se asocia (doctora o general)'); if (!f) falt.push('fecha'); else if (f > todayLocal()) falt.push('fecha (no puede ser futura)');
-  if (!cat) falt.push('categoría'); if (!(monto > 0)) falt.push('monto mayor a cero'); if (!desc) falt.push('descripción'); if (!medio) falt.push('medio de pago');
+  if (!cat) falt.push('categoría'); if (!(monto > 0)) falt.push('monto mayor a cero'); if (!desc) falt.push('descripción');
   if (falt.length) return err('Falta: ' + falt.join(', ') + '.');
   const b = $(desdeModal ? 'mg-save' : 'gasto-btn-guardar'); if (b.disabled) return; b.disabled = true;
   try {
-    const fila = { fecha: f, categoria: cat, monto, descripcion: desc, facturado: fac, medio_pago: medio, doctor_id: asoc === GENERAL ? null : asoc };
+    const fila = { fecha: f, categoria: cat, monto, descripcion: desc, facturacion: fac, facturado: fac !== 'no_facturado', doctor_id: asoc === GENERAL ? null : asoc };
     const q = desdeModal && GS.edit ? sb.from('gastos').update(fila).eq('id', GS.edit.id).select('id') : sb.from('gastos').insert(Object.assign({ creado_por: PERFIL.id }, fila)).select('id');
     const { data, error } = await q;
     if (error || !data || !data.length) throw error || new Error('sin permiso');
     if (desdeModal) cerrarModal('m-gasto');
     else {
       $('gasto-monto').value = ''; $('gasto-descripcion').value = ''; $('gasto-categoria').value = ''; $('gasto-categoria').onchange();
-      $('gasto-medio-group').innerHTML = chipsRadio('gasto-medio', MEDIOS_RADIO(), ''); GS.nuevoMedio = ''; enlazarChips($('gasto-medio-group'), v => { GS.nuevoMedio = v; });
+      $('gasto-fact-group').innerHTML = chipsFact('gasto-facturacion', 'no_facturado'); GS.nuevoFac = 'no_facturado'; enlazarChips($('gasto-fact-group'), v => { GS.nuevoFac = v; });
       $('gasto-err').classList.add('hide');
     }
     toast(desdeModal && GS.edit ? 'Gasto actualizado.' : 'Gasto registrado.'); cargarGastos();
@@ -3254,36 +3214,36 @@ async function guardarGasto(desdeModal) {
 }
 function abrirGasto(g) {
   GS.edit = g || null;
-  $('mg-t').textContent = g ? '✏️ Editar gasto' : '➕ Registrar gasto';
+  $('mg-t').textContent = 'Editar gasto';
+  $('mg-doc').innerHTML = optAsociar(g ? (g.doctor_id || GENERAL) : '');
   $('mg-fecha').value = g ? g.fecha : todayLocal(); $('mg-fecha').max = todayLocal();
   $('mg-cat').innerHTML = optCatGasto(g ? g.categoria : '');
-  $('mg-doc').innerHTML = optAsociar(g ? (g.doctor_id || GENERAL) : '');
-  $('mg-monto').value = g ? num(g.monto).toFixed(2) : ''; $('mg-desc').value = g ? g.descripcion : ''; $('mg-fac').checked = !!(g && g.facturado);
-  GS.medio = g ? (g.medio_pago || '') : '';
-  $('mg-medio').innerHTML = chipsRadio('mg-medio-r', MEDIOS_RADIO(), GS.medio); $('mg-medio').classList.add('fact-group');
-  enlazarChips($('mg-medio'), v => { GS.medio = v; });
+  $('mg-monto').value = g ? num(g.monto).toFixed(2) : ''; $('mg-desc').value = g ? g.descripcion : '';
+  GS.editFac = g ? g.facturacion : 'no_facturado';
+  $('mg-fact').innerHTML = chipsFact('mg-facturacion', GS.editFac);
+  enlazarChips($('mg-fact'), v => { GS.editFac = v; });
   $('mg-err').classList.add('hide');
   abrirModal('m-gasto');
 }
 $('mg-save').onclick = () => guardarGasto(true);
 async function eliminarGasto(g) {
   if (!g) return;
-  const ok = await confirmar('Eliminar gasto', 'Se eliminará "' + g.descripcion + '" del ' + fmtD(g.fecha) + ' por ' + money(g.monto) + '. Quedará registro en la bitácora.', 'Eliminar');
+  const ok = await confirmar('¿Eliminar gasto?', 'Se eliminará "' + g.descripcion + '" del ' + fmtD(g.fecha) + ' por ' + money(g.monto) + '. Esta acción no se puede deshacer; quedará registro en la bitácora.', 'Eliminar');
   if (!ok) return;
   const { data, error } = await sb.from('gastos').delete().eq('id', g.id).select('id');
   if (error || !data || !data.length) return toast('No se pudo eliminar: ' + traducirError(error || 'sin permiso'));
   toast('Gasto eliminado.'); cargarGastos();
 }
 async function exportarGastos() {
-  const rows = filtrarGastos(true);
+  const rows = filtrarGastos();
   if (!rows.length) return toast('No hay gastos para exportar con estos filtros.');
   try {
     await cargarScript(CDN.xlsx);
-    const head = ['Fecha', 'Categoría', 'Asociado a', 'Monto', 'Medio de pago', 'Facturado', 'Descripción', 'Agregado por', 'Registrado el'];
-    const body = rows.map(g => [fmtD(g.fecha), g.categoria, nombreAsociado(g.doctor_id), num(g.monto), MEDIO_GASTO_TXT[g.medio_pago] || 'Sin medio', g.facturado ? 'Sí' : 'No', g.descripcion, g.creado_por === PERFIL.id ? PERFIL.nombre : (GS.nombres[g.creado_por] || ''), fmtFechaHora(g.created_at)]);
-    body.push(['', '', 'TOTAL', sumar(rows, x => num(x.monto)), '', '', '', '', '']);
+    const head = ['Fecha', 'Categoría', 'Monto', 'Facturación', 'Asociado a', 'Registrado el', 'Descripción'];
+    const body = rows.map(g => [fmtD(g.fecha), catInfo(g.categoria).label.replace(/^\S+\s/, ''), num(g.monto), factInfo(g.facturacion).label, nombreAsociado(g.doctor_id), fmtFechaHora(g.created_at), g.descripcion]);
+    body.push(['', 'TOTAL', sumar(rows, x => num(x.monto)), '', '', '', '']);
     const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet([head].concat(body));
-    ws['!cols'] = [11, 18, 28, 12, 14, 10, 40, 22, 17].map(w => ({ wch: w }));
+    ws['!cols'] = [11, 18, 12, 18, 28, 17, 40].map(w => ({ wch: w }));
     XLSX.utils.book_append_sheet(wb, ws, 'Gastos');
     const [d, h] = gsRango();
     XLSX.writeFile(wb, 'MARE_Gastos_' + (GS.modo === 'todo' ? 'todo' : sufijoArchivo(d, h)) + '.xlsx');
