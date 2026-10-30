@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-11"/>
+<meta name="app-version" content="2026.10.29-12"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -896,6 +896,18 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
   .hbtn .tx{display:none}
 }
 @media (min-width:821px){#gasto-kpis{grid-template-columns:repeat(var(--gk,3),minmax(0,1fr))}}
+
+.flash-wrap{position:relative;display:inline-flex}
+.flash-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:60;min-width:290px;max-width:min(360px,calc(100vw - 32px));background:#fff;border:1px solid var(--g2);border-radius:12px;box-shadow:0 12px 32px rgba(11,42,77,.18);padding:6px}
+.flash-menu[hidden]{display:none}
+.flash-menu-t{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--g6);padding:8px 10px 6px}
+.flash-menu-sep{height:1px;background:var(--g2);margin:4px 6px}
+.flash-opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:9px 10px;border:0;border-radius:8px;background:none;font:inherit;font-size:12.5px;color:var(--navy);cursor:pointer;text-align:left}
+.flash-opt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flash-opt b{font-size:12px;color:var(--teal-d,#0E7C74);flex:none}
+.flash-opt:hover,.flash-opt:focus-visible{background:var(--g1,#f1f5f9);outline:none}
+.flash-opt.on{background:rgba(42,183,176,.12)}
+@media (max-width:560px){.flash-wrap{margin-left:0!important}.flash-menu{left:0;right:auto}}
 </style>
 </head>
 <body>
@@ -2139,7 +2151,7 @@ function renderCierre() {
         '<button class="sbtn btn-outline" id="cierre-btn-next" type="button" aria-label="Siguiente">›</button>' +
         '<input type="date" id="cierre-date-input" aria-label="Fecha">' +
         '<button class="sbtn btn-outline" id="cierre-btn-hoy" type="button">↻ Hoy</button>' +
-        (PUEDE_EXPORTAR() ? '<button class="sbtn btn-outline" id="c-flash" type="button" title="Genera un PDF de una hoja con la productividad del periodo" style="margin-left:auto">📄 Exportar PDF</button>' : '') +
+        (PUEDE_EXPORTAR() ? '<div class="flash-wrap" style="margin-left:auto"><button class="sbtn btn-outline" id="c-flash" type="button" title="Genera un PDF de una hoja con la productividad del periodo" aria-haspopup="menu" aria-expanded="false">📄 Exportar PDF' + (ES_DOCTORA() ? '' : ' ▾') + '</button><div class="flash-menu" id="c-flash-menu" role="menu" hidden></div></div>' : '') +
         (ES_DOCTORA() ? '' : '<select id="cierre-doctor" style="max-width:240px' + (PUEDE_EXPORTAR() ? '' : ';margin-left:auto') + '" aria-label="Doctora"></select>') +
       '</div>' +
       '<div class="kpi-grid cierre-kpis" id="cierre-kpis">' +
@@ -2170,12 +2182,12 @@ function renderCierre() {
       $('cierre-tabs').querySelectorAll('.prm-tab-btn').forEach(x => x.classList.toggle('act', x === b));
       document.querySelectorAll('#body-cierre .subpanel').forEach(p => p.classList.toggle('active', p.id === C.vista));
     });
-    if ($('c-flash')) $('c-flash').onclick = exportarFlashReport;
+    if ($('c-flash')) $('c-flash').onclick = abrirMenuFlash;
   }
   return cargarCierre();
 }
 const cRango = () => C.modo === 'dia' ? [C.dia, C.dia] : [C.mes + '-01', finMes(C.mes + '-01')];
-let C_ROWS = [];
+let C_ROWS = [], C_ROWS_ALL = [];
 async function cargarCierre() {
   if (!$('cierre-kpis')) return;
   const seq = ++C.seq, [d, h] = cRango();
@@ -2187,8 +2199,8 @@ async function cargarCierre() {
   const pCons = cargarConsultas(d, h, false).then(r => ({ ok: true, r }), e => ({ ok: false, e }));
   const rc = await pCons;
   if (seq !== C.seq) return;
-  if (!rc.ok) { console.error(rc.e); C_ROWS = []; ['cierre-por-doctor', 'cierre-por-pago', 'cierre-por-farm'].forEach(id => $(id).innerHTML = '<div class="empty-note">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'); }
-  else C_ROWS = (C.doc ? rc.r.filter(c => c.doctor_id === C.doc) : rc.r);
+  if (!rc.ok) { console.error(rc.e); C_ROWS = []; C_ROWS_ALL = []; ['cierre-por-doctor', 'cierre-por-pago', 'cierre-por-farm'].forEach(id => $(id).innerHTML = '<div class="empty-note">No se pudieron cargar las consultas. ' + esc(traducirError(rc.e)) + '</div>'); }
+  else { C_ROWS_ALL = rc.r; C_ROWS = (C.doc ? rc.r.filter(c => c.doctor_id === C.doc) : rc.r); }
   pintarCierre(rc.ok);
 }
 function pintarCierre(consOk) {
@@ -2601,13 +2613,13 @@ const fm0 = n => (n < 0 ? '-' : '') + '$' + Math.round(Math.abs(n)).toLocaleStri
 const capF = s => s.charAt(0).toUpperCase() + s.slice(1);
 const tonoDoc = id => DOCTORAS.findIndex(d => d.id === id) % 2 ? 'd2' : 'd1';
 const claseSvc = s => /primera vez/i.test(s) ? 'k1' : /subsecuente/i.test(s) ? 'k2' : 'k3';
-async function flashTotal(desde, hasta) {
+async function flashTotal(desde, hasta, docId) {
   const rows = await cargarConsultas(desde, hasta, false);
-  return sumar(rows.filter(c => !c.no_vino && (!C.doc || c.doctor_id === C.doc)), ingreso);
+  return sumar(rows.filter(c => !c.no_vino && (!docId || c.doctor_id === docId)), ingreso);
 }
-async function flashReunirDatos() {
+async function flashReunirDatos(docId) {
   const [desde, hasta] = cRango(), esDia = C.modo === 'dia';
-  const rows = C_ROWS, asist = rows.filter(c => !c.no_vino);
+  const rows = docId ? C_ROWS_ALL.filter(c => c.doctor_id === docId) : C_ROWS_ALL, asist = rows.filter(c => !c.no_vino);
   const total = sumar(asist, ingreso);
   const pros = {}, medios = {}, mix = {}, det = {};
   let serv = 0, farm = 0, nFarm = 0;
@@ -2624,15 +2636,17 @@ async function flashReunirDatos() {
   let comp = null;
   try {
     if (esDia) {
-      const prev = await sb.from('consultas').select('fecha').eq('deleted', false).eq('no_vino', false).lt('fecha', desde).order('fecha', { ascending: false }).limit(1);
+      let qp = sb.from('consultas').select('fecha').eq('deleted', false).eq('no_vino', false).lt('fecha', desde);
+      if (docId) qp = qp.eq('doctor_id', docId);
+      const prev = await qp.order('fecha', { ascending: false }).limit(1);
       const f = prev.data && prev.data[0] && prev.data[0].fecha;
-      if (f) comp = { total: await flashTotal(f, f), etiqueta: f === addDays(desde, -1) ? 'ayer' : fmtD(f).slice(0, 5) };
+      if (f) comp = { total: await flashTotal(f, f, docId), etiqueta: f === addDays(desde, -1) ? 'ayer' : fmtD(f).slice(0, 5) };
     } else {
       const ini = parseISO(desde), ant = new Date(ini.getFullYear(), ini.getMonth() - 1, 1);
       const enCurso = todayLocal().slice(0, 7) === desde.slice(0, 7);
       const ultimo = new Date(ini.getFullYear(), ini.getMonth(), 0).getDate();
       const dia = Math.min(enCurso ? parseISO(todayLocal()).getDate() : 31, ultimo);
-      comp = { total: await flashTotal(isoLocal(ant), isoLocal(new Date(ant.getFullYear(), ant.getMonth(), dia))), etiqueta: 'mismo periodo de ' + MESES[ant.getMonth()] };
+      comp = { total: await flashTotal(isoLocal(ant), isoLocal(new Date(ant.getFullYear(), ant.getMonth(), dia)), docId), etiqueta: 'mismo periodo de ' + MESES[ant.getMonth()] };
     }
   } catch (e) { console.warn('[flash] sin comparativo', e); }
   // Anexo: detalle por doctora y paciente (solo en el reporte del día)
@@ -2654,7 +2668,7 @@ async function flashReunirDatos() {
   }
   return { esDia, desde, hasta, total, serv, farm, nFarm, nServ: asist.length - nFarm, n: asist.length, nPrimera: cuenta(/primera vez/i), nSub: cuenta(/subsecuente/i), nOtros: asist.filter(c => !/primera vez|subsecuente/i.test(c.tipo_consulta || '')).length,
     noVino: rows.length - asist.length, factPend: asist.filter(c => c.factura && !c.num_factura).length, pros, medios, mix, det, efTr, comp, anexo,
-    doc: C.doc ? nombreDoctora(C.doc) : (ES_DOCTORA() ? PERFIL.nombre : '') };
+    doc: docId ? nombreDoctora(docId) : (ES_DOCTORA() ? PERFIL.nombre : '') };
 }
 function flashFechaTxt(d) {
   const f = parseISO(d.desde);
@@ -2778,12 +2792,34 @@ async function flashHtmlAPdf(html, nombreArchivo) {
     pdf.save(nombreArchivo);
   } finally { ifr.remove(); }
 }
-async function exportarFlashReport() {
+// Menú del botón "Exportar PDF": consolidado de todas las doctoras o el de una sola (solo lo de ella)
+function cerrarMenuFlash() { const m = $('c-flash-menu'); if (m) { m.hidden = true; $('c-flash').setAttribute('aria-expanded', 'false'); } document.removeEventListener('click', cerrarMenuFlash._fuera, true); }
+function abrirMenuFlash(ev) {
+  const btn = $('c-flash'), menu = $('c-flash-menu');
+  if (!btn || btn.disabled) return;
+  if (ES_DOCTORA()) return exportarFlashReport('');          // la doctora solo ve lo suyo: se genera directo
+  if (!menu.hidden) return cerrarMenuFlash();
+  if (!C_ROWS_ALL.length) return toast('No hay movimientos en este periodo para exportar.');
+  const porDoc = {};
+  C_ROWS_ALL.filter(c => !c.no_vino).forEach(c => { porDoc[c.doctor_id] = num((porDoc[c.doctor_id] || 0) + ingreso(c)); });
+  const ids = Object.keys(porDoc).sort((a, b) => porDoc[b] - porDoc[a] || nombreDoctora(a).localeCompare(nombreDoctora(b)));
+  const tot = sumar(Object.values(porDoc), v => v);
+  const item = (id, ico, txt, monto) => '<button type="button" role="menuitem" class="flash-opt' + ((id || '') === (C.doc || '') ? ' on' : '') + '" data-doc="' + esc(id) + '"><span>' + ico + ' ' + esc(txt) + '</span><b>' + fmt0(monto) + '</b></button>';
+  menu.innerHTML = '<div class="flash-menu-t">Descargar flash report de…</div>' + item('', '👥', 'Todas las doctoras', tot) +
+    (ids.length ? '<div class="flash-menu-sep"></div>' + ids.map(id => item(id, '🩺', nombreDoctora(id), porDoc[id])).join('') : '');
+  menu.querySelectorAll('.flash-opt').forEach(b => b.onclick = e => { e.stopPropagation(); cerrarMenuFlash(); exportarFlashReport(b.dataset.doc); });
+  menu.hidden = false; btn.setAttribute('aria-expanded', 'true');
+  cerrarMenuFlash._fuera = e => { if (!e.target.closest('.flash-wrap')) cerrarMenuFlash(); };
+  document.addEventListener('click', cerrarMenuFlash._fuera, true);
+}
+async function exportarFlashReport(docId) {
   const btn = $('c-flash'); if (!btn || btn.disabled) return;
-  if (!C_ROWS.length) return toast('No hay movimientos en este periodo para exportar.');
+  docId = docId || '';
+  const base = docId ? C_ROWS_ALL.filter(c => c.doctor_id === docId) : C_ROWS_ALL;
+  if (!base.length) return toast('No hay movimientos en este periodo para exportar.');
   const txt0 = btn.textContent; btn.disabled = true; btn.textContent = '⏳ Generando…';
   try {
-    const d = await flashReunirDatos();
+    const d = await flashReunirDatos(docId);
     const nombre = 'MARE_Flash_Report_' + (d.esDia ? d.desde : d.desde.slice(0, 7)) + (d.doc ? '_' + normTxt(corto(d.doc)).replace(/[^a-z0-9]+/g, '_') : '') + '.pdf';
     let extra = '', totalPags = 1;
     if (d.esDia && d.anexo.length) {
@@ -2826,7 +2862,7 @@ function apagarRealtime() { try { if (RT) sb.removeChannel(RT); } catch (e) { /*
 
 function reiniciarEstadoConsultas() {
   H.per = null; H.sel = 'hoy'; H.rows = []; H.q = ''; H.doc = ''; H.mot = ''; H.med = ''; H.tg = new Set(); H.limite = 200; H.papelera = false;
-  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'cierre-por-doctor-panel'; C.modo = 'dia'; C_ROWS = [];
+  C.dia = null; C.mes = null; C.doc = ''; C.vista = 'cierre-por-doctor-panel'; C.modo = 'dia'; C_ROWS = []; C_ROWS_ALL = [];
   D.modo = 'mes'; D.rec = '30'; D.mes = null; D.doc = ''; D.tipo = ''; D.tend = 'dia'; D.ig = 'dia';
   Object.keys(D.charts).forEach(k => { try { D.charts[k].destroy(); } catch (e) { /* nada */ } }); D.charts = {};
   Object.keys(FORMS).forEach(k => delete FORMS[k]);
