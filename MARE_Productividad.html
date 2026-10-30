@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-12"/>
+<meta name="app-version" content="2026.10.30-1"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -908,6 +908,13 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
 .flash-opt:hover,.flash-opt:focus-visible{background:var(--g1,#f1f5f9);outline:none}
 .flash-opt.on{background:rgba(42,183,176,.12)}
 @media (max-width:560px){.flash-wrap{margin-left:0!important}.flash-menu{left:0;right:auto}}
+
+.com-hero.solo{padding-bottom:18px}
+.hero-acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hero-acts .sbtn{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.hero-acts .sbtn:hover{background:rgba(255,255,255,.2)}
+.hero-acts .sbtn.act{background:#fff;color:var(--navy);border-color:#fff}
+@media (max-width:640px){.hero-acts{margin-left:0;justify-content:center;width:100%}.com-hero.solo{padding-bottom:14px}}
 </style>
 </head>
 <body>
@@ -1771,8 +1778,18 @@ function traducirError(e) {
 }
 
 /* ════════ REGISTRO ════════ */
+// Encabezado azul (mismo formato que Dashboard y Gastos)
+function heroTab(id, ico, titulo, subId, acciones) {
+  const v = $('v-' + id); if (!v || $(id + '-hero')) return;
+  v.querySelector('.tab-title').classList.add('hide');
+  const h = document.createElement('div'); h.className = 'com-hero solo'; h.id = id + '-hero';
+  h.innerHTML = '<div class="com-hero-top"><div class="com-hero-ico">' + ico + '</div><div><h1>' + esc(titulo) + '</h1><p id="' + subId + '"></p></div>' + (acciones ? '<div class="hero-acts">' + acciones + '</div>' : '') + '</div>';
+  v.insertBefore(h, $('body-' + id));
+}
 function renderRegistro() {
   $('sub-registro').textContent = ES_DOCTORA() ? 'Registras consultas a tu nombre' : '';
+  heroTab('registro', '📝', 'Registro', 'r-hero-sub', '');
+  $('r-hero-sub').innerHTML = 'Registrar consulta / servicio · <b>' + esc(labelDia(todayLocal())) + '</b>' + (ES_DOCTORA() ? ' · a tu nombre' : '');
   if (FORMS.r && $('r-save')) return; // conserva lo capturado al cambiar de pestaña
   initFormConsulta($('body-registro'), 'r', 'nuevo', null, () => { if (TAB === 'historial') cargarHistorial(); });
 }
@@ -1801,9 +1818,9 @@ function renderHistorial() {
   if (!H.per) H.per = perDia(todayLocal());
   const b = $('body-historial');
   if (!$('hist-tbody')) {
-    $('v-historial').querySelector('.tab-title').innerHTML = '<span>🗂️ Historial de consultas <small id="h-sub" style="font-family:var(--font-b);font-weight:500;font-size:11.5px;color:var(--g6);margin-left:6px"></small></span>' +
-      '<div class="actions" style="display:flex;gap:8px">' + (PUEDE_EXPORTAR() ? '<button class="sbtn btn-outline" id="h-exp" type="button">↓ Exportar</button>' : '') +
-      (PUEDE_PAPELERA() ? '<button class="sbtn btn-outline" id="h-pap" type="button">🗑 Papelera</button>' : '') + '</div>';
+    heroTab('historial', '🗂️', 'Historial', 'h-hero-sub', (PUEDE_EXPORTAR() ? '<button class="sbtn" id="h-exp" type="button">↓ Exportar</button>' : '') +
+      (PUEDE_PAPELERA() ? '<button class="sbtn" id="h-pap" type="button">🗑 Papelera</button>' : ''));
+    $('h-hero-sub').innerHTML = (ES_DOCTORA() ? 'Tus consultas' : 'Consultas registradas') + ' · <b id="h-sub"></b>';
     b.innerHTML =
       '<div class="hist-kpi-chips" id="hist-kpi-chips"></div>' +
       '<div class="filter-bar" id="h-fbar">' +
@@ -1905,7 +1922,7 @@ function pintarHistorial() {
     const rows = filtrarHistorial(H.rows), asist = rows.filter(c => !c.no_vino);
     const tot = sumar(asist, ingreso), pacs = new Set(asist.map(c => c.paciente_id)).size;
     const desc = H.per.tipo === 'dia' ? diaNombre(H.per.d) + ' ' + fmtD(H.per.d) : H.per.tipo === 'all' ? 'Todos los registros' : H.per.lbl + ' · ' + fmtD(H.per.d) + ' – ' + fmtD(H.per.h);
-    $('h-sub').textContent = desc + ' · ' + rows.length + (rows.length === 1 ? ' registro' : ' registros') + (ES_DOCTORA() ? ' · solo tus consultas' : '');
+    $('h-sub').textContent = desc + ' · ' + rows.length + (rows.length === 1 ? ' registro' : ' registros');
     const cuenta = re => asist.filter(c => re.test(c.tipo_consulta || '')).length;
     const otros = asist.filter(c => !/primera vez|subsecuente/i.test(c.tipo_consulta || '')).length;
     $('hist-kpi-chips').innerHTML =
