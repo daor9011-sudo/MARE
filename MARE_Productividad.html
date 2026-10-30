@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.10.29-10"/>
+<meta name="app-version" content="2026.10.29-11"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,8 +87,8 @@ main.appmain{flex:1;width:100%;max-width:1250px;margin:0 auto;padding:22px 26px 
 #btn-notif{position:relative}
 .card{background:#fff;border-radius:14px;box-shadow:0 1px 2px rgba(11,22,40,.04),0 12px 28px -8px rgba(11,22,40,.14);padding:20px 22px;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--navy2))}
-.tab-title{font-family:var(--font-d);font-size:17px;font-weight:800;padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.tab-title small{font-family:var(--font-b);font-weight:500;font-size:12px;color:var(--g6)}
+.tab-title{font-family:var(--font-d);font-size:15.5px;font-weight:800;color:var(--navy);padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--g2);display:flex;align-items:center;gap:7px;justify-content:space-between;flex-wrap:wrap}
+.tab-title small{display:none}
 .placeholder{border:1.5px dashed var(--g2);border-radius:12px;padding:30px 18px;text-align:center;color:var(--g6)}
 .placeholder b{display:block;font-family:var(--font-d);color:var(--navy2);font-size:15px;margin-bottom:4px}
 .st{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:600;white-space:nowrap}
@@ -554,6 +554,7 @@ main.appmain{flex:1;width:100%;max-width:1250px;margin:0 auto;padding:22px 26px 
 .sum .tot{font-family:var(--font-d);font-size:24px;font-weight:800;margin-top:10px}
 .sum .ef{font-size:11.5px;color:var(--pos);margin-top:2px}
 .actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.tab-title .actions{margin-top:0}
 .ac-wrap{position:relative}
 .ac-list{position:absolute;z-index:40;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--g2);border-radius:10px;box-shadow:0 16px 32px -12px rgba(11,22,40,.35);max-height:260px;overflow-y:auto}
 .ac-list button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--g1);padding:9px 12px;cursor:pointer;font-size:12.5px;color:var(--navy)}
@@ -1180,11 +1181,11 @@ const CATALOGOS = {
 /* Pestañas: quién las ve y en qué fase se construyen */
 const TABS = [
   { id: 'registro',  ico: '📝', nombre: 'Registro', titulo: '📝 Registrar consulta / servicio',  fase: 3, ver: p => ['admin', 'doctor', 'recepcion'].includes(p.rol) },
-  { id: 'historial', ico: '🗂️', nombre: 'Historial', fase: 3, ver: p => ['admin', 'doctor', 'recepcion'].includes(p.rol) },
-  { id: 'cierre',    ico: '🧾', nombre: 'Cierre',    fase: 4, ver: p => ['admin', 'doctor', 'recepcion'].includes(p.rol) },
-  { id: 'dashboard', ico: '📊', nombre: 'Dashboard', fase: 4, ver: p => ['admin', 'doctor'].includes(p.rol) },
-  { id: 'prm',       ico: '💬', nombre: 'PRM / CRM', fase: 5, ver: p => ['admin', 'doctor'].includes(p.rol) },
-  { id: 'gastos',    ico: '💸', nombre: 'Gastos',    fase: 6, ver: p => p.rol === 'admin' || permiso(p, 'puede_ver_gastos') }
+  { id: 'historial', ico: '🗂️', nombre: 'Historial', titulo: '🗂️ Historial de consultas', fase: 3, ver: p => ['admin', 'doctor', 'recepcion'].includes(p.rol) },
+  { id: 'cierre',    ico: '🧾', nombre: 'Cierre',    titulo: '🧾 Resultados Operativos',    fase: 4, ver: p => ['admin', 'doctor', 'recepcion'].includes(p.rol) },
+  { id: 'dashboard', ico: '📊', nombre: 'Dashboard', titulo: '📊 Dashboard', fase: 4, ver: p => ['admin', 'doctor'].includes(p.rol) },
+  { id: 'prm',       ico: '💬', nombre: 'PRM / CRM', titulo: '💬 PRM — Pacientes', fase: 5, ver: p => ['admin', 'doctor'].includes(p.rol) },
+  { id: 'gastos',    ico: '💸', nombre: 'Gastos',    titulo: '💸 Gastos',    fase: 6, ver: p => p.rol === 'admin' || permiso(p, 'puede_ver_gastos') }
 ];
 const ROL_TXT = { admin: 'Admin', doctor: 'Doctora', recepcion: 'Recepción', enfermeria: 'Enfermería' };
 
@@ -1341,7 +1342,7 @@ async function montarApp() {
   $('btn-config').classList.toggle('hide', PERFIL.rol !== 'admin');
   const vis = TABS.filter(t => t.ver(PERFIL));
   $('panels').innerHTML = vis.map(t =>
-    '<section class="card hide" id="v-' + t.id + '"><div class="tab-title">' + esc(t.titulo || t.nombre) + ' <small id="sub-' + t.id + '"></small></div><div id="body-' + t.id + '"></div></section>').join('');
+    '<section class="card hide" id="v-' + t.id + '"><div class="tab-title"><span>' + esc(t.titulo || t.nombre) + '</span><small id="sub-' + t.id + '"></small></div><div id="body-' + t.id + '"></div></section>').join('');
   $('nav').innerHTML = vis.map(t => '<button type="button" data-t="' + t.id + '"><span>' + t.ico + '</span>' + esc(t.nombre) + '</button>').join('');
   $('nav').querySelectorAll('[data-t]').forEach(b => b.onclick = () => irA(b.dataset.t));
   reiniciarEstadoConsultas();
