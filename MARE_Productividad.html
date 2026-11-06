@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.11.02-5"/>
+<meta name="app-version" content="2026.11.06-1"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -992,6 +992,7 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
 
 .dash-hero-top .dash-flash{margin-left:auto;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3)}
 .dash-hero-top .dash-flash:hover{background:rgba(255,255,255,.22)}
+.g-mescruce{display:inline-block;font-size:10px;font-weight:700;color:#1B5C9E;background:#E3EEFA;border-radius:99px;padding:1px 7px;margin-left:4px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -3466,7 +3467,7 @@ function pintarGastos() {
         '<td data-l="Facturación"><span class="badge-fact ' + fi.cls + '">' + esc(fi.label) + '</span></td>' +
         '<td data-l="Agregado por" class="autor-cell"><b>' + esc(nombreAsociado(g.doctor_id)) + '</b></td>' +
         '<td data-l="Registrado el" class="autor-cell">' + esc(fmtFechaHoraCorta(g.created_at)) + '</td>' +
-        '<td data-l="Descripción">' + esc(g.descripcion) + (g.se_cruza === false ? ' <span class="g-nocruza" title="No entra al reparto entre doctoras">no se reparte</span>' : '') + '</td>' +
+        '<td data-l="Descripción">' + esc(g.descripcion) + (g.mes_cruce && String(g.mes_cruce).slice(0, 7) !== g.fecha.slice(0, 7) ? ' <span class="g-mescruce" title="Mes en que cuenta para el gasto real">cruza en ' + esc(labelMes(String(g.mes_cruce).slice(0, 7)).toLowerCase()) + '</span>' : '') + (g.se_cruza === false ? ' <span class="g-nocruza" title="No entra al reparto entre doctoras">no se reparte</span>' : '') + '</td>' +
         '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<div style="display:flex;gap:6px"><button class="sbtn btn-edit" type="button" title="Editar" data-ge="' + esc(g.id) + '">✏️</button><button class="sbtn btn-del" type="button" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></div>' : '') + '</td></tr>';
     }).join('');
     $('gasto-tbody').querySelectorAll('[data-ge]').forEach(b => b.onclick = () => abrirGasto(GS.rows.find(g => g.id === b.dataset.ge)));
@@ -3528,6 +3529,8 @@ function abrirGasto(g) {
   $('mg-medio').innerHTML = optMedioGasto(g ? g.medio_pago : 'transferencia');
   $('mg-mes-cruce').value = g ? String(g.mes_cruce || g.fecha).slice(0, 7) : todayLocal().slice(0, 7);
   $('mg-se-cruza').checked = !g || g.se_cruza !== false;
+  // si cambian la fecha, el mes de cruce se mueve con ella (se puede ajustar a mano después)
+  $('mg-fecha').onchange = () => { if ($('mg-fecha').value) $('mg-mes-cruce').value = $('mg-fecha').value.slice(0, 7); };
   $('mg-fact').innerHTML = chipsFact('mg-facturacion', GS.editFac);
   enlazarChips($('mg-fact'), v => { GS.editFac = v; });
   $('mg-err').classList.add('hide');
