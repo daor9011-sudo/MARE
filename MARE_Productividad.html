@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.11.11-4"/>
+<meta name="app-version" content="2026.11.11-5"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1014,6 +1014,32 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
 .gr-cons-r .m{font-weight:800;white-space:nowrap}
 .mr-info{font-size:13px;color:var(--navy);margin-bottom:10px}.mr-info small{display:block;color:var(--g6);font-size:11.5px;margin-top:3px}
 .gr-ficha .fr small{font-size:10px;color:var(--g6);margin-left:3px}.gr-ficha .fr.mu{border-bottom:0;padding-top:6px}.gr-ficha .fr.mu b{color:var(--g6);font-size:12.5px}
+
+/* Gasto real · tarjetas tipo wallet (tono claro) */
+.gr-line{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:none;border:0;padding:0;margin:4px 0 14px}
+.gw-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#1c9a9a}
+.gw-title{font:800 22px var(--font-d);color:var(--navy);margin:2px 0}
+.gw-sub{font-size:12.5px;color:var(--g6);margin:0}.gw-sub b{color:var(--navy)}
+.gw-badge{background:#E9F8F8;border:1px solid #BFE8E8;color:var(--navy);border-radius:16px;padding:10px 18px;font:900 24px var(--font-d);text-align:center;line-height:1.1}
+.gw-badge small{display:block;font:600 11px var(--font-b);color:var(--g6);margin-top:2px}.gw-badge.ok{background:#ECFBF3;border-color:#BDEBD2;color:#1E7A45}
+.gr-fichas{gap:14px}
+.gw-card{position:relative;overflow:hidden;border-radius:20px;padding:16px;color:var(--navy);border:1px solid #E2E8F0;border-color:color-mix(in srgb,var(--c) 30%,#fff);background:#fff;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,#fff),#fff 75%);box-shadow:0 10px 24px rgba(11,42,77,.06);box-shadow:0 10px 24px color-mix(in srgb,var(--c) 14%,transparent)}
+.gw-card:after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:color-mix(in srgb,var(--c) 12%,transparent);pointer-events:none}
+.gw-h{display:flex;align-items:center;gap:8px;font-size:13.5px;position:relative;z-index:1}
+.gw-h b{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gw-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;color:#fff;font-weight:800;font-size:13px;background:var(--c);background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 60%,#000))}
+.gw-h em{margin-left:auto;font-style:normal;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 8px;white-space:nowrap;background:color-mix(in srgb,var(--c) 15%,#fff);color:color-mix(in srgb,var(--c) 70%,#000)}
+.gw-lbl{margin-top:14px;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--g6);position:relative;z-index:1}
+.gw-v{font:900 30px var(--font-d);letter-spacing:-.5px;position:relative;z-index:1}
+.gw-card.neg .gw-v{color:#C53030}.gw-card.pos .gw-v{color:#1E7A45}.gw-card.ok .gw-v{color:#1E7A45}
+.gw-b{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px;background:#fff;border:1px solid #EEF2F7;border-radius:12px;padding:8px;position:relative;z-index:1}
+.gw-b small{display:block;font-size:9.5px;color:var(--g6)}.gw-b b{font-size:12px;white-space:nowrap}
+.gw-x{display:grid;gap:3px;margin-top:8px;font-size:11px;color:var(--g6);position:relative;z-index:1}.gw-x b{color:var(--navy);margin-left:4px}
+.gw-real{margin-top:8px;font-size:11.5px;color:var(--g6);position:relative;z-index:1}.gw-real b{color:var(--navy);margin-left:4px}
+.gw-acts{margin-top:10px;display:grid;gap:5px;position:relative;z-index:1}
+.gw-act{display:flex;align-items:center;gap:8px;border-radius:9px;padding:6px 9px;font-size:12px;background:#F4F8FB;background:color-mix(in srgb,var(--c) 10%,#fff)}
+.gw-act.pa{color:#9B1C1C}.gw-act.re{color:#1E6B3F}.gw-act.none{color:var(--g6)}
+.gw-act .sbtn{margin-left:auto;min-height:26px;padding:3px 9px;font-size:10.5px;background:#fff}
 </style>
 </head>
 <body>
@@ -3347,6 +3373,7 @@ $('cic-save').onclick = async () => {
 /* ════════ GASTOS (igual que Skin Fabric) ════════ */
 const GS = { modo: 'mes', mes: null, d: null, h: null, cat: 'todos', fac: '', doc: '', q: '', rows: [], seq: 0, charts: {}, edit: null, nuevoFac: 'no_facturado', editFac: 'no_facturado' };
 const DOC_COLORS_GASTO = ['#1B3A6B', '#7D3C98', '#2E7D4F', '#9A6010', '#A3376B', '#0E7C74', '#B8481F'];
+const DOC_COLORS_WALLET = ['#3B6FD8', '#9B59D0', '#22B07D', '#E39B2B', '#E0528F', '#2ABFBF', '#B8481F'];
 const GENERAL = '__general';
 const FACTURACION = [
   { id: 'no_facturado', label: 'No Facturado', cls: 'fact-no_facturado' },
@@ -3755,9 +3782,9 @@ function pintarGastoReal() {
   const saldoTxt = v => Math.abs(v) <= 0.5 ? '<span class="gr-ok">✓ al día</span>' : v > 0 ? '<span class="gr-pos">Le deben ' + money(v) + '</span>' : '<span class="gr-neg">Debe ' + money(-v) + '</span>';
   const sg = v => Math.abs(v) < 0.005 ? '—' : (v > 0 ? '+' : '−') + money(Math.abs(v));
   const pend = sumar(c.lista.filter(x => x.saldo > 0.5), x => x.saldo);
-  $('gr-line').innerHTML = 'Gastos fijos <b>' + money(c.bolsa) + '</b> ÷ ' + c.n + ' = <b>' + money(c.corr) + '</b> por doctora' +
-    (c.variable > 0 ? ' · gastos variables <b>' + money(c.variable) + '</b> según productividad' : '') + ' · ' +
-    (pend > 0.5 ? 'falta por cruzar <b class="gr-neg">' + money(pend) + '</b>' : '<b class="gr-ok">✓ el mes está emparejado</b>');
+  $('gr-line').innerHTML = '<div><div class="gw-eyebrow">⚖️ Gasto real · ' + esc(labelMes(GR.mes)) + '</div><h2 class="gw-title">Saldo de cada doctora</h2>' +
+      '<p class="gw-sub">Gastos fijos <b>' + money(c.bolsa) + '</b> ÷ ' + c.n + ' = <b>' + money(c.corr) + '</b> c/u' + (c.variable > 0 ? ' · insumos <b>' + money(c.variable) + '</b>' : '') + '</p></div>' +
+    '<div class="gw-badge' + (pend > 0.5 ? '' : ' ok') + '">' + (pend > 0.5 ? money(pend) + '<small>por cruzar</small>' : '✓<small>mes emparejado</small>') + '</div>';
   $('gr-nota').innerHTML = '<b>Gastos fijos</b> se pagan parejo entre las ' + c.n + ' doctoras. <b>Gastos variables</b> (insumos, farmacia) se reparten según la productividad: si una doctora generó el 30% del ingreso del mes, paga el 30% del gasto variable. ' +
     '<b>Diferencia final</b> = diferencia contra el promedio + diferencia de variables + pagos entre doctoras ya hechos. Lo marcado <i>no se reparte</i> queda fuera. Cada movimiento cuenta en su <b>mes de cruce</b>.' +
     (GR.mes === todayLocal().slice(0, 7) ? ' El mes sigue en curso: la productividad (y lo variable) se ajusta hasta el cierre.' : '') +
@@ -3771,26 +3798,31 @@ function pintarGastoReal() {
   $('gr-consumo').querySelectorAll('[data-rep]').forEach(b => b.onclick = () => abrirReparto(GR.rows.find(g => g.id === b.dataset.rep)));
   // fichas por doctora (de la que más debe a la que más le deben), con las columnas de la hoja de cruces
   const sugs = sugerirCruces(c.lista), maxS = Math.max(1, ...c.lista.map(x => Math.abs(x.saldo)));
-  const colDe = {}; c.lista.forEach((x, i) => { colDe[x.id] = DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]; });
+  const colDe = {}; c.lista.forEach((x, i) => { colDe[x.id] = DOC_COLORS_WALLET[i % DOC_COLORS_WALLET.length]; });
   const acciones = x => {
     const pa = sugs.map((s, k) => [s, k]).filter(([s]) => s.paga === x.id), re = sugs.filter(s => s.recibe === x.id);
     if (!pa.length && !re.length) return '<li class="none">Nada pendiente</li>';
     return pa.map(([s, k]) => '<li class="pa"><span>Paga <b>' + money(s.monto) + '</b> a ' + esc(corto(nombreDoctora(s.recibe))) + '</span>' + (PUEDE_GASTO_CRUCE() ? '<button type="button" class="sbtn btn-outline" data-sug="' + k + '">Ya pagó</button>' : '') + '</li>').join('') +
       re.map(s => '<li class="re"><span>Recibe <b>' + money(s.monto) + '</b> de ' + esc(corto(nombreDoctora(s.paga))) + '</span></li>').join('');
   };
+  const iniciales = n => { const w = String(n).replace(/^Dra?\.\s*/i, '').split(/\s+/).filter(Boolean); return ((w[0] || '')[0] || '') + ((w[1] || '')[0] || ''); };
+  const accW = x => {
+    const pa = sugs.map((s, k) => [s, k]).filter(([s]) => s.paga === x.id), re = sugs.filter(s => s.recibe === x.id);
+    if (!pa.length && !re.length) return '<div class="gw-act none">Nada pendiente</div>';
+    return pa.map(([s, k]) => '<div class="gw-act pa"><span>→ ' + esc(corto(nombreDoctora(s.recibe))) + ' · <b>' + money(s.monto) + '</b></span>' + (PUEDE_GASTO_CRUCE() ? '<button type="button" class="sbtn btn-outline" data-sug="' + k + '">Ya pagó</button>' : '') + '</div>').join('') +
+      re.map(s => '<div class="gw-act re"><span>← ' + esc(corto(nombreDoctora(s.paga))) + ' · <b>' + money(s.monto) + '</b></span></div>').join('');
+  };
   $('gr-fichas').innerHTML = !delMes.length ? '<div class="empty-note">Sin gastos con mes de cruce en ' + esc(labelMes(GR.mes)) + '.</div>' :
     c.lista.slice().sort((a, b) => a.saldo - b.saldo).map(x => {
-      const w = (Math.abs(x.saldo) / maxS * 50).toFixed(1);
-      return '<div class="gr-ficha" data-doc="' + esc(x.id) + '" style="--c:' + colDe[x.id] + '"><div class="fh"><b>' + esc(x.nombre) + '</b>' + saldoTxt(x.saldo) + '</div>' +
-        '<div class="gr-bal" title="Centro = parejas"><div class="mid"></div>' + (Math.abs(x.saldo) <= 0.5 ? '' : '<i class="' + (x.saldo < 0 ? 'l' : 'r') + '" style="width:' + w + '%"></i>') + '</div>' +
-        '<div class="fr"><span>Gastos fijos que pagó</span><b>' + money(x.fijo) + '</b></div>' +
-        '<div class="fr"><span>Diferencia vs promedio <small>(' + money(c.corr) + ')</small></span><b class="' + (x.difProm < 0 ? 'gr-neg' : '') + '">' + sg(x.difProm) + '</b></div>' +
-        (c.variable > 0 ? '<div class="fr"><span>Gastos variables <small>' + (x.part * 100).toFixed(1) + '% de productividad' + (x.cons ? ' · pagó ' + money(x.cons) : '') + '</small></span><b class="' + (x.difVar < 0 ? 'gr-neg' : '') + '">' + sg(x.difVar) + '</b></div>' : '') +
-        (Math.abs(x.entre) >= 0.005 ? '<div class="fr"><span>Pagos entre doctoras ya hechos</span><b>' + sg(x.entre) + '</b></div>' : '') +
-        (x.noRep ? '<div class="fr"><span>No se reparte <small>(fuera)</small></span><b>' + money(x.noRep) + '</b></div>' : '') +
-        '<div class="fr hl"><span>Diferencia final</span><b class="' + (x.saldo < -0.5 ? 'gr-neg' : x.saldo > 0.5 ? 'gr-pos' : '') + '">' + sg(x.saldo) + '</b></div>' +
-        '<div class="fr mu"><span>Gasto real <small>fijos ± pagos entre doctoras, sin insumos</small></span><b>' + money(x.real) + '</b></div>' +
-        '<ul>' + acciones(x) + '</ul></div>';
+      const est = Math.abs(x.saldo) <= 0.5 ? 'ok' : x.saldo < 0 ? 'neg' : 'pos';
+      return '<div class="gr-ficha gw-card ' + est + '" data-doc="' + esc(x.id) + '" style="--c:' + colDe[x.id] + '">' +
+        '<div class="gw-h"><span class="gw-av">' + esc(iniciales(x.nombre)) + '</span><b>' + esc(corto(x.nombre)) + '</b>' + (c.variable > 0 ? '<em title="Participación en el ingreso del mes">' + (x.part * 100).toFixed(1) + '% prod.</em>' : '') + '</div>' +
+        '<div class="gw-lbl">' + (est === 'ok' ? 'Al día' : est === 'neg' ? 'Debe pagar' : 'Le deben') + '</div>' +
+        '<div class="gw-v">' + (est === 'ok' ? '✓ ' + money(0) : money(Math.abs(x.saldo))) + '</div>' +
+        '<div class="gw-b"><div><small>Fijos</small><b>' + sg(x.difProm) + '</b></div><div><small>Insumos</small><b>' + sg(x.difVar) + '</b></div><div><small>Pagó</small><b>' + fmt0(x.fijo) + '</b></div></div>' +
+        (Math.abs(x.entre) >= 0.005 || x.noRep ? '<div class="gw-x">' + (Math.abs(x.entre) >= 0.005 ? '<span>Pagos entre doctoras ya hechos <b>' + sg(x.entre) + '</b></span>' : '') + (x.noRep ? '<span>No se reparte <b>' + money(x.noRep) + '</b></span>' : '') + '</div>' : '') +
+        '<div class="gw-real" title="Gastos fijos ± pagos entre doctoras, sin insumos">Gasto real <b>' + money(x.real) + '</b></div>' +
+        '<div class="gw-acts">' + accW(x) + '</div></div>';
     }).join('');
   $('gr-fichas').querySelectorAll('[data-sug]').forEach(b => b.onclick = () => { const s = sugs[+b.dataset.sug]; abrirCruce(null, { paga: s.paga, recibe: s.recibe, monto: s.monto }); });
   // cruces registrados del mes
