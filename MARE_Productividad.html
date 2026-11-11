@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.11.11-1"/>
+<meta name="app-version" content="2026.11.11-2"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1002,6 +1002,17 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
 .g-consumo .gc-sum{font-size:11.5px;color:var(--g6);margin-top:6px;text-align:right}
 #mg-consumo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}#mg-consumo.hide{display:none}#mg-consumo .gc-t,#mg-consumo .gc-sum{grid-column:1/-1}
 .g-consumo-b{display:inline-block;font-size:10px;font-weight:700;color:#2E7D4F;background:#E6F6EC;border-radius:99px;padding:1px 7px;margin-left:4px;white-space:nowrap;cursor:help}
+
+.g-hint{font-size:11px;color:var(--g6);margin-top:6px;line-height:1.4}
+.g-pend-b{display:inline-block;font-size:10px;font-weight:700;color:#9A6010;background:#FDF1DC;border-radius:99px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+.gr-cons{border:1px solid var(--g2);border-radius:12px;padding:10px 12px;margin-bottom:14px;background:#fff}
+.gr-cons.pend{border-color:#F2C46D;background:#FFFBF2}
+.gr-cons-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--navy);margin-bottom:6px}
+.gr-cons-h span{font-size:11.5px;color:#9A6010}
+.gr-cons-r{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px dashed var(--g2);font-size:12.5px;color:var(--navy)}
+.gr-cons-r>div{flex:1;min-width:0}.gr-cons-r small{display:block;color:var(--g6);font-size:10.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gr-cons-r .m{font-weight:800;white-space:nowrap}
+.mr-info{font-size:13px;color:var(--navy);margin-bottom:10px}.mr-info small{display:block;color:var(--g6);font-size:11.5px;margin-top:3px}
 </style>
 </head>
 <body>
@@ -1224,6 +1235,17 @@ body.en-auth .wmk{color:rgba(255,255,255,.4)}
     </div>
     <div class="err hide" id="mc-err" style="margin:12px 0 0"></div>
     <div class="mfoot"><button class="appbtn appbtn-s" data-close style="background:var(--g1);color:var(--g6);box-shadow:none">Cancelar</button><button class="appbtn appbtn-p" id="mc-save">Guardar pago</button></div>
+  </div>
+</div>
+
+<!-- Repartir gasto por consumo (Gasto real) -->
+<div class="modal-overlay2" id="m-reparto">
+  <div class="modal" style="max-width:520px" role="dialog" aria-labelledby="mr-t">
+    <div class="modal-h"><h3 id="mr-t">Repartir por consumo</h3><button class="x" data-close>×</button></div>
+    <div class="mr-info" id="mr-info"></div>
+    <div class="g-consumo" id="mr-box"></div>
+    <div class="err hide" id="mr-err" style="margin:12px 0 0"></div>
+    <div class="mfoot"><button class="appbtn appbtn-s" data-close style="background:var(--g1);color:var(--g6);box-shadow:none">Cancelar</button><button class="appbtn appbtn-p" id="mr-save">Guardar reparto</button></div>
   </div>
 </div>
 
@@ -3372,7 +3394,7 @@ function renderGastos() {
           '<div class="fg"><label>Facturación</label><div class="fact-group" id="gasto-fact-group">' + chipsFact('gasto-facturacion', 'no_facturado') + '</div></div>' +
           '<div class="fg"><label for="gasto-medio">Forma de pago</label><select id="gasto-medio">' + optMedioGasto('transferencia') + '</select></div>' +
           '<div class="fg"><label for="gasto-mes-cruce">Mes en que se cruza</label><input type="month" id="gasto-mes-cruce"></div>' +
-          '<div class="fg"><label for="gasto-reparto">¿Cómo se reparte?</label><select id="gasto-reparto">' + OPT_REPARTO + '</select><div class="g-consumo hide" id="gasto-consumo"></div></div>' +
+          '<div class="fg"><label for="gasto-reparto">¿Cómo se reparte?</label><select id="gasto-reparto">' + OPT_REPARTO + '</select><div class="g-hint hide" id="gasto-consumo-hint">A fin de mes, en <b>Gasto real</b>, pones cuánto consumió cada doctora.</div></div>' +
           '<div class="err hide" id="gasto-err" style="margin-bottom:10px"></div>' +
           '<button class="sbtn" id="gasto-btn-guardar" type="button" style="width:100%;justify-content:center">✓ Guardar gasto</button>' +
         '</div>' +
@@ -3411,7 +3433,7 @@ function renderGastos() {
     });
     // formulario
     $('gasto-fecha').value = todayLocal(); $('gasto-fecha').max = todayLocal(); $('gasto-mes-cruce').value = todayLocal().slice(0, 7);
-    enlazarReparto('gasto', null);
+    $('gasto-reparto').onchange = () => $('gasto-consumo-hint').classList.toggle('hide', $('gasto-reparto').value !== 'consumo');
     $('gasto-fecha').addEventListener('change', () => { if ($('gasto-fecha').value) $('gasto-mes-cruce').value = $('gasto-fecha').value.slice(0, 7); });
     $('gasto-categoria').onchange = () => document.querySelectorAll('#gasto-hints .cat-hint').forEach(hn => hn.classList.toggle('show', hn.dataset.cat === $('gasto-categoria').value));
     enlazarChips($('gasto-fact-group'), v => { GS.nuevoFac = v; });
@@ -3435,7 +3457,7 @@ async function cargarGastos() {
   $('gasto-mes').value = GS.modo === 'mes' ? GS.mes : ''; $('gasto-desde').value = GS.modo === 'todo' ? '' : GS.d; $('gasto-hasta').value = GS.modo === 'todo' ? '' : GS.h;
   $('gasto-hero-per').textContent = GS.modo === 'mes' ? MESES[+GS.mes.slice(5, 7) - 1].replace(/^./, c => c.toUpperCase()) + ' ' + GS.mes.slice(0, 4) : GS.modo === 'rango' ? fmtD(GS.d) + ' – ' + fmtD(GS.h) : 'Todo el historial';
   $('gasto-tbody').innerHTML = '<tr><td colspan="8" class="empty">Cargando…</td></tr>';
-  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,categoria,subcategoria,monto,descripcion,facturado,facturacion,medio_pago,doctor_id,creado_por,created_at,tipo,se_cruza,mes_cruce,reparto').eq('tipo', 'gasto').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id'));
+  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,categoria,subcategoria,monto,descripcion,facturado,facturacion,medio_pago,doctor_id,creado_por,created_at,tipo,se_cruza,mes_cruce,reparto,modo_reparto').eq('tipo', 'gasto').gte('fecha', d).lte('fecha', h).order('fecha', { ascending: false }).order('created_at', { ascending: false }).order('id'));
   if (seq !== GS.seq) return;
   if (r.error) { console.error(r.error); $('gasto-tbody').innerHTML = ''; $('gasto-empty').textContent = 'No se pudieron cargar los gastos. ' + traducirError(r.error); $('gasto-empty').style.display = ''; return; }
   GS.rows = r.data.map(g => Object.assign(g, { facturacion: g.facturacion || (g.facturado ? 'facturado_clinica' : 'no_facturado') }));
@@ -3478,7 +3500,7 @@ function pintarGastos() {
         '<td data-l="Facturación"><span class="badge-fact ' + fi.cls + '">' + esc(fi.label) + '</span></td>' +
         '<td data-l="Agregado por" class="autor-cell"><b>' + esc(nombreAsociado(g.doctor_id)) + '</b></td>' +
         '<td data-l="Registrado el" class="autor-cell">' + esc(fmtFechaHoraCorta(g.created_at)) + '</td>' +
-        '<td data-l="Descripción">' + esc(g.descripcion) + (g.mes_cruce && String(g.mes_cruce).slice(0, 7) !== g.fecha.slice(0, 7) ? ' <span class="g-mescruce" title="Mes en que cuenta para el gasto real">cruza en ' + esc(labelMes(String(g.mes_cruce).slice(0, 7)).toLowerCase()) + '</span>' : '') + (g.reparto ? ' <span class="g-consumo-b" title="' + esc(Object.entries(g.reparto).map(([k, v]) => corto(nombreDoctora(k)) + ' ' + money(v)).join(' · ')) + '">por consumo</span>' : g.se_cruza === false ? ' <span class="g-nocruza" title="No entra al reparto entre doctoras">no se reparte</span>' : '') + '</td>' +
+        '<td data-l="Descripción">' + esc(g.descripcion) + (g.mes_cruce && String(g.mes_cruce).slice(0, 7) !== g.fecha.slice(0, 7) ? ' <span class="g-mescruce" title="Mes en que cuenta para el gasto real">cruza en ' + esc(labelMes(String(g.mes_cruce).slice(0, 7)).toLowerCase()) + '</span>' : '') + (g.modo_reparto === 'consumo' && !g.reparto ? ' <span class="g-pend-b" title="Se reparte a fin de mes en Gasto real">por consumo · por repartir</span>' : g.reparto ? ' <span class="g-consumo-b" title="' + esc(Object.entries(g.reparto).map(([k, v]) => corto(nombreDoctora(k)) + ' ' + money(v)).join(' · ')) + '">por consumo</span>' : g.se_cruza === false ? ' <span class="g-nocruza" title="No entra al reparto entre doctoras">no se reparte</span>' : '') + '</td>' +
         '<td data-l="Acciones">' + (puedeEditarGasto(g) ? '<div style="display:flex;gap:6px"><button class="sbtn btn-edit" type="button" title="Editar" data-ge="' + esc(g.id) + '">✏️</button><button class="sbtn btn-del" type="button" title="Eliminar" data-gd="' + esc(g.id) + '">🗑</button></div>' : '') + '</td></tr>';
     }).join('');
     $('gasto-tbody').querySelectorAll('[data-ge]').forEach(b => b.onclick = () => abrirGasto(GS.rows.find(g => g.id === b.dataset.ge)));
@@ -3515,18 +3537,18 @@ async function guardarGasto(desdeModal) {
   try {
     const px = desdeModal ? 'mg' : 'gasto', rp = leerReparto(px, monto);
     if (rp.error) return err(rp.error);
-    const extra = { medio_pago: $(px + '-medio').value || null, mes_cruce: ($(px + '-mes-cruce').value || f.slice(0, 7)) + '-01', se_cruza: rp.se_cruza, reparto: rp.reparto };
+    const extra = { medio_pago: $(px + '-medio').value || null, mes_cruce: ($(px + '-mes-cruce').value || f.slice(0, 7)) + '-01', se_cruza: rp.se_cruza, reparto: rp.reparto, modo_reparto: rp.modo_reparto };
     const fila = Object.assign({ fecha: f, categoria: cat, monto, descripcion: desc, facturacion: fac, facturado: fac !== 'no_facturado', doctor_id: asoc === GENERAL ? null : asoc }, extra);
     const q = desdeModal && GS.edit ? sb.from('gastos').update(fila).eq('id', GS.edit.id).select('id') : sb.from('gastos').insert(Object.assign({ creado_por: PERFIL.id }, fila)).select('id');
     const { data, error } = await q;
     if (error || !data || !data.length) throw error || new Error('sin permiso');
     if (desdeModal) cerrarModal('m-gasto');
     else {
-      $('gasto-monto').value = ''; $('gasto-descripcion').value = ''; $('gasto-reparto').value = 'parejo'; enlazarReparto('gasto', null); $('gasto-categoria').value = ''; $('gasto-categoria').onchange();
+      $('gasto-monto').value = ''; $('gasto-descripcion').value = ''; $('gasto-reparto').value = 'parejo'; $('gasto-consumo-hint').classList.add('hide'); $('gasto-categoria').value = ''; $('gasto-categoria').onchange();
       $('gasto-fact-group').innerHTML = chipsFact('gasto-facturacion', 'no_facturado'); GS.nuevoFac = 'no_facturado'; enlazarChips($('gasto-fact-group'), v => { GS.nuevoFac = v; });
       $('gasto-err').classList.add('hide');
     }
-    toast(desdeModal && GS.edit ? 'Gasto actualizado.' : 'Gasto registrado.'); cargarGastos();
+    toast(desdeModal && GS.edit ? 'Gasto actualizado.' : 'Gasto registrado.'); cargarGastos(); if (TAB === 'gastoreal') cargarGastoReal();
   } catch (e) { console.error(e); err('No se pudo guardar: ' + traducirError(e)); }
   finally { b.disabled = false; }
 }
@@ -3540,7 +3562,7 @@ function abrirGasto(g) {
   GS.editFac = g ? g.facturacion : 'no_facturado';
   $('mg-medio').innerHTML = optMedioGasto(g ? g.medio_pago : 'transferencia');
   $('mg-mes-cruce').value = g ? String(g.mes_cruce || g.fecha).slice(0, 7) : todayLocal().slice(0, 7);
-  $('mg-reparto').innerHTML = OPT_REPARTO; $('mg-reparto').value = g && g.reparto ? 'consumo' : g && g.se_cruza === false ? 'no' : 'parejo';
+  $('mg-reparto').innerHTML = OPT_REPARTO; $('mg-reparto').value = g && (g.reparto || g.modo_reparto === 'consumo') ? 'consumo' : g && g.se_cruza === false ? 'no' : 'parejo';
   enlazarReparto('mg', g ? g.reparto : null);
   // si cambian la fecha, el mes de cruce se mueve con ella (se puede ajustar a mano después)
   $('mg-fecha').onchange = () => { if ($('mg-fecha').value) $('mg-mes-cruce').value = $('mg-fecha').value.slice(0, 7); };
@@ -3583,7 +3605,7 @@ const GR = { mes: null, rows: [], seq: 0, charts: {}, edit: null };
 const mesMas = (m, n) => { const [y, mm] = m.split('-').map(Number); return isoLocal(new Date(y, mm - 1 + n, 1)).slice(0, 7); };
 function doctorasReparto(rows) { return DOCTORAS.filter(d => d.activo || rows.some(g => g.doctor_id === d.id || g.recibe_id === d.id)); }
 // ¿Cómo se reparte un gasto? parejo entre las doctoras, por consumo de cada una (montos), o no se reparte
-const OPT_REPARTO = '<option value="parejo">Parejo entre las doctoras</option><option value="consumo">Por consumo de cada doctora</option><option value="no">No se reparte (solo de quien pagó)</option>';
+const OPT_REPARTO = '<option value="parejo">Parejo entre las doctoras</option><option value="consumo">Por consumo (se reparte a fin de mes)</option><option value="no">No se reparte (solo de quien pagó)</option>';
 function enlazarReparto(px, reparto) {
   const sel = $(px + '-reparto'), box = $(px + '-consumo');
   const pintar = () => {
@@ -3610,18 +3632,19 @@ function enlazarReparto(px, reparto) {
 }
 function leerReparto(px, monto) {
   const v = $(px + '-reparto').value;
-  if (v === 'no') return { se_cruza: false, reparto: null };
-  if (v !== 'consumo') return { se_cruza: true, reparto: null };
-  const r = {}; $(px + '-consumo').querySelectorAll('input[data-doc]').forEach(i => { const x = num(i.value); if (x > 0) r[i.dataset.doc] = x; });
+  if (v === 'no') return { se_cruza: false, reparto: null, modo_reparto: null };
+  if (v !== 'consumo') return { se_cruza: true, reparto: null, modo_reparto: null };
+  const box = $(px + '-consumo'), r = {};
+  if (box) box.querySelectorAll('input[data-doc]').forEach(i => { const x = num(i.value); if (x > 0) r[i.dataset.doc] = x; });
   const asig = sumar(Object.values(r), x => x);
-  if (!Object.keys(r).length) return { error: 'Indica cuánto le toca a cada doctora del gasto por consumo.' };
+  if (!Object.keys(r).length) return { se_cruza: true, reparto: null, modo_reparto: 'consumo' };   // por repartir a fin de mes
   if (Math.abs(asig - monto) > 0.02) return { error: 'El reparto por consumo suma ' + money(asig) + ' y el gasto es de ' + money(monto) + '.' };
-  return { se_cruza: true, reparto: r };
+  return { se_cruza: true, reparto: r, modo_reparto: 'consumo' };
 }
 function calcGastoReal(rows) {
   const docs = doctorasReparto(rows), R = {};
   docs.forEach(d => { R[d.id] = { id: d.id, nombre: d.nombre, pago: 0, noRep: 0, cons: 0, cargo: 0, env: 0, rec: 0 }; });
-  let total = 0, general = 0;
+  let total = 0, general = 0; const pend = [];
   rows.forEach(g => {
     const m = num(g.monto);
     if (g.tipo === 'cruce') {
@@ -3632,6 +3655,7 @@ function calcGastoReal(rows) {
     }
     total = num(total + m);
     if (!g.doctor_id || !R[g.doctor_id]) { general = num(general + m); return; }
+    if (g.modo_reparto === 'consumo' && !g.reparto) { pend.push(g); return; }   // por repartir: no entra a los saldos hasta repartirlo
     const r = R[g.doctor_id]; r.pago = num(r.pago + m);
     if (g.reparto) {   // por consumo: lo pagó una, y a cada doctora se le carga lo que consumió
       r.cons = num(r.cons + m);
@@ -3641,7 +3665,7 @@ function calcGastoReal(rows) {
   const lista = Object.values(R), n = lista.length || 1;
   const bolsa = sumar(lista, r => r.pago - r.noRep - r.cons), corr = num(bolsa / n);
   lista.forEach(r => { r.real = num(r.pago - r.noRep + r.env - r.rec); r.toca = num(corr + r.cargo); r.saldo = num(r.real - r.toca); });
-  return { lista, total, general, bolsa, corr, n };
+  return { lista, total, general, bolsa, corr, n, pend };
 }
 // Cruces mínimos para emparejar: quien debe le paga a quien puso de más
 function sugerirCruces(lista) {
@@ -3668,6 +3692,7 @@ function renderGastoReal() {
       '<div class="gr-bar"><button type="button" class="sbtn btn-outline" id="gr-prev" aria-label="Mes anterior">‹</button><span class="lbl-mes" id="gr-lbl">—</span><button type="button" class="sbtn btn-outline" id="gr-next" aria-label="Mes siguiente">›</button>' +
         '<input type="month" id="gr-mes" aria-label="Mes de cruce"><span style="flex:1"></span><button type="button" class="sbtn btn-outline" id="gr-exp">↓ Exportar</button><button type="button" class="sbtn gr-btn-p" id="gr-cruce">🔁 Registrar pago</button></div>' +
       '<div class="gr-line" id="gr-line"></div>' +
+      '<div id="gr-consumo"></div>' +
       '<div class="gr-fichas" id="gr-fichas"></div>' +
       '<div class="gr-nota" id="gr-nota"></div>' +
       '<div class="sec-title">Pagos entre doctoras registrados</div><div class="gr-crs" id="gr-cruces"></div>' +
@@ -3688,7 +3713,7 @@ async function cargarGastoReal() {
   $('gr-lbl').textContent = labelMes(GR.mes); $('gr-mes').value = GR.mes;
   $('gr-hero-sub').innerHTML = 'Lo que le cuesta el mes a cada doctora después de los cruces · <b>' + esc(labelMes(GR.mes)) + '</b>';
   $('gr-fichas').innerHTML = '<div class="empty-note">Cargando…</div>';
-  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,tipo,categoria,monto,descripcion,medio_pago,doctor_id,recibe_id,se_cruza,mes_cruce,reparto,creado_por').gte('mes_cruce', desde).lte('mes_cruce', hasta).order('fecha').order('id'));
+  const r = await traerTodo(() => sb.from('gastos').select('id,fecha,tipo,categoria,subcategoria,monto,descripcion,medio_pago,facturacion,doctor_id,recibe_id,se_cruza,mes_cruce,reparto,modo_reparto,creado_por').gte('mes_cruce', desde).lte('mes_cruce', hasta).order('fecha').order('id'));
   if (seq !== GR.seq) return;
   if (r.error) { console.error(r.error); $('gr-fichas').innerHTML = '<div class="empty-note">No se pudo cargar el gasto real. ' + esc(traducirError(r.error)) + '</div>'; return; }
   GR.rows = r.data.map(g => Object.assign(g, { tipo: g.tipo || 'gasto', mes: String(g.mes_cruce || g.fecha).slice(0, 7) }));
@@ -3703,6 +3728,14 @@ function pintarGastoReal() {
     (pend > 0.5 ? 'falta por pagar entre ellas <b class="gr-neg">' + money(pend) + '</b>' : '<b class="gr-ok">✓ el mes está emparejado</b>');
   $('gr-nota').innerHTML = '<b>Gasto real</b> = lo que pagó + lo que le pasó a otras doctoras − lo que recibió de ellas; lo marcado <i>no se reparte</i> queda fuera, igual que en el Excel. <b>Le toca</b> = su parte pareja de los gastos que se reparten + lo que consumió de los gastos <i>por consumo</i> (como los insumos). Cada movimiento cuenta en su <b>mes de cruce</b>.' +
     (c.general > 0 ? ' Hay ' + money(c.general) + ' de gasto general de la clínica que no pagó ninguna doctora y no entra al reparto.' : '');
+  // gastos por consumo del mes: los pendientes se reparten aquí a fin de mes
+  const consumo = delMes.filter(g => g.tipo !== 'cruce' && g.modo_reparto === 'consumo').sort((a, b) => (a.reparto ? 1 : 0) - (b.reparto ? 1 : 0) || (a.fecha < b.fecha ? -1 : 1));
+  const pendTot = sumar(c.pend, g => num(g.monto));
+  $('gr-consumo').innerHTML = !consumo.length ? '' : '<div class="gr-cons' + (c.pend.length ? ' pend' : '') + '"><div class="gr-cons-h"><b>' + (c.pend.length ? '⏳ Por repartir a fin de mes · ' + money(pendTot) : '✓ Gastos por consumo repartidos') + '</b>' +
+      (c.pend.length ? '<span>Mientras no se repartan, no cuentan en los saldos de abajo.</span>' : '') + '</div>' +
+    consumo.map(g => '<div class="gr-cons-r"><div><b>' + esc(g.descripcion) + '</b><small>' + fmtD(g.fecha) + ' · pagó ' + esc(corto(nombreDoctora(g.doctor_id))) + (g.reparto ? ' · ' + esc(Object.entries(g.reparto).map(([k, v]) => corto(nombreDoctora(k)).replace(/^Dra?\.\s*/, '') + ' ' + fmt0(v)).join(' · ')) : '') + '</small></div><span class="m">' + money(g.monto) + '</span>' +
+      (PUEDE_GASTO_CRUCE() ? '<button type="button" class="sbtn ' + (g.reparto ? 'btn-outline' : 'gr-btn-p') + '" data-rep="' + esc(g.id) + '">' + (g.reparto ? 'Editar reparto' : 'Repartir') + '</button>' : '') + '</div>').join('') + '</div>';
+  $('gr-consumo').querySelectorAll('[data-rep]').forEach(b => b.onclick = () => abrirReparto(GR.rows.find(g => g.id === b.dataset.rep)));
   // fichas por doctora (de la que más debe a la que más le deben), cada una con su balanza y sus pagos pendientes
   const sugs = sugerirCruces(c.lista), maxS = Math.max(1, ...c.lista.map(x => Math.abs(x.saldo)));
   const colDe = {}; c.lista.forEach((x, i) => { colDe[x.id] = DOC_COLORS_GASTO[i % DOC_COLORS_GASTO.length]; });
@@ -3744,6 +3777,35 @@ function pintarGastoReal() {
       : '<tr><td colspan="' + (docsH.length + 2) + '" class="empty">Sin movimientos.</td></tr>') + '</tbody>';
   $('gr-hist').querySelectorAll('tr[data-mes]').forEach(tr => tr.onclick = () => { GR.mes = tr.dataset.mes; cargarGastoReal(); });
 }
+// Repartir un gasto por consumo: cuánto consumió cada doctora (la suma debe dar el monto)
+let GR_REP = null;
+function abrirReparto(g) {
+  if (!g) return; GR_REP = g;
+  $('mr-info').innerHTML = '<b>' + esc(g.descripcion) + '</b> · ' + money(g.monto) + '<small>Pagó ' + esc(nombreDoctora(g.doctor_id)) + ' el ' + fmtD(g.fecha) + '. Pon cuánto consumió cada doctora (incluida ella).</small>';
+  const docs = DOCTORAS.filter(d => d.activo || (g.reparto && g.reparto[d.id] != null));
+  $('mr-box').innerHTML = docs.map(d => '<label class="gc-r"><span>' + esc(d.nombre) + '</span><input type="number" min="0" step="0.01" inputmode="decimal" data-doc="' + esc(d.id) + '" placeholder="0.00" value="' + (g.reparto && g.reparto[d.id] != null ? num(g.reparto[d.id]).toFixed(2) : '') + '"></label>').join('') +
+    '<div class="gc-sum" id="mr-sum"></div>';
+  const suma = () => { const a = sumar([...$('mr-box').querySelectorAll('input')], i => num(i.value)), f = num(g.monto - a);
+    $('mr-sum').innerHTML = 'Asignado <b>' + money(a) + '</b> de ' + money(g.monto) + (Math.abs(f) <= 0.02 ? ' <span class="gr-ok">✓ cuadra</span>' : ' <span class="gr-neg">· ' + (f > 0 ? 'faltan ' : 'sobran ') + money(Math.abs(f)) + '</span>'); };
+  $('mr-box').querySelectorAll('input').forEach(i => i.addEventListener('input', suma)); suma();
+  $('mr-err').classList.add('hide');
+  abrirModal('m-reparto');
+}
+$('mr-save').onclick = async () => {
+  const g = GR_REP; if (!g) return;
+  const err = m => { $('mr-err').textContent = m; $('mr-err').classList.remove('hide'); };
+  const r = {}; $('mr-box').querySelectorAll('input[data-doc]').forEach(i => { const x = num(i.value); if (x > 0) r[i.dataset.doc] = x; });
+  const a = sumar(Object.values(r), x => x);
+  if (!Object.keys(r).length) return err('Pon cuánto consumió cada doctora.');
+  if (Math.abs(a - num(g.monto)) > 0.02) return err('El reparto suma ' + money(a) + ' y el gasto es de ' + money(g.monto) + '.');
+  const b = $('mr-save'); if (b.disabled) return; b.disabled = true;
+  try {
+    const { data, error } = await sb.from('gastos').update({ reparto: r, modo_reparto: 'consumo', se_cruza: true }).eq('id', g.id).select('id');
+    if (error || !data || !data.length) throw error || new Error('sin permiso');
+    cerrarModal('m-reparto'); toast('Reparto guardado.'); cargarGastoReal();
+  } catch (e) { console.error(e); err('No se pudo guardar: ' + traducirError(e)); }
+  finally { b.disabled = false; }
+};
 const PUEDE_GASTO_CRUCE = () => PERFIL.rol === 'admin' || permiso(PERFIL, 'puede_ver_gastos');
 function abrirCruce(g, pre) {
   GR.edit = g || null; pre = pre || {};
