@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="app-version" content="2026.11.11-3"/>
+<meta name="app-version" content="2026.11.11-4"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mare Productividad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2585,7 +2585,7 @@ async function pintarDashGastoReal(lbl) {
   graf('greal', 'd-c-greal', { type: 'bar', data: { labels: lista.map(x => partirNombre(x.nombre)), datasets: [
       { label: 'Gasto real', data: lista.map(x => x.real), backgroundColor: lista.map(col), borderRadius: 6, maxBarThickness: 40, order: 2,
         datalabels: { anchor: 'end', align: 'top', color: '#0B2A4D', font: { size: 9, weight: '700' }, formatter: v => v ? fmtCorto(v) : '' } },
-      { label: 'Le toca', type: 'line', data: lista.map(x => x.toca), stepped: 'middle', borderColor: '#2ABFBF', borderDash: [6, 4], borderWidth: 2, pointRadius: 0, order: 1, datalabels: { display: false } }] },
+      { label: 'Promedio de fijos', type: 'line', data: lista.map(() => corr), borderColor: '#2ABFBF', borderDash: [6, 4], borderWidth: 2, pointRadius: 0, order: 1, datalabels: { display: false } }] },
     options: (o => { o.layout = { padding: { top: 18 } }; o.scales.x.ticks = { maxRotation: 0, autoSkip: false, font: { size: 10 } }; return o; })(baseOpts({ datalabels: {} })) });
   graf('grpie', 'd-c-grpie', { type: 'doughnut', data: { labels: lista.map(x => x.nombre), datasets: [{ data: lista.map(x => Math.max(0, x.real)), backgroundColor: lista.map(col), borderColor: '#fff', borderWidth: 2 }] },
     options: { maintainAspectRatio: false, cutout: '55%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) } },
@@ -2628,7 +2628,7 @@ async function flashMesDatos() {
     await cargarProdMeses(mesesF[0], mesesF[mesesF.length - 1]).catch(e => console.error('[productividad]', e));
     [...new Set(rows.map(g => g.mes))].sort().forEach(m => {
       const c = calcGastoReal(rows.filter(g => g.mes === m)); corr = num(corr + c.corr);
-      c.lista.forEach(x => { const r = R[x.id] || (R[x.id] = { id: x.id, nombre: x.nombre, real: 0, saldo: 0 }); r.real = num(r.real + x.toca); r.saldo = num(r.saldo + x.saldo); });
+      c.lista.forEach(x => { const r = R[x.id] || (R[x.id] = { id: x.id, nombre: x.nombre, real: 0, saldo: 0 }); r.real = num(r.real + x.real); r.saldo = num(r.saldo + x.saldo); });
       sugerirCruces(c.lista).forEach(sg => pagos.push(Object.assign({ mes: m }, sg)));
     });
     greal = { lista: Object.values(R).filter(x => soloDoc(x.id)).sort((a, b) => a.saldo - b.saldo), corr, pagos: pagos.filter(p => soloDoc(p.paga) || soloDoc(p.recibe)), meses: [...new Set(rows.map(g => g.mes))].length };
@@ -3692,7 +3692,8 @@ function calcGastoReal(rows) {
     r.difProm = num(r.fijo - corr);                     // diferencia respecto al promedio
     r.difVar = num(r.cons - r.cargo);                   // variables: lo que pagó − lo que le toca por productividad
     r.entre = num(r.env - r.rec);                       // pagos entre doctoras ya hechos
-    r.real = num(r.pago - r.noRep + r.env - r.rec); r.toca = num(corr + r.cargo);
+    r.real = num(r.fijo + r.entre);                     // gasto real (como la hoja): fijos que pagó ± pagos entre doctoras, sin insumos
+    r.toca = num(corr + r.cargo);
     r.saldo = num(r.difProm + r.difVar + r.entre);      // diferencia final para cruces
   });
   return { lista, total, general, bolsa, corr, n, pend, variable, totProd };
@@ -3788,7 +3789,7 @@ function pintarGastoReal() {
         (Math.abs(x.entre) >= 0.005 ? '<div class="fr"><span>Pagos entre doctoras ya hechos</span><b>' + sg(x.entre) + '</b></div>' : '') +
         (x.noRep ? '<div class="fr"><span>No se reparte <small>(fuera)</small></span><b>' + money(x.noRep) + '</b></div>' : '') +
         '<div class="fr hl"><span>Diferencia final</span><b class="' + (x.saldo < -0.5 ? 'gr-neg' : x.saldo > 0.5 ? 'gr-pos' : '') + '">' + sg(x.saldo) + '</b></div>' +
-        '<div class="fr mu"><span>Gasto real del mes <small>fijo parejo + su parte variable</small></span><b>' + money(x.toca) + '</b></div>' +
+        '<div class="fr mu"><span>Gasto real <small>fijos ± pagos entre doctoras, sin insumos</small></span><b>' + money(x.real) + '</b></div>' +
         '<ul>' + acciones(x) + '</ul></div>';
     }).join('');
   $('gr-fichas').querySelectorAll('[data-sug]').forEach(b => b.onclick = () => { const s = sugs[+b.dataset.sug]; abrirCruce(null, { paga: s.paga, recibe: s.recibe, monto: s.monto }); });
@@ -3804,7 +3805,7 @@ function pintarGastoReal() {
   const meses = [...new Set(GR.rows.map(g => g.mes))].sort().reverse();
   const docsH = doctorasReparto(GR.rows);
   $('gr-hist').innerHTML = '<thead><tr><th>Mes</th>' + docsH.map(d => '<th class="n">' + esc(corto(d.nombre)) + '</th>').join('') + '<th class="n">Total</th></tr></thead><tbody>' +
-    (meses.length ? meses.map(m => { const cm = calcGastoReal(GR.rows.filter(g => g.mes === m)), by = {}; cm.lista.forEach(x => { by[x.id] = x.toca; });
+    (meses.length ? meses.map(m => { const cm = calcGastoReal(GR.rows.filter(g => g.mes === m)), by = {}; cm.lista.forEach(x => { by[x.id] = x.real; });
       return '<tr data-mes="' + m + '" style="cursor:pointer' + (m === GR.mes ? ';background:rgba(42,191,191,.08)' : '') + '"><td>' + esc(labelMes(m)) + '</td>' + docsH.map(d => '<td class="n">' + (by[d.id] ? money(by[d.id]) : '—') + '</td>').join('') + '<td class="n"><b>' + money(cm.total) + '</b></td></tr>'; }).join('')
       : '<tr><td colspan="' + (docsH.length + 2) + '" class="empty">Sin movimientos.</td></tr>') + '</tbody>';
   $('gr-hist').querySelectorAll('tr[data-mes]').forEach(tr => tr.onclick = () => { GR.mes = tr.dataset.mes; cargarGastoReal(); });
@@ -3884,10 +3885,10 @@ async function exportarGastoReal() {
   try {
     await cargarScript(CDN.xlsx);
     const c = calcGastoReal(GR.rows.filter(g => g.mes === GR.mes));
-    const res = [['Doctora', 'Gastos fijos que pagó', 'Diferencia vs promedio', 'Productividad %', 'Variables que pagó', 'Variables que le tocan', 'Diferencia de variables', 'Pagos entre doctoras', 'Diferencia final (+ le deben / − debe)', 'Gasto real del mes']]
-      .concat(c.lista.map(x => [x.nombre, x.fijo, x.difProm, Math.round(x.part * 1000) / 10, x.cons, x.cargo, x.difVar, x.entre, x.saldo, x.toca]));
+    const res = [['Doctora', 'Gastos fijos que pagó', 'Diferencia vs promedio', 'Productividad %', 'Variables que pagó', 'Variables que le tocan', 'Diferencia de variables', 'Pagos entre doctoras', 'Diferencia final (+ le deben / − debe)', 'Gasto real (fijos)']]
+      .concat(c.lista.map(x => [x.nombre, x.fijo, x.difProm, Math.round(x.part * 1000) / 10, x.cons, x.cargo, x.difVar, x.entre, x.saldo, x.real]));
     const meses = [...new Set(GR.rows.map(g => g.mes))].sort(), docs = doctorasReparto(GR.rows);
-    const hist = [['Mes'].concat(docs.map(d => d.nombre), ['Total'])].concat(meses.map(m => { const cm = calcGastoReal(GR.rows.filter(g => g.mes === m)), by = {}; cm.lista.forEach(x => { by[x.id] = x.toca; }); return [labelMes(m)].concat(docs.map(d => by[d.id] || 0), [cm.total]); }));
+    const hist = [['Mes'].concat(docs.map(d => d.nombre), ['Total'])].concat(meses.map(m => { const cm = calcGastoReal(GR.rows.filter(g => g.mes === m)), by = {}; cm.lista.forEach(x => { by[x.id] = x.real; }); return [labelMes(m)].concat(docs.map(d => by[d.id] || 0), [cm.total]); }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(res), 'Gasto real ' + GR.mes);
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(hist), 'Por mes');
